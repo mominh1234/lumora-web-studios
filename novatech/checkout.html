@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NovaTech – Checkout</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #080808;
+      --card: #111111;
+      --card2: #161616;
+      --accent: #00d4ff;
+      --accent-dim: rgba(0,212,255,0.12);
+      --accent-glow: rgba(0,212,255,0.3);
+      --white: #ffffff;
+      --grey: #888888;
+      --grey2: #555555;
+      --border: rgba(255,255,255,0.07);
+      --border2: rgba(255,255,255,0.12);
+      --font-head: 'Space Grotesk', sans-serif;
+      --font-body: 'Inter', sans-serif;
+      --red: #ff4d4d;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--white);
+      font-family: var(--font-body);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      top: -20%; left: 50%;
+      transform: translateX(-50%);
+      width: 800px; height: 800px;
+      background: radial-gradient(circle, rgba(0,212,255,0.05) 0%, transparent 70%);
+      pointer-events: none; z-index: 0;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px; height: 70px;
+      background: rgba(8,8,8,0.9);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: var(--font-head);
+      font-size: 1.4rem; font-weight: 700;
+      color: var(--white); text-decoration: none;
+    }
+    .nav-logo span { color: var(--accent); }
+    .nav-back {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 0.85rem; color: var(--grey);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-back:hover { color: var(--white); }
+    .nav-back svg { width: 16px; height: 16px; }
+
+    /* ── PROGRESS STEPS ── */
+    .progress-bar {
+      position: fixed; top: 70px; left: 0; right: 0; z-index: 99;
+      background: rgba(8,8,8,0.9);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 0;
+    }
+    .progress-inner {
+      max-width: 900px; margin: 0 auto; padding: 0 24px;
+      display: flex; align-items: center; justify-content: center;
+      gap: 0;
+    }
+    .step {
+      display: flex; align-items: center; gap: 10px;
+      font-family: var(--font-head);
+      font-size: 0.8rem; font-weight: 600;
+      letter-spacing: 0.5px;
+      color: var(--grey2);
+    }
+    .step.active { color: var(--white); }
+    .step.done { color: var(--accent); }
+    .step-num {
+      width: 28px; height: 28px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; font-weight: 700;
+      border: 1.5px solid var(--grey2);
+      background: transparent;
+      transition: all 0.3s;
+    }
+    .step.active .step-num {
+      background: var(--accent); border-color: var(--accent);
+      color: #000; box-shadow: 0 0 14px var(--accent-glow);
+    }
+    .step.done .step-num {
+      background: var(--accent); border-color: var(--accent); color: #000;
+    }
+    .step-line {
+      width: 64px; height: 1px;
+      background: var(--border2);
+      margin: 0 4px;
+    }
+    .step-line.done { background: var(--accent); opacity: 0.5; }
+
+    /* ── MAIN LAYOUT ── */
+    main {
+      max-width: 1100px; margin: 0 auto;
+      padding: 160px 24px 80px;
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 40px;
+      position: relative; z-index: 1;
+    }
+    @media (max-width: 860px) {
+      main { grid-template-columns: 1fr; }
+      .order-summary { order: -1; }
+    }
+
+    /* ── FORM CARD ── */
+    .form-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 36px;
+    }
+    .form-card h2 {
+      font-family: var(--font-head);
+      font-size: 1.4rem; font-weight: 700;
+      margin-bottom: 28px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    .form-row.single { grid-template-columns: 1fr; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--grey);
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+    }
+    .form-group input,
+    .form-group select {
+      background: var(--card2);
+      border: 1px solid var(--border2);
+      border-radius: 10px;
+      padding: 12px 16px;
+      color: var(--white);
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    .form-group input::placeholder { color: var(--grey2); }
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-dim);
+    }
+    .form-group input.error { border-color: var(--red); }
+    .form-group select option { background: #1a1a1a; }
+    .select-wrap { position: relative; }
+    .select-wrap::after {
+      content: '▾';
+      position: absolute; right: 14px; top: 50%;
+      transform: translateY(-50%);
+      color: var(--grey); pointer-events: none;
+      font-size: 0.8rem;
+    }
+    .error-msg {
+      font-size: 0.75rem; color: var(--red);
+      display: none;
+    }
+
+    /* ── DELIVERY OPTIONS ── */
+    .section-label {
+      font-family: var(--font-head);
+      font-size: 0.95rem; font-weight: 600;
+      color: var(--grey);
+      margin: 28px 0 14px;
+      text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .delivery-options { display: flex; flex-direction: column; gap: 10px; }
+    .delivery-option {
+      display: flex; align-items: center;
+      gap: 14px;
+      background: var(--card2);
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 18px;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .delivery-option:hover { border-color: var(--border2); }
+    .delivery-option.selected {
+      border-color: var(--accent);
+      background: var(--accent-dim);
+    }
+    .delivery-option input[type="radio"] { display: none; }
+    .radio-dot {
+      width: 18px; height: 18px; border-radius: 50%;
+      border: 2px solid var(--grey2);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      transition: border-color 0.2s;
+    }
+    .delivery-option.selected .radio-dot { border-color: var(--accent); }
+    .radio-inner {
+      width: 9px; height: 9px; border-radius: 50%;
+      background: var(--accent);
+      display: none;
+    }
+    .delivery-option.selected .radio-inner { display: block; }
+    .delivery-info { flex: 1; }
+    .delivery-name {
+      font-family: var(--font-head);
+      font-size: 0.9rem; font-weight: 600;
+    }
+    .delivery-desc { font-size: 0.8rem; color: var(--grey); }
+    .delivery-price {
+      font-family: var(--font-head);
+      font-size: 0.95rem; font-weight: 700;
+      color: var(--accent);
+    }
+    .delivery-price.free { color: #00ff88; }
+
+    /* ── PROMO ── */
+    .promo-row {
+      display: flex; gap: 10px;
+      margin-top: 28px;
+    }
+    .promo-row input {
+      flex: 1;
+      background: var(--card2);
+      border: 1px solid var(--border2);
+      border-radius: 10px;
+      padding: 12px 16px;
+      color: var(--white);
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .promo-row input::placeholder { color: var(--grey2); }
+    .promo-row input:focus { border-color: var(--accent); }
+    .btn-promo {
+      background: transparent;
+      border: 1.5px solid var(--border2);
+      border-radius: 10px;
+      padding: 12px 20px;
+      color: var(--white);
+      font-family: var(--font-head);
+      font-size: 0.85rem; font-weight: 600;
+      cursor: pointer;
+      transition: border-color 0.2s, color 0.2s;
+      white-space: nowrap;
+    }
+    .btn-promo:hover { border-color: var(--accent); color: var(--accent); }
+    .promo-msg {
+      margin-top: 8px;
+      font-size: 0.8rem;
+      display: none;
+    }
+    .promo-msg.success { color: #00ff88; display: block; }
+    .promo-msg.error { color: var(--red); display: block; }
+
+    /* ── SUBMIT ── */
+    .btn-continue {
+      width: 100%;
+      margin-top: 28px;
+      background: var(--accent);
+      color: #000;
+      border: none;
+      border-radius: 12px;
+      padding: 16px;
+      font-family: var(--font-head);
+      font-size: 1rem; font-weight: 700;
+      cursor: pointer;
+      letter-spacing: 0.3px;
+      transition: opacity 0.2s, box-shadow 0.2s;
+      box-shadow: 0 0 20px var(--accent-glow);
+    }
+    .btn-continue:hover { opacity: 0.88; box-shadow: 0 0 30px var(--accent-glow); }
+
+    /* ── ORDER SUMMARY ── */
+    .order-summary {
+      position: sticky; top: 140px;
+      align-self: start;
+    }
+    .summary-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+    }
+    .summary-card h3 {
+      font-family: var(--font-head);
+      font-size: 1.1rem; font-weight: 700;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .summary-items { display: flex; flex-direction: column; gap: 14px; }
+    .summary-item {
+      display: flex; gap: 12px; align-items: center;
+    }
+    .summary-item-icon {
+      width: 44px; height: 44px;
+      background: var(--card2);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+      border: 1px solid var(--border);
+    }
+    .summary-item-info { flex: 1; }
+    .summary-item-name {
+      font-family: var(--font-head);
+      font-size: 0.85rem; font-weight: 600;
+      line-height: 1.3;
+    }
+    .summary-item-qty { font-size: 0.75rem; color: var(--grey); }
+    .summary-item-price {
+      font-family: var(--font-head);
+      font-size: 0.9rem; font-weight: 700;
+      color: var(--accent);
+    }
+    .summary-divider {
+      height: 1px; background: var(--border);
+      margin: 18px 0;
+    }
+    .summary-row {
+      display: flex; justify-content: space-between;
+      font-size: 0.85rem; color: var(--grey);
+      margin-bottom: 8px;
+    }
+    .summary-row span:last-child { color: var(--white); font-weight: 500; }
+    .summary-row.delivery span:last-child { color: #00ff88; }
+    .summary-row.discount span:last-child { color: #ff8c42; }
+    .summary-total {
+      display: flex; justify-content: space-between;
+      align-items: center;
+      padding-top: 14px;
+      border-top: 1px solid var(--border2);
+      margin-top: 6px;
+    }
+    .summary-total span:first-child {
+      font-family: var(--font-head);
+      font-size: 1rem; font-weight: 700;
+    }
+    .summary-total span:last-child {
+      font-family: var(--font-head);
+      font-size: 1.3rem; font-weight: 700;
+      color: var(--accent);
+    }
+    .secure-note {
+      margin-top: 16px;
+      display: flex; align-items: center; gap: 6px;
+      font-size: 0.75rem; color: var(--grey);
+      justify-content: center;
+    }
+    .secure-note svg { width: 12px; height: 12px; color: var(--grey); }
+
+    @media (max-width: 600px) {
+      nav { padding: 0 20px; }
+      main { padding: 160px 16px 60px; }
+      .form-card { padding: 24px 20px; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-logo">Nova<span>Tech</span></a>
+    <a href="hardware.html" class="nav-back">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M10 3L5 8l5 5"/>
+      </svg>
+      Continue Shopping
+    </a>
+  </nav>
+
+  <div class="progress-bar">
+    <div class="progress-inner">
+      <div class="step active" id="step1">
+        <div class="step-num">1</div>
+        <span>Delivery</span>
+      </div>
+      <div class="step-line" id="line1"></div>
+      <div class="step" id="step2">
+        <div class="step-num">2</div>
+        <span>Payment</span>
+      </div>
+      <div class="step-line" id="line2"></div>
+      <div class="step" id="step3">
+        <div class="step-num">3</div>
+        <span>Confirm</span>
+      </div>
+    </div>
+  </div>
+
+  <main>
+    <!-- LEFT: Form -->
+    <div>
+      <div class="form-card">
+        <h2>Delivery Details</h2>
+        <form id="checkoutForm" novalidate>
+          <div class="form-row">
+            <div class="form-group">
+              <label>First Name</label>
+              <input type="text" id="firstName" placeholder="John" autocomplete="given-name" />
+              <span class="error-msg" id="err-firstName">Please enter your first name.</span>
+            </div>
+            <div class="form-group">
+              <label>Last Name</label>
+              <input type="text" id="lastName" placeholder="Smith" autocomplete="family-name" />
+              <span class="error-msg" id="err-lastName">Please enter your last name.</span>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Email Address</label>
+              <input type="email" id="email" placeholder="john@example.com" autocomplete="email" />
+              <span class="error-msg" id="err-email">Please enter a valid email.</span>
+            </div>
+            <div class="form-group">
+              <label>Phone Number</label>
+              <input type="tel" id="phone" placeholder="+44 7700 900000" autocomplete="tel" />
+              <span class="error-msg" id="err-phone">Please enter your phone number.</span>
+            </div>
+          </div>
+          <div class="form-row single">
+            <div class="form-group">
+              <label>Address Line 1</label>
+              <input type="text" id="address1" placeholder="12 Example Street" autocomplete="address-line1" />
+              <span class="error-msg" id="err-address1">Please enter your address.</span>
+            </div>
+          </div>
+          <div class="form-row single">
+            <div class="form-group">
+              <label>Address Line 2 <span style="color:var(--grey2);font-weight:400;">(optional)</span></label>
+              <input type="text" id="address2" placeholder="Flat, suite, etc." autocomplete="address-line2" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>City</label>
+              <input type="text" id="city" placeholder="London" autocomplete="address-level2" />
+              <span class="error-msg" id="err-city">Please enter your city.</span>
+            </div>
+            <div class="form-group">
+              <label>Postcode</label>
+              <input type="text" id="postcode" placeholder="EC1A 1BB" autocomplete="postal-code" />
+              <span class="error-msg" id="err-postcode">Please enter your postcode.</span>
+            </div>
+          </div>
+          <div class="form-row single">
+            <div class="form-group">
+              <label>Country</label>
+              <div class="select-wrap">
+                <select id="country" autocomplete="country">
+                  <option value="GB">United Kingdom</option>
+                  <option value="IE">Ireland</option>
+                  <option value="US">United States</option>
+                  <option value="CA">Canada</option>
+                  <option value="AU">Australia</option>
+                  <option value="DE">Germany</option>
+                  <option value="FR">France</option>
+                  <option value="NL">Netherlands</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <p class="section-label">Delivery Method</p>
+          <div class="delivery-options">
+            <label class="delivery-option selected" id="opt-standard">
+              <input type="radio" name="delivery" value="standard" checked />
+              <div class="radio-dot"><div class="radio-inner"></div></div>
+              <div class="delivery-info">
+                <div class="delivery-name">Standard Delivery</div>
+                <div class="delivery-desc">3–5 business days</div>
+              </div>
+              <span class="delivery-price free" id="standard-price">FREE</span>
+            </label>
+            <label class="delivery-option" id="opt-express">
+              <input type="radio" name="delivery" value="express" />
+              <div class="radio-dot"><div class="radio-inner"></div></div>
+              <div class="delivery-info">
+                <div class="delivery-name">Express Delivery</div>
+                <div class="delivery-desc">1–2 business days</div>
+              </div>
+              <span class="delivery-price">£7.99</span>
+            </label>
+            <label class="delivery-option" id="opt-next">
+              <input type="radio" name="delivery" value="nextday" />
+              <div class="radio-dot"><div class="radio-inner"></div></div>
+              <div class="delivery-info">
+                <div class="delivery-name">Next Day Delivery</div>
+                <div class="delivery-desc">Order before 2pm — delivered tomorrow</div>
+              </div>
+              <span class="delivery-price">£12.99</span>
+            </label>
+          </div>
+
+          <div class="promo-row">
+            <input type="text" id="promoInput" placeholder="Promo code" />
+            <button type="button" class="btn-promo" onclick="applyPromo()">Apply</button>
+          </div>
+          <p class="promo-msg" id="promoMsg"></p>
+
+          <button type="submit" class="btn-continue">Continue to Payment &rarr;</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- RIGHT: Order Summary -->
+    <div class="order-summary">
+      <div class="summary-card">
+        <h3>Order Summary</h3>
+        <div class="summary-items" id="summaryItems"></div>
+        <div class="summary-divider"></div>
+        <div class="summary-row">
+          <span>Subtotal</span>
+          <span id="summarySubtotal">£0.00</span>
+        </div>
+        <div class="summary-row delivery">
+          <span>Delivery</span>
+          <span id="summaryDelivery">FREE</span>
+        </div>
+        <div class="summary-row discount" id="discountRow" style="display:none;">
+          <span>Discount</span>
+          <span id="summaryDiscount"></span>
+        </div>
+        <div class="summary-total">
+          <span>Total</span>
+          <span id="summaryTotal">£0.00</span>
+        </div>
+        <p class="secure-note">
+          <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1L3 3.5v4C3 10.5 5.2 13.4 8 14c2.8-.6 5-3.5 5-6.5v-4L8 1z"/></svg>
+          Secure checkout · SSL encrypted
+        </p>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // ── Cart & state ──
+    let cart = JSON.parse(localStorage.getItem('novatech_cart') || '[]');
+    let deliveryCost = 0;
+    let discountPct = 0;
+    const PROMO_CODES = { 'NOVA10': 10, 'TECH15': 15, 'NVT20': 20 };
+
+    if (cart.length === 0) window.location.href = 'hardware.html';
+
+    function subtotal() {
+      return cart.reduce((s, i) => s + i.price * i.qty, 0);
+    }
+
+    function updateSummary() {
+      // Items
+      const itemsEl = document.getElementById('summaryItems');
+      itemsEl.innerHTML = cart.map(i => `
+        <div class="summary-item">
+          <div class="summary-item-icon">${i.icon}</div>
+          <div class="summary-item-info">
+            <div class="summary-item-name">${i.name}</div>
+            <div class="summary-item-qty">Qty: ${i.qty}</div>
+          </div>
+          <div class="summary-item-price">£${(i.price * i.qty).toLocaleString('en-GB', {minimumFractionDigits:2})}</div>
+        </div>
+      `).join('');
+
+      const sub = subtotal();
+      const discount = Math.round(sub * discountPct / 100);
+      const total = sub + deliveryCost - discount;
+
+      document.getElementById('summarySubtotal').textContent = `£${sub.toLocaleString('en-GB', {minimumFractionDigits:2})}`;
+      document.getElementById('summaryDelivery').textContent = deliveryCost === 0 ? 'FREE' : `£${deliveryCost.toFixed(2)}`;
+      document.getElementById('summaryDelivery').style.color = deliveryCost === 0 ? '#00ff88' : '#fff';
+      document.getElementById('summaryTotal').textContent = `£${total.toLocaleString('en-GB', {minimumFractionDigits:2})}`;
+
+      if (discount > 0) {
+        document.getElementById('discountRow').style.display = 'flex';
+        document.getElementById('summaryDiscount').textContent = `-£${discount.toLocaleString('en-GB', {minimumFractionDigits:2})}`;
+      } else {
+        document.getElementById('discountRow').style.display = 'none';
+      }
+    }
+
+    // ── Delivery selection ──
+    const deliveryOpts = document.querySelectorAll('.delivery-option');
+    const costs = { standard: 0, express: 7.99, nextday: 12.99 };
+
+    deliveryOpts.forEach(opt => {
+      opt.addEventListener('click', () => {
+        deliveryOpts.forEach(o => o.classList.remove('selected'));
+        opt.classList.add('selected');
+        const val = opt.querySelector('input').value;
+        deliveryCost = costs[val];
+        updateSummary();
+      });
+    });
+
+    // ── Promo ──
+    function applyPromo() {
+      const code = document.getElementById('promoInput').value.trim().toUpperCase();
+      const msgEl = document.getElementById('promoMsg');
+      if (PROMO_CODES[code]) {
+        discountPct = PROMO_CODES[code];
+        msgEl.textContent = `Code applied — ${discountPct}% off!`;
+        msgEl.className = 'promo-msg success';
+      } else {
+        discountPct = 0;
+        msgEl.textContent = 'Invalid promo code. Try NOVA10, TECH15 or NVT20.';
+        msgEl.className = 'promo-msg error';
+      }
+      updateSummary();
+    }
+
+    // ── Validation ──
+    function validate() {
+      const required = ['firstName','lastName','email','phone','address1','city','postcode'];
+      let ok = true;
+      required.forEach(id => {
+        const el = document.getElementById(id);
+        const err = document.getElementById('err-' + id);
+        const empty = !el.value.trim();
+        const emailBad = id === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(el.value.trim());
+        if (empty || emailBad) {
+          el.classList.add('error');
+          if (err) err.style.display = 'block';
+          ok = false;
+        } else {
+          el.classList.remove('error');
+          if (err) err.style.display = 'none';
+        }
+      });
+      return ok;
+    }
+
+    // ── Submit ──
+    document.getElementById('checkoutForm').addEventListener('submit', e => {
+      e.preventDefault();
+      if (!validate()) return;
+
+      const selectedDelivery = document.querySelector('.delivery-option.selected input').value;
+      const sub = subtotal();
+      const discount = Math.round(sub * discountPct / 100);
+
+      const shipping = {
+        firstName: document.getElementById('firstName').value.trim(),
+        lastName: document.getElementById('lastName').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        phone: document.getElementById('phone').value.trim(),
+        address1: document.getElementById('address1').value.trim(),
+        address2: document.getElementById('address2').value.trim(),
+        city: document.getElementById('city').value.trim(),
+        postcode: document.getElementById('postcode').value.trim(),
+        country: document.getElementById('country').value,
+        delivery: selectedDelivery,
+        deliveryCost,
+        discountPct,
+        discount,
+        subtotal: sub,
+        total: sub + deliveryCost - discount
+      };
+
+      localStorage.setItem('novatech_shipping', JSON.stringify(shipping));
+      window.location.href = 'payment.html';
+    });
+
+    updateSummary();
+  </script>
+</body>
+</html>

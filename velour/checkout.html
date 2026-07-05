@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Checkout — Velour</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:  #0a0a0a;
+      --white:  #f5f5f5;
+      --grey:   #1a1a1a;
+      --mid:    #2e2e2e;
+      --muted:  #888;
+      --accent: #e8d5b0;
+      --border: rgba(255,255,255,0.08);
+      --error:  #e07070;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px;
+      height: 64px;
+      background: rgba(10,10,10,0.92);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.6rem;
+      letter-spacing: 0.12em;
+      color: var(--white);
+      text-decoration: none;
+    }
+    .nav-steps {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .step { color: var(--muted); }
+    .step.active { color: var(--accent); }
+    .step-sep { color: var(--mid); }
+    .nav-back {
+      font-size: 0.82rem;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-back:hover { color: var(--white); }
+
+    /* ── LAYOUT ── */
+    .checkout-layout {
+      display: grid;
+      grid-template-columns: 1fr 420px;
+      gap: 0;
+      max-width: 1100px;
+      margin: 0 auto;
+      min-height: calc(100vh - 64px);
+    }
+
+    /* ── FORM SIDE ── */
+    .form-side {
+      padding: 52px 60px 60px 24px;
+      border-right: 1px solid var(--border);
+    }
+
+    .form-section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.9rem;
+      letter-spacing: 0.08em;
+      margin-bottom: 6px;
+    }
+    .form-section-sub {
+      color: var(--muted);
+      font-size: 0.85rem;
+      margin-bottom: 36px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      margin-bottom: 18px;
+    }
+    .form-group.full { grid-column: 1 / -1; }
+
+    label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    input, select {
+      background: var(--grey);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      padding: 13px 16px;
+      outline: none;
+      transition: border-color 0.2s;
+      width: 100%;
+      -webkit-appearance: none;
+    }
+    input::placeholder { color: var(--muted); }
+    input:focus, select:focus { border-color: var(--accent); }
+    select option { background: var(--grey); }
+
+    .select-wrap {
+      position: relative;
+    }
+    .select-wrap::after {
+      content: '▾';
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      pointer-events: none;
+      font-size: 0.85rem;
+    }
+    .select-wrap select { padding-right: 36px; cursor: pointer; }
+
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 32px 0;
+    }
+
+    .delivery-options {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .delivery-option {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--grey);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 18px;
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+    .delivery-option:has(input:checked) {
+      border-color: var(--accent);
+      background: rgba(232,213,176,0.06);
+    }
+    .delivery-option-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .delivery-option input[type="radio"] {
+      width: 18px; height: 18px;
+      accent-color: var(--accent);
+      cursor: pointer;
+      flex-shrink: 0;
+      margin: 0; padding: 0;
+    }
+    .delivery-name {
+      font-size: 0.88rem;
+      font-weight: 500;
+    }
+    .delivery-eta {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+    .delivery-price {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    .btn-continue {
+      display: block;
+      width: 100%;
+      margin-top: 36px;
+      padding: 16px;
+      background: var(--white);
+      color: var(--black);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem;
+      letter-spacing: 0.15em;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+      text-align: center;
+    }
+    .btn-continue:hover {
+      background: var(--accent);
+      transform: translateY(-1px);
+    }
+
+    /* ── ORDER SIDE ── */
+    .order-side {
+      padding: 52px 24px 60px 48px;
+      background: var(--grey);
+    }
+
+    .order-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.2rem;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-bottom: 28px;
+    }
+
+    .order-items {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+    .order-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .order-item-img-wrap {
+      position: relative;
+      flex-shrink: 0;
+    }
+    .order-item-img {
+      width: 60px; height: 60px;
+      border-radius: 6px;
+      object-fit: cover;
+      border: 1px solid var(--border);
+    }
+    .order-item-qty {
+      position: absolute;
+      top: -8px; right: -8px;
+      width: 20px; height: 20px;
+      background: var(--muted);
+      color: var(--white);
+      font-size: 0.68rem;
+      font-weight: 700;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .order-item-info { flex: 1; }
+    .order-item-name {
+      font-size: 0.88rem;
+      font-weight: 500;
+    }
+    .order-item-cat {
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-transform: capitalize;
+    }
+    .order-item-price {
+      font-size: 0.88rem;
+      font-weight: 600;
+    }
+
+    .order-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 20px 0;
+    }
+
+    .order-line {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+    .order-line span:last-child { color: var(--white); }
+    .order-total {
+      display: flex;
+      justify-content: space-between;
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+    .order-total span:last-child { color: var(--accent); }
+
+    .promo-wrap {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+    .promo-input {
+      flex: 1;
+      font-size: 0.82rem;
+      padding: 11px 14px;
+    }
+    .promo-btn {
+      padding: 11px 18px;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--muted);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      letter-spacing: 0.05em;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .promo-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    .secure-note {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 28px;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+    .secure-note svg { flex-shrink: 0; }
+
+    /* validation */
+    input.error { border-color: var(--error); }
+
+    @media (max-width: 860px) {
+      .checkout-layout { grid-template-columns: 1fr; }
+      .form-side { padding: 36px 24px; border-right: none; border-bottom: 1px solid var(--border); }
+      .order-side { padding: 36px 24px; }
+      nav { padding: 0 20px; }
+      .nav-steps { display: none; }
+    }
+    @media (max-width: 500px) {
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-logo">Velour</a>
+    <div class="nav-steps">
+      <span class="step active">Shipping</span>
+      <span class="step-sep">›</span>
+      <span class="step">Payment</span>
+      <span class="step-sep">›</span>
+      <span class="step">Confirmation</span>
+    </div>
+    <a href="index.html" class="nav-back">← Back to shop</a>
+  </nav>
+
+  <div class="checkout-layout">
+
+    <!-- FORM SIDE -->
+    <div class="form-side">
+      <div class="form-section-title">Shipping Details</div>
+      <p class="form-section-sub">Enter the address where you'd like your order delivered.</p>
+
+      <form id="shippingForm" novalidate>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="firstName">First Name</label>
+            <input type="text" id="firstName" placeholder="James" autocomplete="given-name"/>
+          </div>
+          <div class="form-group">
+            <label for="lastName">Last Name</label>
+            <input type="text" id="lastName" placeholder="Mercer" autocomplete="family-name"/>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" placeholder="james@example.com" autocomplete="email"/>
+        </div>
+
+        <div class="form-group">
+          <label for="phone">Phone Number</label>
+          <input type="tel" id="phone" placeholder="+44 7700 900000" autocomplete="tel"/>
+        </div>
+
+        <hr class="divider"/>
+
+        <div class="form-group">
+          <label for="address1">Address Line 1</label>
+          <input type="text" id="address1" placeholder="123 High Street" autocomplete="address-line1"/>
+        </div>
+
+        <div class="form-group">
+          <label for="address2">Address Line 2 <span style="color:var(--muted);font-weight:400;">(optional)</span></label>
+          <input type="text" id="address2" placeholder="Flat 4B" autocomplete="address-line2"/>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="city">City / Town</label>
+            <input type="text" id="city" placeholder="London" autocomplete="address-level2"/>
+          </div>
+          <div class="form-group">
+            <label for="postcode">Postcode</label>
+            <input type="text" id="postcode" placeholder="SW1A 1AA" autocomplete="postal-code"/>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="country">Country</label>
+          <div class="select-wrap">
+            <select id="country" autocomplete="country">
+              <option value="GB" selected>United Kingdom</option>
+              <option value="US">United States</option>
+              <option value="IE">Ireland</option>
+              <option value="FR">France</option>
+              <option value="DE">Germany</option>
+              <option value="ES">Spain</option>
+              <option value="IT">Italy</option>
+              <option value="NL">Netherlands</option>
+              <option value="AU">Australia</option>
+              <option value="CA">Canada</option>
+              <option value="SA">Saudi Arabia</option>
+            </select>
+          </div>
+        </div>
+
+        <hr class="divider"/>
+
+        <div class="form-section-title" style="font-size:1.4rem; margin-bottom:6px;">Delivery Method</div>
+        <p class="form-section-sub">Choose how fast you'd like your order to arrive.</p>
+
+        <div class="delivery-options">
+          <label class="delivery-option">
+            <div class="delivery-option-left">
+              <input type="radio" name="delivery" value="standard" checked/>
+              <div>
+                <div class="delivery-name">Standard Delivery</div>
+                <div class="delivery-eta">3–5 business days</div>
+              </div>
+            </div>
+            <div class="delivery-price" id="std-price">FREE</div>
+          </label>
+
+          <label class="delivery-option">
+            <div class="delivery-option-left">
+              <input type="radio" name="delivery" value="express"/>
+              <div>
+                <div class="delivery-name">Express Delivery</div>
+                <div class="delivery-eta">1–2 business days</div>
+              </div>
+            </div>
+            <div class="delivery-price">£6.99</div>
+          </label>
+
+          <label class="delivery-option">
+            <div class="delivery-option-left">
+              <input type="radio" name="delivery" value="next"/>
+              <div>
+                <div class="delivery-name">Next Day Delivery</div>
+                <div class="delivery-eta">Order before 2pm</div>
+              </div>
+            </div>
+            <div class="delivery-price">£9.99</div>
+          </label>
+        </div>
+
+        <button type="submit" class="btn-continue">Continue to Payment →</button>
+
+      </form>
+    </div>
+
+    <!-- ORDER SUMMARY SIDE -->
+    <div class="order-side">
+      <div class="order-title">Order Summary</div>
+
+      <div class="order-items" id="orderItems">
+        <!-- filled by JS -->
+      </div>
+
+      <div class="promo-wrap">
+        <input class="promo-input" type="text" placeholder="Promo code" id="promoInput"/>
+        <button class="promo-btn" onclick="applyPromo()">Apply</button>
+      </div>
+
+      <div class="order-divider"></div>
+
+      <div class="order-line"><span>Subtotal</span><span id="summarySubtotal">£0</span></div>
+      <div class="order-line"><span>Delivery</span><span id="summaryDelivery">FREE</span></div>
+      <div class="order-line" id="discountLine" style="display:none; color:#90c97c;"><span>Discount (VELOUR10)</span><span id="discountAmt"></span></div>
+      <div class="order-total"><span>Total</span><span id="summaryTotal">£0</span></div>
+
+      <div class="secure-note">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        Secure checkout — encrypted & protected
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // ── Load cart from sessionStorage ──
+    let cart = JSON.parse(sessionStorage.getItem('velour_cart') || '[]');
+    let promoApplied = false;
+    let deliveryCost = 0;
+
+    // If cart is empty redirect back
+    if (cart.length === 0) {
+      window.location.href = 'index.html';
+    }
+
+    function getSubtotal() {
+      return cart.reduce((s, i) => s + i.price * i.qty, 0);
+    }
+
+    function renderOrder() {
+      const sub = getSubtotal();
+      const freeShipping = sub >= 80;
+
+      document.getElementById('orderItems').innerHTML = cart.map(item => `
+        <div class="order-item">
+          <div class="order-item-img-wrap">
+            <img class="order-item-img" src="${item.img}" alt="${item.name}"/>
+            <span class="order-item-qty">${item.qty}</span>
+          </div>
+          <div class="order-item-info">
+            <div class="order-item-name">${item.name}</div>
+            <div class="order-item-cat">${item.cat}</div>
+          </div>
+          <div class="order-item-price">£${item.price * item.qty}</div>
+        </div>
+      `).join('');
+
+      updateTotals();
+
+      // Standard delivery free if over £80
+      const stdLabel = document.getElementById('std-price');
+      if (stdLabel) stdLabel.textContent = freeShipping ? 'FREE' : '£3.99';
+    }
+
+    function updateTotals() {
+      const sub = getSubtotal();
+      const freeShipping = sub >= 80;
+      const selectedDelivery = document.querySelector('input[name="delivery"]:checked')?.value || 'standard';
+
+      const deliveryMap = { standard: freeShipping ? 0 : 3.99, express: 6.99, next: 9.99 };
+      deliveryCost = deliveryMap[selectedDelivery];
+
+      const discount = promoApplied ? Math.round(sub * 0.1) : 0;
+      const total = sub + deliveryCost - discount;
+
+      document.getElementById('summarySubtotal').textContent = `£${sub}`;
+      document.getElementById('summaryDelivery').textContent = deliveryCost === 0 ? 'FREE' : `£${deliveryCost.toFixed(2)}`;
+      document.getElementById('summaryTotal').textContent = `£${total.toFixed(2)}`;
+
+      if (promoApplied) {
+        document.getElementById('discountLine').style.display = 'flex';
+        document.getElementById('discountAmt').textContent = `-£${discount}`;
+      }
+    }
+
+    // Delivery change
+    document.querySelectorAll('input[name="delivery"]').forEach(r => {
+      r.addEventListener('change', updateTotals);
+    });
+
+    function applyPromo() {
+      const code = document.getElementById('promoInput').value.trim().toUpperCase();
+      if (code === 'VELOUR10' && !promoApplied) {
+        promoApplied = true;
+        document.getElementById('promoInput').style.borderColor = '#90c97c';
+        updateTotals();
+      } else if (promoApplied) {
+        document.getElementById('promoInput').style.borderColor = 'var(--accent)';
+      } else {
+        document.getElementById('promoInput').style.borderColor = 'var(--error)';
+      }
+    }
+
+    // ── Form validation & submit ──
+    document.getElementById('shippingForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const required = ['firstName','lastName','email','address1','city','postcode'];
+      let valid = true;
+      required.forEach(id => {
+        const el = document.getElementById(id);
+        if (!el.value.trim()) {
+          el.classList.add('error');
+          valid = false;
+        } else {
+          el.classList.remove('error');
+        }
+      });
+      if (!valid) return;
+
+      // Save shipping + order data to sessionStorage
+      const shipping = {
+        firstName: document.getElementById('firstName').value.trim(),
+        lastName:  document.getElementById('lastName').value.trim(),
+        email:     document.getElementById('email').value.trim(),
+        phone:     document.getElementById('phone').value.trim(),
+        address1:  document.getElementById('address1').value.trim(),
+        address2:  document.getElementById('address2').value.trim(),
+        city:      document.getElementById('city').value.trim(),
+        postcode:  document.getElementById('postcode').value.trim(),
+        country:   document.getElementById('country').value,
+        delivery:  document.querySelector('input[name="delivery"]:checked').value,
+        deliveryCost,
+        promoApplied,
+      };
+      sessionStorage.setItem('velour_shipping', JSON.stringify(shipping));
+
+      // Navigate to payment page
+      window.location.href = 'payment.html';
+    });
+
+    // Clear error on input
+    document.querySelectorAll('input').forEach(inp => {
+      inp.addEventListener('input', () => inp.classList.remove('error'));
+    });
+
+    renderOrder();
+  </script>
+
+</body>
+</html>

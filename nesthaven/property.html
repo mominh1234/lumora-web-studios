@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Property Detail — NestHaven</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #06090c; --bg-card: #0d1117; --bg-card2: #111820;
+      --border: rgba(255,159,122,0.12); --border-hover: rgba(255,159,122,0.45);
+      --c1: #FF9F7A; --c2: #FFBFA5; --c3: #FFD9B5;
+      --white: #ffffff; --muted: rgba(255,255,255,0.55);
+      --radius: 16px; --radius-lg: 24px;
+      --transition: 0.35s cubic-bezier(0.4,0,0.2,1);
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--white); font-family: 'Inter', sans-serif; font-size: 16px; line-height: 1.6; overflow-x: hidden; }
+
+    .grad-text { background: linear-gradient(135deg, var(--c1), var(--c2), var(--c3)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .grad-btn { background: linear-gradient(135deg, var(--c1), var(--c2)); color: #1a0a00; font-weight: 700; border: none; cursor: pointer; transition: opacity var(--transition), transform var(--transition), box-shadow var(--transition); }
+    .grad-btn:hover { opacity: 0.92; transform: translateY(-2px); box-shadow: 0 12px 40px rgba(255,159,122,0.35); }
+
+    /* NAV */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 22px 60px; background: rgba(6,9,12,0.88); backdrop-filter: blur(18px); border-bottom: 1px solid var(--border); }
+    .nav-logo { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.5rem; font-weight: 800; text-decoration: none; letter-spacing: -0.02em; }
+    .nav-links { display: flex; align-items: center; gap: 36px; list-style: none; }
+    .nav-links a { color: rgba(255,255,255,0.75); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: color var(--transition); }
+    .nav-links a:hover { color: var(--white); }
+    .nav-links .nav-login { padding: 9px 22px; border: 1px solid rgba(255,159,122,0.4); border-radius: 40px; color: var(--c2) !important; }
+    .nav-links .nav-login:hover { background: rgba(255,159,122,0.1); border-color: var(--c1); }
+
+    /* BREADCRUMB */
+    .breadcrumb-bar { padding: 100px 60px 0; max-width: 1260px; margin: 0 auto; }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.82rem; color: var(--muted); }
+    .breadcrumb a { color: var(--muted); text-decoration: none; transition: color var(--transition); }
+    .breadcrumb a:hover { color: var(--c2); }
+    .breadcrumb svg { color: rgba(255,255,255,0.25); }
+
+    /* PHOTO GALLERY */
+    .gallery { max-width: 1260px; margin: 20px auto 0; padding: 0 60px; }
+    .gallery-main { position: relative; border-radius: var(--radius-lg); overflow: hidden; height: 500px; cursor: pointer; }
+    .gallery-main img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+    .gallery-main:hover img { transform: scale(1.02); }
+    .gallery-badge { position: absolute; top: 20px; left: 20px; background: linear-gradient(135deg, var(--c1), var(--c2)); color: #1a0800; font-size: 0.75rem; font-weight: 700; padding: 6px 16px; border-radius: 40px; letter-spacing: 0.05em; }
+    .gallery-count { position: absolute; bottom: 20px; right: 20px; background: rgba(6,9,12,0.75); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.15); color: var(--white); font-size: 0.82rem; font-weight: 600; padding: 8px 16px; border-radius: 40px; display: flex; align-items: center; gap: 6px; cursor: pointer; transition: all var(--transition); }
+    .gallery-count:hover { border-color: var(--c1); }
+    .gallery-thumbs { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 10px; }
+    .gallery-thumb { border-radius: 12px; overflow: hidden; height: 90px; cursor: pointer; border: 2px solid transparent; transition: all var(--transition); }
+    .gallery-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
+    .gallery-thumb:hover img { transform: scale(1.08); }
+    .gallery-thumb.active { border-color: var(--c1); }
+
+    /* LIGHTBOX */
+    .lightbox { display: none; position: fixed; inset: 0; z-index: 999; background: rgba(0,0,0,0.95); align-items: center; justify-content: center; flex-direction: column; }
+    .lightbox.open { display: flex; }
+    .lightbox img { max-width: 90vw; max-height: 80vh; border-radius: 12px; object-fit: contain; }
+    .lightbox-close { position: absolute; top: 24px; right: 28px; width: 44px; height: 44px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 50%; color: #fff; cursor: pointer; font-size: 1.4rem; display: flex; align-items: center; justify-content: center; transition: all var(--transition); }
+    .lightbox-close:hover { background: rgba(255,159,122,0.25); border-color: var(--c1); }
+    .lightbox-nav { position: absolute; top: 50%; transform: translateY(-50%); width: 52px; height: 52px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 50%; color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all var(--transition); }
+    .lightbox-nav:hover { background: rgba(255,159,122,0.25); border-color: var(--c1); }
+    .lightbox-prev { left: 24px; }
+    .lightbox-next { right: 24px; }
+    .lightbox-caption { color: rgba(255,255,255,0.6); font-size: 0.85rem; margin-top: 14px; }
+
+    /* MAIN LAYOUT */
+    .prop-layout { max-width: 1260px; margin: 40px auto 0; padding: 0 60px 100px; display: grid; grid-template-columns: 1fr 380px; gap: 48px; align-items: start; }
+
+    /* LEFT: DETAILS */
+    .prop-detail { min-width: 0; }
+    .prop-header { margin-bottom: 32px; }
+    .prop-price-row { display: flex; align-items: baseline; gap: 10px; margin-bottom: 8px; }
+    .prop-price-big { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 2.4rem; font-weight: 800; color: var(--c2); }
+    .prop-price-per { font-size: 1rem; color: var(--muted); }
+    .prop-title-big { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.8rem; font-weight: 800; letter-spacing: -0.025em; line-height: 1.2; margin-bottom: 10px; }
+    .prop-address { display: flex; align-items: center; gap: 6px; color: var(--muted); font-size: 0.92rem; margin-bottom: 20px; }
+    .prop-address svg { color: var(--c1); flex-shrink: 0; }
+    .prop-stats { display: flex; gap: 20px; flex-wrap: wrap; padding: 20px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); margin-bottom: 28px; }
+    .prop-stat { display: flex; align-items: center; gap: 8px; }
+    .prop-stat-icon { width: 38px; height: 38px; background: rgba(255,159,122,0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .prop-stat-icon svg { color: var(--c1); }
+    .prop-stat-text strong { display: block; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.92rem; font-weight: 700; }
+    .prop-stat-text span { font-size: 0.75rem; color: var(--muted); }
+
+    /* DESCRIPTION */
+    .section-heading { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.15rem; font-weight: 800; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+    .section-heading::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .prop-description { color: rgba(255,255,255,0.75); line-height: 1.8; font-size: 0.95rem; margin-bottom: 36px; }
+    .prop-description p { margin-bottom: 14px; }
+    .prop-description p:last-child { margin-bottom: 0; }
+
+    /* FEATURES GRID */
+    .features-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 36px; }
+    .feature-item { display: flex; align-items: center; gap: 10px; background: var(--bg-card2); border: 1px solid var(--border); border-radius: 12px; padding: 12px 16px; font-size: 0.85rem; transition: border-color var(--transition); }
+    .feature-item:hover { border-color: rgba(255,159,122,0.3); }
+    .feature-item svg { color: var(--c1); flex-shrink: 0; }
+
+    /* FLOOR PLAN */
+    .floor-plan-wrap { margin-bottom: 36px; }
+    .floor-plan-svg { background: var(--bg-card2); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; width: 100%; }
+    .floor-plan-tabs { display: flex; gap: 8px; margin-bottom: 16px; }
+    .fp-tab { padding: 7px 18px; border-radius: 40px; background: var(--bg-card2); border: 1px solid var(--border); color: var(--muted); font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: all var(--transition); }
+    .fp-tab.active { background: linear-gradient(135deg, rgba(255,159,122,0.2), rgba(255,191,165,0.1)); border-color: var(--c1); color: var(--c2); }
+
+    /* MAP AREA */
+    .map-area { background: var(--bg-card2); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; height: 200px; position: relative; margin-bottom: 36px; display: flex; align-items: center; justify-content: center; }
+    .map-placeholder { text-align: center; color: var(--muted); }
+    .map-placeholder svg { color: var(--c1); margin-bottom: 8px; }
+    .map-placeholder p { font-size: 0.85rem; }
+    .map-placeholder strong { display: block; font-family: 'Plus Jakarta Sans', sans-serif; color: var(--white); font-size: 0.95rem; margin-bottom: 4px; }
+
+    /* RIGHT: SIDEBAR */
+    .prop-sidebar { position: sticky; top: 90px; }
+    .sidebar-card { background: var(--bg-card2); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 28px; margin-bottom: 16px; }
+    .sidebar-cta-title { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1rem; font-weight: 800; margin-bottom: 6px; }
+    .sidebar-cta-sub { font-size: 0.82rem; color: var(--muted); margin-bottom: 20px; }
+    .sidebar-form input, .sidebar-form textarea { width: 100%; background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; color: var(--white); font-family: 'Inter', sans-serif; font-size: 0.88rem; padding: 12px 14px; outline: none; transition: border-color var(--transition); margin-bottom: 10px; resize: none; }
+    .sidebar-form input:focus, .sidebar-form textarea:focus { border-color: var(--c1); }
+    .sidebar-form textarea { height: 90px; }
+    .sidebar-btn { display: block; width: 100%; padding: 14px; text-align: center; border-radius: 12px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.9rem; font-weight: 700; cursor: pointer; margin-bottom: 10px; border: none; }
+    .sidebar-btn-outline { background: transparent; border: 1px solid var(--border); color: var(--white); border-radius: 12px; padding: 12px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.88rem; font-weight: 600; cursor: pointer; width: 100%; display: flex; align-items: center; justify-content: center; gap: 7px; transition: all var(--transition); }
+    .sidebar-btn-outline:hover { border-color: var(--c1); color: var(--c2); background: rgba(255,159,122,0.05); }
+    .sidebar-agent { display: flex; align-items: center; gap: 12px; padding-top: 16px; border-top: 1px solid var(--border); margin-top: 16px; }
+    .sidebar-agent-avatar { width: 46px; height: 46px; border-radius: 50%; background: linear-gradient(135deg, var(--c1), var(--c3)); display: flex; align-items: center; justify-content: center; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 1rem; color: #1a0800; flex-shrink: 0; }
+    .sidebar-agent-info strong { display: block; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.88rem; font-weight: 700; }
+    .sidebar-agent-info span { font-size: 0.75rem; color: var(--muted); }
+    .sidebar-key-facts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .sidebar-fact { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; }
+    .sidebar-fact-label { font-size: 0.68rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 4px; }
+    .sidebar-fact-val { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.9rem; font-weight: 700; color: var(--c2); }
+
+    /* SIMILAR PROPERTIES */
+    .similar-section { max-width: 1260px; margin: 0 auto; padding: 0 60px 100px; }
+    .similar-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-top: 24px; }
+    .sim-card { background: var(--bg-card2); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition); cursor: pointer; text-decoration: none; display: block; }
+    .sim-card:hover { transform: translateY(-5px); border-color: var(--border-hover); box-shadow: 0 20px 50px rgba(0,0,0,0.4); }
+    .sim-img { height: 180px; overflow: hidden; }
+    .sim-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+    .sim-card:hover .sim-img img { transform: scale(1.05); }
+    .sim-body { padding: 18px; }
+    .sim-price { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.2rem; font-weight: 800; color: var(--c2); margin-bottom: 4px; }
+    .sim-title { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.9rem; font-weight: 700; margin-bottom: 6px; }
+    .sim-loc { font-size: 0.78rem; color: var(--muted); display: flex; align-items: center; gap: 4px; }
+    .sim-loc svg { color: var(--c1); }
+
+    /* FOOTER */
+    footer { background: #040709; padding: 48px 60px 0; border-top: 1px solid var(--border); }
+    .footer-bottom { max-width: 1200px; margin: 0 auto; padding: 24px 0; display: flex; align-items: center; justify-content: space-between; font-size: 0.78rem; color: rgba(255,255,255,0.3); }
+    .footer-bottom a { color: rgba(255,255,255,0.35); text-decoration: none; }
+
+    /* REVEAL */
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* RESPONSIVE */
+    @media (max-width: 1024px) {
+      nav, .breadcrumb-bar, .gallery, .prop-layout, .similar-section, footer { padding-left: 32px; padding-right: 32px; }
+      .prop-layout { grid-template-columns: 1fr; }
+      .prop-sidebar { position: static; }
+      .gallery-thumbs { grid-template-columns: repeat(5, 1fr); }
+      .similar-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 768px) {
+      nav { padding: 16px 20px; }
+      .nav-links li:not(:last-child) { display: none; }
+      .breadcrumb-bar, .gallery, .prop-layout, .similar-section, footer { padding-left: 20px; padding-right: 20px; }
+      .gallery-main { height: 300px; }
+      .gallery-thumbs { grid-template-columns: repeat(3, 1fr); }
+      .prop-price-big { font-size: 1.8rem; }
+      .prop-title-big { font-size: 1.4rem; }
+      .features-grid { grid-template-columns: 1fr; }
+      .similar-grid { grid-template-columns: 1fr; }
+      .footer-bottom { flex-direction: column; gap: 10px; text-align: center; }
+    }
+
+    @keyframes fadeIn { from { opacity: 0; transform: scale(0.97); } to { opacity: 1; transform: scale(1); } }
+    .lightbox.open { animation: fadeIn 0.2s ease; }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-logo grad-text">NestHaven</a>
+    <ul class="nav-links">
+      <li><a href="index.html#why">For Landlords</a></li>
+      <li><a href="index.html#why">For Buyers</a></li>
+      <li><a href="index.html" class="nav-login">Login</a></li>
+    </ul>
+  </nav>
+
+  <div class="breadcrumb-bar">
+    <div class="breadcrumb">
+      <a href="index.html">Home</a>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      <a href="browse.html">Browse Properties</a>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      <span id="bc-title">Property Detail</span>
+    </div>
+  </div>
+
+  <!-- GALLERY -->
+  <div class="gallery">
+    <div class="gallery-main" id="gallery-main" onclick="openLightbox(0)">
+      <img id="gallery-hero" src="" alt="Property exterior" />
+      <span class="gallery-badge">Verified</span>
+      <span class="gallery-count" onclick="event.stopPropagation();openLightbox(0)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+        View all photos
+      </span>
+    </div>
+    <div class="gallery-thumbs" id="gallery-thumbs"></div>
+  </div>
+
+  <!-- PROPERTY LAYOUT -->
+  <div class="prop-layout">
+
+    <!-- LEFT -->
+    <div class="prop-detail">
+
+      <div class="prop-header reveal">
+        <div class="prop-price-row">
+          <span class="prop-price-big" id="p-price"></span>
+          <span class="prop-price-per" id="p-per"></span>
+        </div>
+        <h1 class="prop-title-big" id="p-title"></h1>
+        <div class="prop-address">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+          <span id="p-address"></span>
+        </div>
+        <div class="prop-stats" id="p-stats"></div>
+      </div>
+
+      <div class="reveal">
+        <h3 class="section-heading">About this property</h3>
+        <div class="prop-description" id="p-description"></div>
+      </div>
+
+      <div class="reveal">
+        <h3 class="section-heading">Features &amp; amenities</h3>
+        <div class="features-grid" id="p-features"></div>
+      </div>
+
+      <div class="floor-plan-wrap reveal">
+        <h3 class="section-heading">Floor plan</h3>
+        <div class="floor-plan-tabs">
+          <button class="fp-tab active" data-floor="ground" onclick="switchFloor(this,'ground')">Ground Floor</button>
+          <button class="fp-tab" data-floor="first" onclick="switchFloor(this,'first')">First Floor</button>
+        </div>
+        <div class="floor-plan-svg" id="floor-plan-svg"></div>
+      </div>
+
+      <div class="reveal">
+        <h3 class="section-heading">Location</h3>
+        <div class="map-area">
+          <div class="map-placeholder">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            <strong id="map-city"></strong>
+            <p>Full interactive map available on request</p>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /prop-detail -->
+
+    <!-- RIGHT SIDEBAR -->
+    <div class="prop-sidebar">
+      <div class="sidebar-card reveal">
+        <div class="sidebar-cta-title">Enquire about this property</div>
+        <div class="sidebar-cta-sub">Send a message and we'll get back to you within the hour.</div>
+        <div class="sidebar-form">
+          <input type="text" placeholder="Your full name" />
+          <input type="email" placeholder="Email address" />
+          <input type="tel" placeholder="Phone number (optional)" />
+          <textarea placeholder="Hi, I'm interested in this property and would like to arrange a viewing..."></textarea>
+          <button class="sidebar-btn grad-btn" onclick="sendEnquiry(this)">Send Enquiry</button>
+          <button class="sidebar-btn-outline">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.16 3.45 2 2 0 0 1 3.15 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.12a16 16 0 0 0 6 6l.46-.46a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21 16z"></path></svg>
+            Request a Viewing
+          </button>
+        </div>
+        <div class="sidebar-agent">
+          <div class="sidebar-agent-avatar" id="agent-avatar">NH</div>
+          <div class="sidebar-agent-info">
+            <strong id="agent-name">NestHaven Agent</strong>
+            <span>Property Specialist</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-card reveal">
+        <div class="sidebar-cta-title" style="margin-bottom:14px;">Key facts</div>
+        <div class="sidebar-key-facts" id="sidebar-facts"></div>
+      </div>
+    </div>
+
+  </div><!-- /prop-layout -->
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+    <button class="lightbox-nav lightbox-prev" onclick="lightboxNav(-1)">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+    </button>
+    <img id="lightbox-img" src="" alt="" />
+    <span class="lightbox-caption" id="lightbox-caption"></span>
+    <button class="lightbox-nav lightbox-next" onclick="lightboxNav(1)">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+    </button>
+  </div>
+
+  <!-- SIMILAR PROPERTIES -->
+  <div class="similar-section">
+    <h3 class="section-heading reveal" style="font-family:'Plus Jakarta Sans',sans-serif;font-size:1.3rem;font-weight:800;">Similar Properties</h3>
+    <div class="similar-grid" id="similar-grid"></div>
+  </div>
+
+  <footer>
+    <div class="footer-bottom">
+      <span>&copy; 2025 NestHaven. All rights reserved.</span>
+      <div style="display:flex;gap:20px;">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+      </div>
+    </div>
+  </footer>
+
+<script>
+// ============================================================
+// PER-PROPERTY INTERIOR PHOTO IDs (all verified 200)
+// [living, kitchen, bedroom, bathroom, dining]
+// ============================================================
+const INTERIORS = {
+  1:  ['1583847268964-b28dc8f51f92','1484154218962-a197022b5858','1579656381226-5fc0f0100c3b','1496771461583-954f4c95339e','1531410691118-74e9fbc0f57f'],
+  2:  ['1555041469-a586c61ea9bc','1512916194211-3f2b7f5f7de3','1600210491305-7396500b5b31','1576698483491-8c43f0862543','1534353436294-0dbd4bdac845'],
+  3:  ['1598928506311-c55ded91a20c','1538944570562-2c9cb7857097','1600210491741-a69593e43133','1595428773927-7c9c75203a2d','1564586880927-99376cbf0f4f'],
+  4:  ['1600210491892-03d54c0aaf87','1541604193435-22287d32c2c2','1600493504091-8fb1555d2e14','1595428773960-5bea2830b067','1567111065380-257ee03985bb'],
+  5:  ['1611048267451-e6ed903d4a38','1565538810643-b5bdb714032a','1600493505500-afac3fc363e6','1595428774185-e1ec02f38bdd','1568388741904-8e9b843c9b0f'],
+  6:  ['1613082442324-62ef5249275e','1578854888566-a4fde9f0b0e9','1603072388139-565853396b38','1595514534892-a1ce92ee8677','1585128903994-9788298932a6'],
+  7:  ['1616047006789-b7af5afb8c20','1583845112239-97ef1341b271','1611048268330-53de574cae3b','1595514535141-0b20e6615700','1593136596203-7212b076f4d2'],
+  8:  ['1618220179428-22790b461013','1588854337115-1c67d9247e4d','1613685703237-6628de38ddb7','1595514535215-8a093483610a','1600488999806-8efb986d87b1'],
+  9:  ['1618221195710-dd6b41faaea6','1588854337236-6889d631faa8','1616594039964-ae9021a400a0','1595514535310-e4e66107c31d','1600489000300-e590b381ce48'],
+  10: ['1631679706909-1844bbd07221','1591924450983-b8f7587ea332','1618221823713-ca8c0e6c9992','1595514535415-dae8580c416c','1611596188718-840151555242'],
+  11: ['1633505899118-4ca6bd143043','1600489000022-c2086d79f9d4','1625578782042-3f2ad4f42956','1595515106880-aa5c54392847','1612320428376-4096809118b5'],
+  12: ['1634822929277-0c51ca0e8846','1600684388091-627109f3cd60','1625579002297-aeebbf69de89','1595515106969-1ce29566ff1c','1613545325268-314979eeef03'],
+  13: ['1664711942326-2c3351e215e6','1602028915047-37269d1a73f7','1631049307290-bb947b114627','1595515422510-7ece0438c07d','1631048499453-b1342a519efc'],
+  14: ['1724582586495-d050726cf354','1609241506098-80fc37c6325f','1638840992956-142399e7e2df','1595515422730-cc7684b670dc','1631048500063-aac1c3565d4c'],
+  15: ['1724582586529-62622e50c0b3','1556912167-f556f1f39fdf','1650484238427-e3743996836f','1595515422824-a17acde1b915','1550930401-6a5854f1c5dd'],
+};
+
+// ============================================================
+// ALL 15 PROPERTIES DATA
+// ============================================================
+const PROPERTIES = [
+  {
+    id: 1,
+    title: '3-Bed Victorian Terrace',
+    address: 'Didsbury, Manchester, M20',
+    city: 'Manchester',
+    price: '£1,200',
+    per: '/month',
+    type: 'House',
+    beds: 3, baths: 2, size: '1,150',
+    extImg: '1759403478100-92a1acc2d07e',
+    agent: { name: 'Sarah Mitchell', initials: 'SM' },
+    description: `<p>A beautifully presented Victorian terrace on one of Didsbury's most sought-after tree-lined streets. This characterful three-bedroom home has been thoughtfully renovated to blend period features with contemporary living — original cornicing, fireplaces and sash windows sit alongside a fully fitted open-plan kitchen-diner and stylish family bathroom.</p>
+    <p>The south-facing rear garden is a real highlight, with a paved patio ideal for entertaining and a lawned area beyond. Located steps from Didsbury Village's independent restaurants, cafes and boutiques, and within catchment for excellent local schools. The Metrolink is a short walk away.</p>
+    <p>Available from 1st February. Pets considered. Council Tax Band C.</p>`,
+    features: ['South-facing garden','Original fireplaces','Open-plan kitchen-diner','Loft storage','Sash windows','Street parking permit','Near Metrolink','Top-rated schools nearby'],
+    tags: ['Victorian','Garden','Parking','Schools'],
+    typeLabel: 'Victorian Terrace',
+    available: '1 Feb 2025',
+    tenancy: '12 months',
+    deposit: '£1,800',
+    epc: 'D (60)',
+    floorGroundRooms: [
+      {label:'Kitchen-Diner',w:200,h:130,x:10,y:150},
+      {label:'Living Room',w:160,h:130,x:220,y:150},
+      {label:'Hallway',w:60,h:130,x:390,y:150},
+      {label:'WC',w:60,h:70,x:460,y:210},
+    ],
+    floorFirstRooms: [
+      {label:'Master Bedroom',w:200,h:130,x:10,y:150},
+      {label:'Bedroom 2',w:160,h:130,x:220,y:150},
+      {label:'Bathroom',w:80,h:130,x:390,y:150},
+    ],
+  },
+  {
+    id: 2,
+    title: '2-Bed Garden Flat',
+    address: 'Notting Hill, London, W11',
+    city: 'London',
+    price: '£1,800',
+    per: '/month',
+    type: 'Flat',
+    beds: 2, baths: 1, size: '850',
+    extImg: '1718579019220-98697dc2fd72',
+    agent: { name: 'James Thornton', initials: 'JT' },
+    description: `<p>An exceptional garden flat in the heart of Notting Hill, set within one of the area's iconic colourful Georgian terraces. This beautifully presented lower-ground floor apartment benefits from outstanding ceiling heights, original period shutters, and direct access to a private south-facing walled rear garden — a genuine rarity at this price point.</p>
+    <p>The open-plan reception room is bathed in natural light through full-height windows, and the kitchen has been fitted to a high specification with integrated appliances. Both bedrooms are well-proportioned, with the master overlooking the garden.</p>
+    <p>Located moments from Portobello Road Market, the Elizabeth Line at Paddington, and an array of acclaimed restaurants. Available immediately. No smokers. Council Tax Band F.</p>`,
+    features: ['Private walled garden','Period shutters','High ceilings','Integrated kitchen','Elizabeth Line nearby','Portobello Road','Garden access','Storage cupboards'],
+    tags: ['Garden','Period','Central London'],
+    typeLabel: 'Garden Flat',
+    available: 'Immediately',
+    tenancy: '12–24 months',
+    deposit: '£2,700',
+    epc: 'E (50)',
+    floorGroundRooms: [
+      {label:'Open-Plan Living',w:220,h:140,x:10,y:140},
+      {label:'Master Bed',w:150,h:140,x:240,y:140},
+      {label:'Bed 2',w:120,h:140,x:400,y:140},
+    ],
+    floorFirstRooms: [],
+  },
+  {
+    id: 3,
+    title: '1-Bed Stone Tenement Flat',
+    address: 'New Town, Edinburgh, EH2',
+    city: 'Edinburgh',
+    price: '£950',
+    per: '/month',
+    type: 'Flat',
+    beds: 1, baths: 1, size: '550',
+    extImg: '1629475840643-2d2b9923894d',
+    agent: { name: 'Fiona Campbell', initials: 'FC' },
+    description: `<p>A stunning first-floor flat within one of Edinburgh's iconic stone tenement buildings, located in the prestigious New Town conservation area. The flat retains its magnificent original cornicing, deep skirtings and a decorative cast iron fireplace — features that define this remarkable style of architecture unique to Edinburgh.</p>
+    <p>The bright principal room enjoys views over the cobbled street below, while the fitted kitchen and stylish bathroom have been renovated to a high standard. The building is immaculately maintained with a secure entry system.</p>
+    <p>Within five minutes walk of Princes Street, the Scottish National Gallery, and Edinburgh Waverley station. Bills exclude council tax Band C.</p>`,
+    features: ['Original cornicing','Cast iron fireplace','Stone tenement building','Cobbled street views','5 min from Princes St','Waverley Station nearby','Secure entry','High ceilings'],
+    tags: ['Period','New Town','City Centre'],
+    typeLabel: 'Tenement Flat',
+    available: '15 Jan 2025',
+    tenancy: '6–12 months',
+    deposit: '£1,425',
+    epc: 'D (55)',
+    floorGroundRooms: [
+      {label:'Living Room',w:190,h:130,x:10,y:150},
+      {label:'Bedroom',w:150,h:130,x:210,y:150},
+      {label:'Kitchen',w:120,h:130,x:370,y:150},
+      {label:'Bathroom',w:60,h:130,x:500,y:150},
+    ],
+    floorFirstRooms: [],
+  },
+  {
+    id: 4,
+    title: '4-Bed Victorian Detached',
+    address: 'Moseley, Birmingham, B13',
+    city: 'Birmingham',
+    price: '£1,500',
+    per: '/month',
+    type: 'Detached',
+    beds: 4, baths: 2, size: '1,800',
+    extImg: '1587995430048-dff2c324ce2f',
+    agent: { name: 'Priya Patel', initials: 'PP' },
+    description: `<p>A substantial Victorian detached home on one of Moseley's most prestigious tree-lined roads. This impressive property retains a wealth of original features including decorative red brick façade, ornate ceiling roses, large bay windows and original floorboards, while benefiting from a modern fully fitted kitchen-diner extending to the rear.</p>
+    <p>The property offers generous family accommodation over two floors: four well-proportioned bedrooms (master en-suite), a family bathroom, large reception room with original fireplace, and a separate study or playroom. To the rear is a beautifully landscaped south-west facing garden with raised beds and a patio.</p>
+    <p>Moseley is one of Birmingham's most vibrant and characterful neighbourhoods, home to the famous Moseley Farmers Market, independent shops and acclaimed restaurants. Excellent transport links into Birmingham city centre. Council Tax Band E.</p>`,
+    features: ['En-suite master bedroom','Double garage','South-west garden','Original fireplaces','Bay windows','Separate study','Modern kitchen extension','Off-road parking'],
+    tags: ['Victorian','Garden','En-suite','Garage'],
+    typeLabel: 'Victorian Detached',
+    available: '1 Mar 2025',
+    tenancy: '12 months',
+    deposit: '£2,250',
+    epc: 'D (62)',
+    floorGroundRooms: [
+      {label:'Living Room',w:160,h:120,x:10,y:160},
+      {label:'Study',w:100,h:120,x:180,y:160},
+      {label:'Kitchen-Diner',w:200,h:120,x:290,y:160},
+      {label:'Hallway',w:50,h:280,x:500,y:10},
+    ],
+    floorFirstRooms: [
+      {label:'Master + En-suite',w:200,h:130,x:10,y:150},
+      {label:'Bed 2',w:160,h:130,x:220,y:150},
+      {label:'Bed 3',w:120,h:130,x:390,y:150},
+      {label:'Bed 4',w:120,h:130,x:390,y:10},
+      {label:'Bathroom',w:80,h:130,x:10,y:10},
+    ],
+  },
+  {
+    id: 5,
+    title: '3-Bed Colourful Terrace',
+    address: 'Clifton, Bristol, BS8',
+    city: 'Bristol',
+    price: '£1,350',
+    per: '/month',
+    type: 'Terrace',
+    beds: 3, baths: 1, size: '1,050',
+    extImg: '1707776445404-5f7421740a26',
+    agent: { name: 'Tom Hargreaves', initials: 'TH' },
+    description: `<p>One of Bristol's most charming and photogenic properties — a classic colourful Clifton terrace house with the bright yellow-and-teal facade that makes this street one of the most photographed in the city. Inside, the home is just as impressive with generous room proportions and a sense of light and space throughout.</p>
+    <p>The ground floor features a welcoming reception room with original wood floors and fireplace, and a contemporary kitchen leading to the sunny south-facing rear garden — perfect for summer entertaining. Three well-sized bedrooms upstairs share the family bathroom, which has been stylishly refurbished.</p>
+    <p>Clifton is one of Bristol's most desirable areas, walking distance from the iconic Clifton Suspension Bridge, Clifton Village boutiques and restaurants, and the open spaces of Clifton Downs. Council Tax Band D.</p>`,
+    features: ['South-facing garden','Original wood floors','Period fireplace','Refurbished bathroom','Clifton Downs nearby','Suspension Bridge views','Clifton Village','Good cycle routes'],
+    tags: ['Garden','Period','Clifton','Character'],
+    typeLabel: 'Colourful Terrace',
+    available: '1 Feb 2025',
+    tenancy: '12 months',
+    deposit: '£2,025',
+    epc: 'E (49)',
+    floorGroundRooms: [
+      {label:'Reception',w:180,h:120,x:10,y:160},
+      {label:'Kitchen',w:150,h:120,x:200,y:160},
+      {label:'Garden Room',w:130,h:120,x:360,y:160},
+    ],
+    floorFirstRooms: [
+      {label:'Master Bedroom',w:180,h:130,x:10,y:150},
+      {label:'Bedroom 2',w:150,h:130,x:200,y:150},
+      {label:'Bedroom 3',w:130,h:130,x:360,y:150},
+      {label:'Bathroom',w:80,h:130,x:500,y:150},
+    ],
+  },
+  {
+    id: 6,
+    title: '2-Bed Sandstone Conversion',
+    address: 'West End, Glasgow, G12',
+    city: 'Glasgow',
+    price: '£1,100',
+    per: '/month',
+    type: 'Flat',
+    beds: 2, baths: 1, size: '780',
+    extImg: '1674090624035-a04b0839136e',
+    agent: { name: 'Angus MacLeod', initials: 'AM' },
+    description: `<p>A beautifully appointed apartment within a classic Glasgow sandstone townhouse, located on one of the West End's most handsome Victorian streets. The conversion has been carried out with exceptional care, preserving original features including ornate plaster cornicing, a stunning cast iron fireplace, and deep-set sash windows while creating a thoroughly modern living space.</p>
+    <p>The generous open-plan living and dining room is the heart of the apartment — a wonderful entertaining space with high ceilings and bay windows flooding the room with light. Two double bedrooms, a contemporary kitchen and a well-appointed bathroom complete the accommodation.</p>
+    <p>Glasgow's vibrant West End is right on the doorstep — Byres Road, the Botanic Gardens, and the University of Glasgow are all a short stroll away, along with excellent cafes, restaurants and independent shops. Council Tax Band C.</p>`,
+    features: ['Original cornicing','Cast iron fireplace','Sash windows','Bay windows','High ceilings','Byres Road nearby','Botanic Gardens','University area'],
+    tags: ['Sandstone','Period','West End'],
+    typeLabel: 'Sandstone Flat',
+    available: '1 Jan 2025',
+    tenancy: '12 months',
+    deposit: '£1,650',
+    epc: 'D (58)',
+    floorGroundRooms: [
+      {label:'Living-Dining',w:210,h:140,x:10,y:140},
+      {label:'Master Bedroom',w:160,h:140,x:230,y:140},
+      {label:'Bed 2 / Kitchen',w:140,h:140,x:400,y:140},
+    ],
+    floorFirstRooms: [],
+  },
+  {
+    id: 7,
+    title: '3-Bed Ivy-Clad Cottage',
+    address: 'Jericho, Oxford, OX2',
+    city: 'Oxford',
+    price: '£1,650',
+    per: '/month',
+    type: 'Cottage',
+    beds: 3, baths: 1, size: '1,020',
+    extImg: '1620630158203-d521ee7a4f36',
+    agent: { name: 'Eleanor Hughes', initials: 'EH' },
+    description: `<p>An extraordinarily characterful ivy-clad stone cottage in Jericho, one of Oxford's most sought-after and eclectic neighbourhoods. The stunning exterior with its dormers, chimneys and autumn-coloured ivy is matched by an equally impressive interior — original stone mullion windows, aged oak beams, a country kitchen and a series of intimate, atmospheric rooms across two floors.</p>
+    <p>A particular highlight is the enclosed walled courtyard garden — a sun-trap accessible from the kitchen and perfectly private, with established climbing roses and a stone-flagged terrace. Three bedrooms (one ground-floor) make the cottage ideal for professionals or a small family.</p>
+    <p>Jericho is Oxford's bohemian heartland, home to the Phoenix Picturehouse, Oxford's best independent cafes and restaurants on Walton Street, and the Oxford University Press. Walking distance to the city centre and all university buildings. Council Tax Band E.</p>`,
+    features: ['Walled courtyard garden','Beamed ceilings','Stone mullion windows','Country kitchen','Ivy-clad exterior','Walton Street nearby','Period fireplaces','Ground floor bedroom'],
+    tags: ['Cottage','Walled Garden','Jericho','Character'],
+    typeLabel: 'Stone Cottage',
+    available: '15 Feb 2025',
+    tenancy: '12 months',
+    deposit: '£2,475',
+    epc: 'F (38)',
+    floorGroundRooms: [
+      {label:'Sitting Room',w:160,h:120,x:10,y:160},
+      {label:'Country Kitchen',w:150,h:120,x:180,y:160},
+      {label:'Grd Floor Bed',w:130,h:120,x:340,y:160},
+      {label:'Courtyard',w:130,h:80,x:340,y:290},
+    ],
+    floorFirstRooms: [
+      {label:'Master Bedroom',w:190,h:130,x:10,y:150},
+      {label:'Bedroom 3',w:150,h:130,x:210,y:150},
+      {label:'Bathroom',w:100,h:130,x:370,y:150},
+    ],
+  },
+  {
+    id: 8,
+    title: '4-Bed Georgian Townhouse',
+    address: 'Georgian Quarter, Liverpool, L8',
+    city: 'Liverpool',
+    price: '£1,700',
+    per: '/month',
+    type: 'Townhouse',
+    beds: 4, baths: 2, size: '2,100',
+    extImg: '1626011338304-525185d89fdf',
+    agent: { name: 'Danny Brennan', initials: 'DB' },
+    description: `<p>A magnificent Grade II listed Georgian townhouse set within Liverpool's world-famous Georgian Quarter — one of the largest Georgian housing stocks outside London. This four-storey property is a masterclass in the elegance of the period, with perfect symmetry, full-height sash windows, ornate fanlight above the entrance, and original marble fireplaces throughout.</p>
+    <p>Across four gracious floors, the house offers a formal drawing room, separate dining room, a fully equipped modern kitchen on the lower ground floor with access to a private rear courtyard, four double bedrooms, a family bathroom, and a principal en-suite with a free-standing bath.</p>
+    <p>The Georgian Quarter is a UNESCO-recognised townscape, within walking distance of the Royal Albert Dock, Tate Liverpool, the Baltic Triangle creative quarter, and Liverpool Central station. Council Tax Band G.</p>`,
+    features: ['Grade II Listed','Four storeys','Marble fireplaces','Freestanding bath','Private courtyard','Formal drawing room','En-suite master','Near Royal Albert Dock'],
+    tags: ['Georgian','Listed','Townhouse','Historic'],
+    typeLabel: 'Georgian Townhouse',
+    available: '1 Apr 2025',
+    tenancy: '12–24 months',
+    deposit: '£2,550',
+    epc: 'E (46)',
+    floorGroundRooms: [
+      {label:'Drawing Room',w:180,h:130,x:10,y:150},
+      {label:'Dining Room',w:160,h:130,x:200,y:150},
+      {label:'Hallway / Stairs',w:60,h:290,x:370,y:10},
+    ],
+    floorFirstRooms: [
+      {label:'Master + En-suite',w:200,h:140,x:10,y:140},
+      {label:'Bedroom 2',w:155,h:140,x:220,y:140},
+    ],
+  },
+  {
+    id: 9,
+    title: '5-Bed Yorkshire Stone Villa',
+    address: 'Roundhay, Leeds, LS8',
+    city: 'Leeds',
+    price: '£2,200',
+    per: '/month',
+    type: 'Villa',
+    beds: 5, baths: 3, size: '2,600',
+    extImg: '1639219563997-332d8b8dd207',
+    agent: { name: 'Rebecca Carr', initials: 'RC' },
+    description: `<p>An outstanding Yorkshire stone villa in prestigious Roundhay, featuring the dramatic turret that makes this one of Leeds's most recognisable private homes. Built to impressive proportions in the late Victorian era, the property combines castle-like exterior grandeur with light, modern interiors retaining original stone surrounds, shuttered windows and polished oak floors throughout.</p>
+    <p>Five generous double bedrooms span two upper floors, served by a family bathroom and two en-suites. The kitchen is fully equipped and opens onto a utility room and double garage access. The grounds are a genuine highlight — mature landscaped gardens wrapping around three sides of the house with a paved terrace and a greenhouse.</p>
+    <p>Roundhay is one of Leeds's premier residential areas, adjacent to the magnificent Roundhay Park — one of the largest city parks in Europe. Excellent transport links and highly regarded local schools. Council Tax Band H.</p>`,
+    features: ['Turret feature','Mature landscaped grounds','Double garage','Greenhouse','3 en-suites','Yorkshire stone exterior','Oak floors throughout','Roundhay Park adjacent'],
+    tags: ['Villa','Yorkshire Stone','Turret','Grounds'],
+    typeLabel: 'Yorkshire Stone Villa',
+    available: '1 Mar 2025',
+    tenancy: '12 months',
+    deposit: '£3,300',
+    epc: 'D (65)',
+    floorGroundRooms: [
+      {label:'Sitting Room',w:160,h:120,x:10,y:160},
+      {label:'Dining Room',w:140,h:120,x:180,y:160},
+      {label:'Kitchen',w:140,h:120,x:330,y:160},
+      {label:'Study',w:100,h:120,x:480,y:160},
+    ],
+    floorFirstRooms: [
+      {label:'Master + En-suite',w:200,h:130,x:10,y:150},
+      {label:'Bed 2 + En-suite',w:160,h:130,x:220,y:150},
+      {label:'Bed 3',w:120,h:130,x:390,y:150},
+    ],
+  },
+  {
+    id: 10,
+    title: '2-Bed City Centre Apartment',
+    address: 'City Centre, Cambridge, CB2',
+    city: 'Cambridge',
+    price: '£1,450',
+    per: '/month',
+    type: 'Apartment',
+    beds: 2, baths: 1, size: '720',
+    extImg: '1644889027199-1d810b046c4f',
+    agent: { name: 'Oliver Park', initials: 'OP' },
+    description: `<p>A superb city centre apartment in a sought-after converted building, positioned to enjoy some of Cambridge's most iconic views — the soaring Gothic pinnacles of King's College Chapel are visible from the living room windows, creating a truly remarkable backdrop to everyday life.</p>
+    <p>The apartment is presented to a high standard throughout, with a bright open-plan living and dining space, a well-fitted kitchen with integrated appliances, two comfortable double bedrooms, and a contemporary bathroom. The building benefits from secure entry and a communal courtyard garden.</p>
+    <p>Situated moments from King's Parade, the Fitzwilliam Museum, the Market Square and the River Cam — Cambridge's best restaurants, independent shops and cultural venues are all within easy walking distance. The railway station is a 10-minute cycle ride. Council Tax Band D.</p>`,
+    features: ["King's College views",'Secure entry','Communal courtyard','Integrated appliances','Cycle storage','Market Square nearby','River Cam nearby','Fitzwilliam Museum'],
+    tags: ['City Centre','Views','Cambridge'],
+    typeLabel: 'City Apartment',
+    available: '1 Feb 2025',
+    tenancy: '12 months',
+    deposit: '£2,175',
+    epc: 'C (76)',
+    floorGroundRooms: [
+      {label:'Open-Plan Living',w:210,h:140,x:10,y:140},
+      {label:'Master Bedroom',w:160,h:140,x:230,y:140},
+      {label:'Bedroom 2',w:120,h:140,x:400,y:140},
+    ],
+    floorFirstRooms: [],
+  },
+  {
+    id: 11,
+    title: '2-Bed Quayside Apartment',
+    address: 'Quayside, Newcastle upon Tyne, NE1',
+    city: 'Newcastle',
+    price: '£1,050',
+    per: '/month',
+    type: 'Apartment',
+    beds: 2, baths: 1, size: '680',
+    extImg: '1660042866417-1963a3cf5ab6',
+    agent: { name: 'Connor Walsh', initials: 'CW' },
+    description: `<p>A stunning modern apartment in a premium development on Newcastle's famous Quayside, with breathtaking direct views of the iconic Tyne Bridge from a large private balcony. The apartment is finished to an exceptional specification — floor-to-ceiling glazing, polished concrete floors, an open-plan kitchen-living area with a kitchen island, and smart home lighting.</p>
+    <p>Both bedrooms enjoy river glimpses, with the master featuring a built-in wardrobe system. The sleek bathroom is fitted with a walk-in shower and underfloor heating. Secure underground parking space included. The building has a concierge, residents' gym, and rooftop terrace.</p>
+    <p>The Quayside is the beating heart of Newcastle's social scene — Michelin-starred restaurants, cocktail bars, the SAGE Gateshead and Baltic Centre for Contemporary Art are all within a 5-minute walk. Council Tax Band D.</p>`,
+    features: ['Tyne Bridge views','Private balcony','Underground parking','Concierge service','Residents gym','Rooftop terrace','Smart home lighting','Walk-in shower'],
+    tags: ['River Views','Balcony','Quayside','Luxury'],
+    typeLabel: 'Quayside Apartment',
+    available: 'Immediately',
+    tenancy: '12 months',
+    deposit: '£1,575',
+    epc: 'B (84)',
+    floorGroundRooms: [
+      {label:'Open-Plan Kitchen-Living',w:240,h:150,x:10,y:130},
+      {label:'Master + WIW',w:170,h:150,x:260,y:130},
+      {label:'Bedroom 2',w:110,h:150,x:440,y:130},
+    ],
+    floorFirstRooms: [],
+  },
+  {
+    id: 12,
+    title: '4-Bed Victorian Estate House',
+    address: 'Pontcanna, Cardiff, CF11',
+    city: 'Cardiff',
+    price: '£1,400',
+    per: '/month',
+    type: 'Detached',
+    beds: 4, baths: 2, size: '1,950',
+    extImg: '1730212161911-49a6a7b17f72',
+    agent: { name: 'Cerys Williams', initials: 'CW' },
+    description: `<p>A stately and beautifully preserved Victorian estate house set within private mature grounds in Pontcanna — Cardiff's most coveted conservation area, frequently described as the 'Garden Suburb' of the Welsh capital. The white-painted stone façade, tall mature pines, and formal approach make this one of the most impressive properties on the market in the city.</p>
+    <p>Inside, the house is filled with light and space: original sash windows, ornate plaster cornicing and generous ceiling heights throughout. A large reception hall leads to a formal drawing room with marble fireplace, a separate dining room, fully fitted kitchen, and a study. All four bedrooms are doubles, with the master benefiting from a dressing room and a luxuriously appointed en-suite.</p>
+    <p>Pontcanna is home to Cardiff's finest independent restaurants, coffee shops and boutiques along Cathedral Road. Bute Park — 130 acres of parkland — is at the end of the road. Council Tax Band H.</p>`,
+    features: ['Private grounds','Mature pines','Drawing room','Marble fireplace','Dressing room','En-suite master','Bute Park nearby','Conservation area'],
+    tags: ['Estate','Conservation Area','Private Grounds'],
+    typeLabel: 'Victorian Estate House',
+    available: '1 Apr 2025',
+    tenancy: '12 months',
+    deposit: '£2,100',
+    epc: 'E (47)',
+    floorGroundRooms: [
+      {label:'Hall',w:80,h:260,x:10,y:10},
+      {label:'Drawing Room',w:180,h:130,x:100,y:140},
+      {label:'Dining Room',w:160,h:130,x:290,y:140},
+      {label:'Kitchen',w:140,h:120,x:460,y:150},
+    ],
+    floorFirstRooms: [
+      {label:'Master + Dressing',w:200,h:140,x:10,y:140},
+      {label:'Bed 2',w:160,h:140,x:220,y:140},
+      {label:'Bed 3',w:130,h:140,x:390,y:140},
+      {label:'Bed 4 / Study',w:110,h:140,x:390,y:10},
+    ],
+  },
+  {
+    id: 13,
+    title: '2-Bed Lace Market Loft',
+    address: 'Lace Market, Nottingham, NG1',
+    city: 'Nottingham',
+    price: '£980',
+    per: '/month',
+    type: 'Apartment',
+    beds: 2, baths: 1, size: '810',
+    extImg: '1630344353375-2f744504def3',
+    agent: { name: 'Jake Reynolds', initials: 'JR' },
+    description: `<p>A dramatic and atmospheric loft conversion within one of Nottingham Lace Market's finest Victorian red brick warehouses — the same district that was once the global capital of the lace industry. The building's extraordinary exterior with its ornate turret and Gothic detailing is matched inside by a stunning industrial-chic interior of exposed brick, original timber beams, polished concrete floors and vast steel-framed warehouse windows.</p>
+    <p>The living space is open-plan and entirely unique — a vast 40ft kitchen-dining-living room with a mezzanine level housing the second bedroom. The master bedroom occupies a separate wing with its own large windows. A sleek wet room-style bathroom with walk-in shower completes the contemporary fit-out.</p>
+    <p>The Lace Market is the creative and cultural heart of Nottingham — independent galleries, craft beer bars, excellent restaurants and live music venues are all within minutes. Nottingham station is a 10-minute walk. Council Tax Band C.</p>`,
+    features: ['Exposed brick walls','Original timber beams','Mezzanine level','Industrial wet room','Vast warehouse windows','Polished concrete floors','Lace Market location','Creative quarter'],
+    tags: ['Loft','Industrial','Lace Market','Unique'],
+    typeLabel: 'Warehouse Loft',
+    available: '1 Jan 2025',
+    tenancy: '12 months',
+    deposit: '£1,470',
+    epc: 'D (60)',
+    floorGroundRooms: [
+      {label:'Kitchen-Living-Dining',w:280,h:160,x:10,y:120},
+      {label:'Master Bedroom',w:180,h:110,x:300,y:170},
+      {label:'Wet Room',w:100,h:110,x:490,y:170},
+    ],
+    floorFirstRooms: [
+      {label:'Mezzanine Bedroom 2',w:240,h:120,x:10,y:160},
+    ],
+  },
+  {
+    id: 14,
+    title: '6-Bed Country Manor Estate',
+    address: 'Surrey Hills, Surrey, GU5',
+    city: 'Surrey',
+    price: '£4,500',
+    per: '/month',
+    type: 'Manor',
+    beds: 6, baths: 4, size: '5,200',
+    extImg: '1763976435009-4362d4be36c5',
+    agent: { name: 'Victoria Ashford', initials: 'VA' },
+    description: `<p>A magnificent red brick country manor of the finest provenance, set within a 3-acre private estate in the Surrey Hills Area of Outstanding Natural Beauty. The house exudes the grandeur and craftsmanship of the Edwardian era: ornate terracotta chimneys, stone-mullioned leaded windows, a formal double-height entrance hall with galleried landing, and a ballroom-sized drawing room with original panelling and inglenook fireplace.</p>
+    <p>Six elegant principal bedrooms span the upper floors — three with en-suite bathrooms, all with original fireplaces and country views. The kitchen has been entirely refitted to a six-ring Aga standard and opens to a boot room and utility. Outside, the formal walled kitchen garden, croquet lawn, paddock and double stable block complete a truly exceptional country estate.</p>
+    <p>Located between Guildford and Dorking in the heart of the Surrey Hills, with excellent road links to London. Nearest train station Gomshall (1 mile). Council Tax Band H.</p>`,
+    features: ['3-acre estate','Formal walled garden','Paddock and stables','Aga kitchen','Ballroom drawing room','Galleried entrance hall','6 fireplaces','Helicopter pad'],
+    tags: ['Manor','Luxury','Surrey Hills','AONB'],
+    typeLabel: 'Country Manor',
+    available: '1 Mar 2025',
+    tenancy: '12–24 months',
+    deposit: '£6,750',
+    epc: 'E (44)',
+    floorGroundRooms: [
+      {label:'Entrance Hall',w:100,h:260,x:10,y:10},
+      {label:'Drawing Room',w:200,h:140,x:120,y:130},
+      {label:'Dining Room',w:160,h:140,x:330,y:130},
+      {label:'Kitchen-Aga',w:180,h:110,x:430,y:10},
+      {label:'Library',w:150,h:110,x:120,y:10},
+    ],
+    floorFirstRooms: [
+      {label:'Master + En-suite',w:200,h:140,x:10,y:140},
+      {label:'Bed 2 + En-suite',w:170,h:140,x:220,y:140},
+      {label:'Bed 3',w:140,h:140,x:400,y:140},
+      {label:'Bed 4',w:140,h:140,x:400,y:10},
+      {label:'Bed 5',w:140,h:120,x:220,y:10},
+    ],
+  },
+  {
+    id: 15,
+    title: '5-Bed Palladian Estate House',
+    address: 'Prior Park, Bath, BA2',
+    city: 'Bath',
+    price: '£3,200',
+    per: '/month',
+    type: 'Estate',
+    beds: 5, baths: 3, size: '3,800',
+    extImg: '1699454030717-c611ef4a315f',
+    agent: { name: 'Arabella Stone', initials: 'AS' },
+    description: `<p>A rare and exceptional Palladian-style estate house set within the historic Prior Park grounds in Bath — a landscape of international significance featuring the famous Palladian bridge, a cascade and sweeping valley views that Ralph Allen created in the 18th century. The house stands as a landmark in one of the most beautiful settings in England, framed by ancient woodland and meadow.</p>
+    <p>The architecture is of the highest order: a symmetrical limestone façade of perfect proportions, Doric columns, a piano nobile principal floor with ceiling heights of over 14 feet, and a double-height entrance rotunda. Five superbly appointed bedrooms, three bathrooms, a library, formal dining room and drawing room make this a home of extraordinary distinction.</p>
+    <p>Bath city centre, with its world-famous Georgian terraces, Roman Baths, and two Michelin-starred restaurants, is 10 minutes drive. World Heritage Site surroundings. Council Tax Band H.</p>`,
+    features: ['Palladian architecture','14ft ceilings','Historic grounds','Double-height rotunda','Library room','Formal gardens','Cascade water feature','World Heritage Site'],
+    tags: ['Palladian','Historic','Estate','Bath'],
+    typeLabel: 'Palladian Estate',
+    available: '1 May 2025',
+    tenancy: '12 months',
+    deposit: '£4,800',
+    epc: 'E (42)',
+    floorGroundRooms: [
+      {label:'Entrance Rotunda',w:120,h:120,x:200,y:10},
+      {label:'Drawing Room',w:200,h:140,x:10,y:140},
+      {label:'Dining Room',w:160,h:140,x:220,y:140},
+      {label:'Library',w:140,h:140,x:390,y:140},
+      {label:'Kitchen',w:170,h:100,x:10,y:290},
+    ],
+    floorFirstRooms: [
+      {label:'Master + En-suite',w:200,h:140,x:10,y:140},
+      {label:'Bed 2 + En-suite',w:160,h:140,x:220,y:140},
+      {label:'Bed 3',w:140,h:140,x:390,y:140},
+      {label:'Bed 4',w:130,h:130,x:390,y:10},
+      {label:'Bed 5',w:130,h:130,x:250,y:10},
+    ],
+  },
+];
+
+// ============================================================
+// BUILD FLOOR PLAN SVG
+// ============================================================
+function buildFloorPlan(rooms, totalBeds) {
+  if (!rooms || rooms.length === 0) {
+    return `<p style="color:var(--muted);text-align:center;padding:20px;font-size:0.85rem;">Floor plan not available for this level.</p>`;
+  }
+  const colors = ['rgba(255,159,122,0.18)','rgba(255,191,165,0.14)','rgba(255,217,181,0.16)','rgba(255,159,122,0.10)','rgba(17,24,32,0.5)'];
+  const rects = rooms.map((r,i) => `
+    <g>
+      <rect x="${r.x+2}" y="${r.y+2}" width="${r.w}" height="${r.h}" rx="6" fill="rgba(0,0,0,0.3)" />
+      <rect x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}" rx="6" fill="${colors[i%colors.length]}" stroke="rgba(255,159,122,0.4)" stroke-width="1.5" />
+      <text x="${r.x + r.w/2}" y="${r.y + r.h/2 - 6}" text-anchor="middle" font-family="Plus Jakarta Sans,sans-serif" font-size="9.5" font-weight="700" fill="rgba(255,217,181,0.9)">${r.label}</text>
+      <text x="${r.x + r.w/2}" y="${r.y + r.h/2 + 10}" text-anchor="middle" font-family="Inter,sans-serif" font-size="8" fill="rgba(255,255,255,0.4)">${r.w/10}m × ${r.h/10}m</text>
+    </g>
+  `).join('');
+  return `<svg viewBox="0 0 620 310" width="100%" xmlns="http://www.w3.org/2000/svg" style="display:block">
+    <rect width="620" height="310" rx="12" fill="#0d1117"/>
+    <rect x="1" y="1" width="618" height="308" rx="11" fill="none" stroke="rgba(255,159,122,0.15)" stroke-width="1"/>
+    ${rects}
+    <text x="12" y="300" font-family="Inter,sans-serif" font-size="9" fill="rgba(255,255,255,0.25)">Not to scale — indicative only</text>
+  </svg>`;
+}
+
+// ============================================================
+// GALLERY PHOTOS
+// ============================================================
+function getPhotos(prop) {
+  const int = INTERIORS[prop.id] || INTERIORS[1];
+  return [
+    { url: `https://images.unsplash.com/photo-${prop.extImg}?w=1200&q=85`, label: `Exterior — ${prop.city}` },
+    { url: `https://images.unsplash.com/photo-${int[0]}?w=1200&q=85`, label: 'Living Room' },
+    { url: `https://images.unsplash.com/photo-${int[1]}?w=1200&q=85`, label: 'Kitchen' },
+    { url: `https://images.unsplash.com/photo-${int[2]}?w=1200&q=85`, label: 'Master Bedroom' },
+    { url: `https://images.unsplash.com/photo-${int[3]}?w=1200&q=85`, label: 'Bathroom' },
+    { url: `https://images.unsplash.com/photo-${int[4]}?w=1200&q=85`, label: 'Dining Area' },
+  ];
+}
+
+// ============================================================
+// RENDER PROPERTY
+// ============================================================
+let currentPhotos = [];
+let currentFloorPlan = null;
+
+function render(prop) {
+  document.title = `${prop.title} — NestHaven`;
+  document.getElementById('bc-title').textContent = prop.title;
+
+  // Photos
+  currentPhotos = getPhotos(prop);
+  const hero = document.getElementById('gallery-hero');
+  hero.src = currentPhotos[0].url;
+  hero.alt = currentPhotos[0].label;
+
+  const thumbsEl = document.getElementById('gallery-thumbs');
+  thumbsEl.innerHTML = currentPhotos.map((p,i) => `
+    <div class="gallery-thumb ${i===0?'active':''}" onclick="setPhoto(${i})">
+      <img src="${p.url.replace('w=1200','w=400')}" alt="${p.label}" loading="lazy" />
+    </div>
+  `).join('');
+
+  // Header
+  document.getElementById('p-price').textContent = prop.price;
+  document.getElementById('p-per').textContent = prop.per;
+  document.getElementById('p-title').textContent = prop.title;
+  document.getElementById('p-address').textContent = prop.address;
+  document.getElementById('map-city').textContent = prop.city;
+
+  // Stats
+  document.getElementById('p-stats').innerHTML = `
+    <div class="prop-stat">
+      <div class="prop-stat-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg></div>
+      <div class="prop-stat-text"><strong>${prop.beds} Bedrooms</strong><span>Double rooms</span></div>
+    </div>
+    <div class="prop-stat">
+      <div class="prop-stat-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l11 0M9 12l11 0M9 18l11 0M5 6l.01 0M5 12l.01 0M5 18l.01 0"></path></svg></div>
+      <div class="prop-stat-text"><strong>${prop.baths} Bathroom${prop.baths>1?'s':''}</strong><span>${prop.baths>1?'Family + en-suite':'Family bathroom'}</span></div>
+    </div>
+    <div class="prop-stat">
+      <div class="prop-stat-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"></rect></svg></div>
+      <div class="prop-stat-text"><strong>${prop.size} sq ft</strong><span>${prop.type}</span></div>
+    </div>
+    <div class="prop-stat">
+      <div class="prop-stat-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></div>
+      <div class="prop-stat-text"><strong>Available ${prop.available}</strong><span>${prop.tenancy} tenancy</span></div>
+    </div>
+  `;
+
+  // Description
+  document.getElementById('p-description').innerHTML = prop.description;
+
+  // Features
+  const featureIcons = [
+    `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>`,
+  ];
+  document.getElementById('p-features').innerHTML = prop.features.map(f => `
+    <div class="feature-item">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+      ${f}
+    </div>
+  `).join('');
+
+  // Floor plan
+  currentFloorPlan = prop;
+  document.getElementById('floor-plan-svg').innerHTML = buildFloorPlan(prop.floorGroundRooms, prop.beds);
+
+  // Sidebar agent
+  document.getElementById('agent-avatar').textContent = prop.agent.initials;
+  document.getElementById('agent-name').textContent = prop.agent.name;
+
+  // Sidebar facts
+  document.getElementById('sidebar-facts').innerHTML = `
+    <div class="sidebar-fact"><div class="sidebar-fact-label">Price</div><div class="sidebar-fact-val">${prop.price}/mo</div></div>
+    <div class="sidebar-fact"><div class="sidebar-fact-label">Deposit</div><div class="sidebar-fact-val">${prop.deposit}</div></div>
+    <div class="sidebar-fact"><div class="sidebar-fact-label">Type</div><div class="sidebar-fact-val">${prop.typeLabel}</div></div>
+    <div class="sidebar-fact"><div class="sidebar-fact-label">Bedrooms</div><div class="sidebar-fact-val">${prop.beds} bed</div></div>
+    <div class="sidebar-fact"><div class="sidebar-fact-label">Tenancy</div><div class="sidebar-fact-val">${prop.tenancy}</div></div>
+    <div class="sidebar-fact"><div class="sidebar-fact-label">EPC</div><div class="sidebar-fact-val">${prop.epc}</div></div>
+  `;
+
+  // Similar (pick 3 others)
+  const others = PROPERTIES.filter(p => p.id !== prop.id).slice(0,3);
+  document.getElementById('similar-grid').innerHTML = others.map(p => `
+    <a class="sim-card" href="property.html?id=${p.id}">
+      <div class="sim-img"><img src="https://images.unsplash.com/photo-${p.extImg}?w=500&q=80" alt="${p.title}" loading="lazy" /></div>
+      <div class="sim-body">
+        <div class="sim-price">${p.price}<span style="font-size:0.75rem;color:var(--muted);font-weight:400;">/mo</span></div>
+        <div class="sim-title">${p.title}</div>
+        <div class="sim-loc">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+          ${p.city}
+        </div>
+      </div>
+    </a>
+  `).join('');
+}
+
+// ============================================================
+// GALLERY INTERACTIONS
+// ============================================================
+let currentPhotoIdx = 0;
+
+function setPhoto(idx) {
+  currentPhotoIdx = idx;
+  const hero = document.getElementById('gallery-hero');
+  hero.src = currentPhotos[idx].url;
+  hero.alt = currentPhotos[idx].label;
+  document.querySelectorAll('.gallery-thumb').forEach((t,i) => t.classList.toggle('active', i===idx));
+}
+
+function openLightbox(idx) {
+  currentPhotoIdx = idx;
+  const lb = document.getElementById('lightbox');
+  lb.classList.add('open');
+  document.getElementById('lightbox-img').src = currentPhotos[idx].url;
+  document.getElementById('lightbox-caption').textContent = `${currentPhotos[idx].label}  —  ${idx+1} / ${currentPhotos.length}`;
+  document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function lightboxNav(dir) {
+  currentPhotoIdx = (currentPhotoIdx + dir + currentPhotos.length) % currentPhotos.length;
+  document.getElementById('lightbox-img').src = currentPhotos[currentPhotoIdx].url;
+  document.getElementById('lightbox-caption').textContent = `${currentPhotos[currentPhotoIdx].label}  —  ${currentPhotoIdx+1} / ${currentPhotos.length}`;
+}
+
+document.getElementById('lightbox').addEventListener('click', function(e) {
+  if (e.target === this) closeLightbox();
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeLightbox();
+  if (e.key === 'ArrowLeft')  lightboxNav(-1);
+  if (e.key === 'ArrowRight') lightboxNav(1);
+});
+
+// ============================================================
+// FLOOR PLAN TABS
+// ============================================================
+function switchFloor(btn, floor) {
+  document.querySelectorAll('.fp-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  const rooms = floor === 'ground' ? currentFloorPlan.floorGroundRooms : currentFloorPlan.floorFirstRooms;
+  document.getElementById('floor-plan-svg').innerHTML = buildFloorPlan(rooms, currentFloorPlan.beds);
+}
+
+// ============================================================
+// ENQUIRY BUTTON
+// ============================================================
+function sendEnquiry(btn) {
+  btn.textContent = 'Sending…';
+  btn.style.opacity = '0.7';
+  setTimeout(() => {
+    btn.textContent = '✓ Enquiry sent!';
+    btn.style.background = 'linear-gradient(135deg,#4ade80,#22c55e)';
+  }, 1200);
+}
+
+// ============================================================
+// SCROLL REVEAL
+// ============================================================
+const revealEls = document.querySelectorAll('.reveal');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+}, { threshold: 0.1 });
+revealEls.forEach(el => obs.observe(el));
+
+// ============================================================
+// INIT — read ?id= from URL
+// ============================================================
+const params = new URLSearchParams(window.location.search);
+const id = parseInt(params.get('id')) || 1;
+const prop = PROPERTIES.find(p => p.id === id) || PROPERTIES[0];
+render(prop);
+</script>
+</body>
+</html>

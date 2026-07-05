@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NovaTech – Get In Touch</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #080808;
+      --card: #111111;
+      --accent: #00d4ff;
+      --accent-dim: rgba(0, 212, 255, 0.15);
+      --white: #ffffff;
+      --grey: #888888;
+      --border: rgba(255,255,255,0.07);
+      --font-head: 'Space Grotesk', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--bg);
+      color: var(--white);
+      font-family: var(--font-body);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: -20%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 900px;
+      height: 900px;
+      background: radial-gradient(circle, rgba(0,212,255,0.06) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 48px;
+      height: 70px;
+      background: rgba(8,8,8,0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: var(--font-head);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--white);
+      text-decoration: none;
+      letter-spacing: -0.5px;
+    }
+    .nav-logo span { color: var(--accent); }
+    .nav-links { display: flex; gap: 36px; list-style: none; }
+    .nav-links a {
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--grey);
+      text-decoration: none;
+      transition: color 0.2s;
+      position: relative;
+    }
+    .nav-links a:hover { color: var(--white); }
+    .nav-links a.active { color: var(--white); }
+    .nav-links a.active::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0; right: 0;
+      height: 2px;
+      background: var(--accent);
+      border-radius: 2px;
+    }
+    .nav-right { display: flex; align-items: center; gap: 16px; }
+    .nav-cart-btn {
+      position: relative;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--grey);
+      font-size: 1.2rem;
+      padding: 6px;
+      transition: color 0.2s;
+    }
+    .nav-cart-btn:hover { color: var(--white); }
+    .cart-count {
+      position: absolute;
+      top: 0; right: 0;
+      background: var(--accent);
+      color: #000;
+      font-size: 0.6rem;
+      font-weight: 700;
+      width: 16px; height: 16px;
+      border-radius: 50%;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+    .btn-nav-cta {
+      background: var(--accent);
+      color: #000;
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 10px 22px;
+      border-radius: 8px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    .btn-nav-cta:hover { opacity: 0.85; transform: translateY(-1px); }
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--white); border-radius: 2px; transition: all 0.3s; }
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 70px; left: 0; right: 0;
+      background: rgba(8,8,8,0.97);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      padding: 24px 48px;
+      z-index: 999;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a { font-family: var(--font-body); font-size: 1rem; font-weight: 500; color: var(--grey); text-decoration: none; transition: color 0.2s; }
+    .mobile-menu a:hover, .mobile-menu a.active { color: var(--white); }
+
+    /* ── PAGE HERO ── */
+    .page-hero {
+      position: relative;
+      z-index: 1;
+      padding: 140px 24px 70px;
+      text-align: center;
+      background: radial-gradient(ellipse 70% 50% at 50% 30%, rgba(0,212,255,0.09) 0%, transparent 70%);
+    }
+    .tag {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: var(--accent-dim);
+      border: 1px solid rgba(0,212,255,0.25);
+      padding: 6px 16px;
+      border-radius: 100px;
+      margin-bottom: 20px;
+    }
+    .page-hero h1 {
+      font-family: var(--font-head);
+      font-size: clamp(2.4rem, 5vw, 4rem);
+      font-weight: 700;
+      letter-spacing: -1.5px;
+      margin-bottom: 14px;
+    }
+    .page-hero p { font-size: 1.05rem; color: var(--grey); }
+
+    /* ── CONTACT SECTION ── */
+    .contact-section {
+      position: relative;
+      z-index: 1;
+      padding: 60px 24px 80px;
+    }
+    .contact-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 48px;
+    }
+
+    /* Info Side */
+    .contact-info-side {}
+    .contact-info-side h2 {
+      font-family: var(--font-head);
+      font-size: 1.8rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+    }
+    .contact-info-side > p {
+      color: var(--grey);
+      font-size: 0.9rem;
+      margin-bottom: 36px;
+    }
+
+    .info-block {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 28px;
+      align-items: flex-start;
+    }
+    .info-icon {
+      width: 44px;
+      height: 44px;
+      background: var(--accent-dim);
+      border: 1px solid rgba(0,212,255,0.2);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+    .info-block h4 {
+      font-family: var(--font-head);
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .info-block p {
+      font-size: 0.85rem;
+      color: var(--grey);
+      line-height: 1.6;
+    }
+    .info-block a { color: var(--accent); text-decoration: none; }
+    .info-block a:hover { text-decoration: underline; }
+
+    .map-wrap {
+      margin-top: 36px;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .map-wrap iframe {
+      display: block;
+      width: 100%;
+      height: 240px;
+      border: 0;
+      filter: invert(90%) hue-rotate(180deg) saturate(0.8);
+    }
+
+    /* Form Side */
+    .contact-form-wrap {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 40px;
+    }
+    .contact-form-wrap h2 {
+      font-family: var(--font-head);
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .contact-form-wrap > p {
+      color: var(--grey);
+      font-size: 0.88rem;
+      margin-bottom: 32px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .form-group { margin-bottom: 18px; }
+    .form-group label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--grey);
+      margin-bottom: 8px;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      background: #0d0d0d;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px;
+      color: var(--white);
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      padding: 13px 16px;
+      outline: none;
+      transition: border-color 0.2s;
+      -webkit-appearance: none;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(0,212,255,0.08);
+    }
+    .form-group select option { background: #111; color: #fff; }
+    .form-group textarea { resize: vertical; min-height: 120px; }
+
+    .btn-submit {
+      width: 100%;
+      background: var(--accent);
+      color: #000;
+      border: none;
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      font-weight: 700;
+      padding: 15px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.2s;
+      letter-spacing: 0.3px;
+    }
+    .btn-submit:hover { opacity: 0.85; transform: translateY(-1px); }
+
+    .form-success {
+      display: none;
+      text-align: center;
+      padding: 40px 20px;
+    }
+    .form-success span { font-size: 3rem; display: block; margin-bottom: 16px; }
+    .form-success h3 {
+      font-family: var(--font-head);
+      font-size: 1.3rem;
+      margin-bottom: 8px;
+    }
+    .form-success p { color: var(--grey); font-size: 0.9rem; }
+
+    /* ── INFO CARDS ── */
+    .info-cards-section {
+      position: relative;
+      z-index: 1;
+      padding: 0 24px 100px;
+    }
+    .info-cards-grid {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .info-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 20px;
+      padding: 36px 28px;
+      text-align: center;
+      transition: transform 0.3s, border-color 0.3s;
+    }
+    .info-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(0,212,255,0.2);
+    }
+    .info-card-icon {
+      font-size: 2.2rem;
+      margin-bottom: 16px;
+      display: block;
+    }
+    .info-card h3 {
+      font-family: var(--font-head);
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .info-card p {
+      font-size: 0.85rem;
+      color: var(--grey);
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+    .info-card a {
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 500;
+    }
+    .info-card a:hover { text-decoration: underline; }
+    .badge-soon {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 600;
+      background: rgba(255,170,0,0.15);
+      color: #ffaa00;
+      border: 1px solid rgba(255,170,0,0.25);
+      padding: 4px 10px;
+      border-radius: 100px;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative;
+      z-index: 1;
+      border-top: 1px solid var(--border);
+      padding: 60px 48px 32px;
+    }
+    .footer-inner { max-width: 1200px; margin: 0 auto; }
+    .footer-top {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 48px;
+      margin-bottom: 48px;
+    }
+    .footer-brand .nav-logo { display: inline-block; margin-bottom: 14px; }
+    .footer-brand p { font-size: 0.85rem; color: var(--grey); line-height: 1.7; max-width: 260px; }
+    .footer-col h4 { font-family: var(--font-head); font-size: 0.9rem; font-weight: 600; margin-bottom: 16px; }
+    .footer-col ul { list-style: none; }
+    .footer-col ul li { margin-bottom: 10px; }
+    .footer-col ul a { font-size: 0.85rem; color: var(--grey); text-decoration: none; transition: color 0.2s; }
+    .footer-col ul a:hover { color: var(--accent); }
+    .footer-bottom {
+      border-top: 1px solid var(--border);
+      padding-top: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer-bottom p { font-size: 0.8rem; color: var(--grey); }
+    .footer-bottom a { color: var(--accent); text-decoration: none; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .contact-inner { grid-template-columns: 1fr; }
+      .info-cards-grid { grid-template-columns: 1fr; }
+      .footer-top { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 768px) {
+      nav { padding: 0 24px; }
+      .nav-links { display: none; }
+      .btn-nav-cta { display: none; }
+      .hamburger { display: flex; }
+      .form-row { grid-template-columns: 1fr; }
+      .contact-form-wrap { padding: 28px 20px; }
+      .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
+    }
+    @media (max-width: 480px) {
+      .footer-top { grid-template-columns: 1fr; gap: 32px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="index.html" class="nav-logo">Nova<span>Tech</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="hardware.html">Hardware</a></li>
+      <li><a href="repairs.html">Repairs</a></li>
+      <li><a href="contact.html" class="active">Contact</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="nav-cart-btn" onclick="window.location.href='hardware.html'" title="Basket">
+        🛒
+        <span class="cart-count" id="cartCount">0</span>
+      </button>
+      <a href="hardware.html" class="btn-nav-cta">Shop Now</a>
+      <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html">Home</a>
+    <a href="hardware.html">Hardware</a>
+    <a href="repairs.html">Repairs</a>
+    <a href="contact.html" class="active">Contact</a>
+    <a href="hardware.html" class="btn-nav-cta" style="text-align:center;">Shop Now</a>
+  </div>
+
+  <!-- PAGE HERO -->
+  <div class="page-hero">
+    <span class="tag">&#128172; We're Here to Help</span>
+    <h1>Get In Touch</h1>
+    <p>Questions, orders, or repairs — our team is ready and waiting.</p>
+  </div>
+
+  <!-- CONTACT SECTION -->
+  <section class="contact-section">
+    <div class="contact-inner">
+
+      <!-- Info Side -->
+      <div class="contact-info-side">
+        <h2>Visit or Contact Us</h2>
+        <p>We're based in the heart of London and happy to help in person, by phone, or online.</p>
+
+        <div class="info-block">
+          <div class="info-icon">📍</div>
+          <div>
+            <h4>Address</h4>
+            <p>TechPoint Ltd<br>20 Farringdon Street<br>London, EC4A 4AB</p>
+          </div>
+        </div>
+
+        <div class="info-block">
+          <div class="info-icon">📞</div>
+          <div>
+            <h4>Phone</h4>
+            <p><a href="tel:+442079460321">+44 20 7946 0321</a></p>
+          </div>
+        </div>
+
+        <div class="info-block">
+          <div class="info-icon">✉️</div>
+          <div>
+            <h4>Email</h4>
+            <p><a href="mailto:hello@novatech.co.uk">hello@novatech.co.uk</a></p>
+          </div>
+        </div>
+
+        <div class="info-block">
+          <div class="info-icon">🕐</div>
+          <div>
+            <h4>Opening Hours</h4>
+            <p>Monday – Saturday: 9am – 6pm<br>Sunday: Closed</p>
+          </div>
+        </div>
+
+        <!-- Google Maps -->
+        <div class="map-wrap">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2483.0703428453455!2d-0.10535432316437!3d51.51819987181633!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x48761b4d9c3b3a6f%3A0xb6dcb80b4e9bdc24!2s20%20Farringdon%20St%2C%20London%20EC4A%204AB!5e0!3m2!1sen!2suk!4v1700000000000!5m2!1sen!2suk"
+            width="100%" height="240" style="border:0;" allowfullscreen="" loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            title="NovaTech location - 20 Farringdon Street London">
+          </iframe>
+        </div>
+      </div>
+
+      <!-- Form Side -->
+      <div class="contact-form-wrap">
+        <h2>Send Us a Message</h2>
+        <p>Fill in the form below and we'll get back to you within one business day.</p>
+
+        <form id="contactForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="fname">Name</label>
+              <input type="text" id="fname" name="name" placeholder="Your full name" required />
+            </div>
+            <div class="form-group">
+              <label for="femail">Email</label>
+              <input type="email" id="femail" name="email" placeholder="your@email.com" required />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="fsubject">Subject</label>
+            <select id="fsubject" name="subject" required>
+              <option value="" disabled selected>Select a subject</option>
+              <option value="general">General Enquiry</option>
+              <option value="order">Order Issue</option>
+              <option value="repair">Repair Booking</option>
+              <option value="wholesale">Wholesale</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="fmessage">Message</label>
+            <textarea id="fmessage" name="message" placeholder="How can we help you?" required></textarea>
+          </div>
+
+          <button type="submit" class="btn-submit">Send Message</button>
+        </form>
+
+        <div class="form-success" id="formSuccess">
+          <span>✅</span>
+          <h3>Message Sent!</h3>
+          <p>Thanks for reaching out. We'll get back to you within one business day.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- INFO CARDS -->
+  <section class="info-cards-section">
+    <div class="info-cards-grid">
+      <div class="info-card">
+        <span class="info-card-icon">📞</span>
+        <h3>Phone Support</h3>
+        <p>Speak to a real person — no bots. Our team answers calls Mon–Sat, 9am–6pm.</p>
+        <a href="tel:+442079460321">+44 20 7946 0321</a>
+      </div>
+      <div class="info-card">
+        <span class="info-card-icon">✉️</span>
+        <h3>Email Us</h3>
+        <p>Drop us an email and we'll respond within one working day, guaranteed.</p>
+        <a href="mailto:hello@novatech.co.uk">hello@novatech.co.uk</a>
+      </div>
+      <div class="info-card">
+        <span class="info-card-icon">💬</span>
+        <h3>Live Chat</h3>
+        <p>Real-time chat support is coming soon. Check back shortly or email us in the meantime.</p>
+        <span class="badge-soon">Coming Soon</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a href="index.html" class="nav-logo">Nova<span>Tech</span></a>
+          <p>Premium tech retail &amp; repair specialists. Serving the UK with the finest devices since 2018.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Shop</h4>
+          <ul>
+            <li><a href="hardware.html">Phones</a></li>
+            <li><a href="hardware.html">Tablets</a></li>
+            <li><a href="hardware.html">Laptops</a></li>
+            <li><a href="hardware.html">Consoles</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Services</h4>
+          <ul>
+            <li><a href="repairs.html">Screen Repair</a></li>
+            <li><a href="repairs.html">Battery Replace</a></li>
+            <li><a href="repairs.html">Water Damage</a></li>
+            <li><a href="repairs.html">Book a Repair</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <ul>
+            <li><a href="contact.html">Contact Us</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Service</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 NovaTech. All rights reserved. TechPoint Ltd, 20 Farringdon Street, London EC4A 4AB.</p>
+        <p>Made with care by <a href="#">Lumora Web Studios</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    hamburgerBtn.addEventListener('click', () => mobileMenu.classList.toggle('open'));
+    document.addEventListener('click', (e) => {
+      if (!hamburgerBtn.contains(e.target) && !mobileMenu.contains(e.target))
+        mobileMenu.classList.remove('open');
+    });
+
+    // Cart sync
+    function updateCartDisplay() {
+      const cart = JSON.parse(localStorage.getItem('novatech_cart') || '[]');
+      const total = cart.reduce((s, i) => s + i.qty, 0);
+      const el = document.getElementById('cartCount');
+      if (el) { el.textContent = total; el.style.display = total > 0 ? 'flex' : 'none'; }
+    }
+    updateCartDisplay();
+    window.addEventListener('storage', updateCartDisplay);
+
+    // Contact form
+    const contactForm = document.getElementById('contactForm');
+    const formSuccess = document.getElementById('formSuccess');
+    contactForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      contactForm.style.display = 'none';
+      formSuccess.style.display = 'block';
+    });
+  </script>
+</body>
+</html>

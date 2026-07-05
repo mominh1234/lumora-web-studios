@@ -1,0 +1,1463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Browse Properties — NestHaven</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #06090c;
+      --bg-card:   #0d1117;
+      --bg-card2:  #111820;
+      --border:    rgba(255,159,122,0.12);
+      --border-hover: rgba(255,159,122,0.45);
+      --c1:        #FF9F7A;
+      --c2:        #FFBFA5;
+      --c3:        #FFD9B5;
+      --white:     #ffffff;
+      --muted:     rgba(255,255,255,0.55);
+      --radius:    16px;
+      --radius-lg: 24px;
+      --transition: 0.35s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* GRADIENT UTILITIES */
+    .grad-text {
+      background: linear-gradient(135deg, var(--c1), var(--c2), var(--c3));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .grad-btn {
+      background: linear-gradient(135deg, var(--c1), var(--c2));
+      color: #1a0a00;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      transition: opacity var(--transition), transform var(--transition), box-shadow var(--transition);
+    }
+    .grad-btn:hover {
+      opacity: 0.92;
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(255,159,122,0.35);
+    }
+
+    /* SCROLL REVEAL */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-d1 { transition-delay: 0.08s; }
+    .reveal-d2 { transition-delay: 0.16s; }
+    .reveal-d3 { transition-delay: 0.24s; }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 22px 60px;
+      background: rgba(6,9,12,0.85);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 800;
+      text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+      list-style: none;
+    }
+    .nav-links a {
+      color: rgba(255,255,255,0.75);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color var(--transition);
+    }
+    .nav-links a:hover { color: var(--white); }
+    .nav-links .nav-login {
+      padding: 9px 22px;
+      border: 1px solid rgba(255,159,122,0.4);
+      border-radius: 40px;
+      color: var(--c2) !important;
+    }
+    .nav-links .nav-login:hover {
+      background: rgba(255,159,122,0.1);
+      border-color: var(--c1);
+    }
+
+    /* PAGE HEADER */
+    .page-header {
+      padding: 140px 60px 60px;
+      background: var(--bg);
+      position: relative;
+      overflow: hidden;
+    }
+    .page-header::before {
+      content: '';
+      position: absolute;
+      top: -200px; right: -200px;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(255,159,122,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .page-header::after {
+      content: '';
+      position: absolute;
+      bottom: -100px; left: -100px;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(255,191,165,0.05) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .page-header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-bottom: 24px;
+    }
+    .breadcrumb a {
+      color: var(--muted);
+      text-decoration: none;
+      transition: color var(--transition);
+    }
+    .breadcrumb a:hover { color: var(--c2); }
+    .breadcrumb svg { color: rgba(255,255,255,0.25); }
+
+    .page-header-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: clamp(2.2rem, 4vw, 3.4rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: 14px;
+    }
+    .page-header-sub {
+      color: var(--muted);
+      font-size: 1.05rem;
+      max-width: 480px;
+    }
+    .result-count {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 18px;
+      font-size: 0.82rem;
+      color: var(--muted);
+      font-weight: 500;
+    }
+    .result-count strong {
+      color: var(--c2);
+      font-weight: 700;
+    }
+
+    /* FILTER BAR */
+    .filter-bar {
+      background: var(--bg-card);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 0 60px;
+      position: sticky;
+      top: 73px;
+      z-index: 50;
+    }
+    .filter-bar-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 0;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .filter-bar-inner::-webkit-scrollbar { display: none; }
+
+    .filter-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      white-space: nowrap;
+      margin-right: 4px;
+    }
+
+    .filter-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 16px;
+      border-radius: 40px;
+      background: var(--bg-card2);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.8rem;
+      font-weight: 500;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all var(--transition);
+      user-select: none;
+    }
+    .filter-chip:hover {
+      border-color: rgba(255,159,122,0.35);
+      color: var(--white);
+    }
+    .filter-chip.active {
+      background: linear-gradient(135deg, rgba(255,159,122,0.2), rgba(255,191,165,0.1));
+      border-color: var(--c1);
+      color: var(--c2);
+    }
+    .filter-chip svg { flex-shrink: 0; }
+
+    .filter-divider {
+      width: 1px;
+      height: 28px;
+      background: var(--border);
+      flex-shrink: 0;
+    }
+
+    /* MAIN CONTENT */
+    .main-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 48px 60px 100px;
+    }
+
+    /* SORT ROW */
+    .sort-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 36px;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+    .sort-row-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+    .sort-select {
+      background: var(--bg-card2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.82rem;
+      padding: 8px 14px;
+      outline: none;
+      cursor: pointer;
+      transition: border-color var(--transition);
+    }
+    .sort-select:focus { border-color: var(--c1); }
+
+    .view-toggle {
+      display: flex;
+      gap: 4px;
+    }
+    .view-btn {
+      width: 36px; height: 36px;
+      border-radius: 10px;
+      background: var(--bg-card2);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--transition);
+    }
+    .view-btn.active, .view-btn:hover {
+      border-color: var(--c1);
+      color: var(--c1);
+    }
+
+    /* PROPERTY GRID */
+    .prop-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .prop-grid.list-view {
+      grid-template-columns: 1fr;
+    }
+
+    /* PROPERTY CARD */
+    .prop-card {
+      background: var(--bg-card2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition);
+    }
+    .prop-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--border-hover);
+      box-shadow: 0 24px 60px rgba(0,0,0,0.45);
+    }
+
+    /* List view card */
+    .prop-grid.list-view .prop-card {
+      display: flex;
+      flex-direction: row;
+    }
+    .prop-grid.list-view .prop-img-wrap {
+      width: 280px;
+      height: 200px;
+      flex-shrink: 0;
+      border-radius: 0;
+    }
+    .prop-grid.list-view .prop-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .prop-grid.list-view .prop-desc {
+      display: block;
+    }
+    .prop-grid.list-view .prop-features {
+      display: flex;
+    }
+
+    .prop-img-wrap {
+      position: relative;
+      height: 220px;
+      overflow: hidden;
+    }
+    .prop-img-wrap img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+    .prop-card:hover .prop-img-wrap img { transform: scale(1.05); }
+
+    .prop-badge {
+      position: absolute;
+      top: 14px; left: 14px;
+      background: linear-gradient(135deg, var(--c1), var(--c2));
+      color: #1a0800;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 40px;
+      letter-spacing: 0.04em;
+    }
+    .prop-badge-new {
+      position: absolute;
+      top: 14px; right: 14px;
+      background: rgba(6,9,12,0.75);
+      backdrop-filter: blur(8px);
+      color: var(--c3);
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 40px;
+      border: 1px solid rgba(255,217,181,0.3);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .prop-fave {
+      position: absolute;
+      bottom: 14px; right: 14px;
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      background: rgba(6,9,12,0.7);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all var(--transition);
+      color: rgba(255,255,255,0.5);
+    }
+    .prop-fave:hover {
+      background: rgba(255,159,122,0.2);
+      border-color: var(--c1);
+      color: var(--c1);
+      transform: scale(1.1);
+    }
+    .prop-fave.active {
+      background: rgba(255,159,122,0.25);
+      border-color: var(--c1);
+      color: var(--c1);
+    }
+
+    .prop-body { padding: 22px 22px 24px; }
+
+    .prop-price {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--c2);
+      margin-bottom: 4px;
+    }
+    .prop-per { font-size: 0.78rem; color: var(--muted); font-weight: 400; }
+
+    .prop-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      margin: 8px 0 6px;
+      line-height: 1.3;
+    }
+
+    .prop-location {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+    .prop-location svg { color: var(--c1); flex-shrink: 0; }
+
+    .prop-desc {
+      display: none;
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 14px;
+    }
+
+    .prop-meta {
+      display: flex;
+      gap: 14px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+    .prop-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+    .prop-meta-item svg { color: var(--c1); flex-shrink: 0; }
+
+    .prop-features {
+      display: none;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+    .prop-tag {
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 20px;
+      background: rgba(255,159,122,0.08);
+      border: 1px solid rgba(255,159,122,0.18);
+      color: var(--c2);
+      letter-spacing: 0.02em;
+    }
+
+    .prop-divider {
+      height: 1px;
+      background: var(--border);
+      margin-bottom: 16px;
+    }
+
+    .prop-btn {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      text-align: center;
+      border-radius: 12px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+
+    /* LOAD MORE */
+    .load-more-wrap {
+      text-align: center;
+      padding: 48px 0 0;
+    }
+    .load-more-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 36px;
+      border-radius: 50px;
+      background: var(--bg-card2);
+      border: 1px solid var(--border);
+      color: var(--white);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.92rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+    .load-more-btn:hover {
+      border-color: var(--c1);
+      background: rgba(255,159,122,0.08);
+      transform: translateY(-2px);
+    }
+
+    /* FOOTER */
+    footer {
+      background: #040709;
+      padding: 60px 60px 0;
+      border-top: 1px solid var(--border);
+    }
+    .footer-bottom {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 28px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.3);
+      border-top: 1px solid var(--border);
+    }
+    .footer-bottom a {
+      color: rgba(255,255,255,0.35);
+      text-decoration: none;
+      transition: color var(--transition);
+    }
+    .footer-bottom a:hover { color: var(--muted); }
+    .footer-cols {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding-bottom: 48px;
+    }
+    .footer-col h4 {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+    .footer-col ul { list-style: none; }
+    .footer-col ul li { margin-bottom: 10px; }
+    .footer-col ul li a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: color var(--transition);
+    }
+    .footer-col ul li a:hover { color: var(--c2); }
+
+    /* RESPONSIVE */
+    @media (max-width: 1024px) {
+      nav, .page-header, .filter-bar, .main-content, footer { padding-left: 32px; padding-right: 32px; }
+      .prop-grid { grid-template-columns: repeat(2,1fr); }
+    }
+    @media (max-width: 768px) {
+      nav { padding: 16px 20px; }
+      .nav-links li:not(:last-child) { display: none; }
+      .page-header { padding: 120px 20px 48px; }
+      .filter-bar { padding: 0 20px; }
+      .main-content { padding: 32px 20px 80px; }
+      footer { padding: 40px 20px 0; }
+      .prop-grid { grid-template-columns: 1fr; }
+      .footer-cols { grid-template-columns: 1fr; }
+      .footer-bottom { flex-direction: column; gap: 10px; text-align: center; }
+    }
+
+    /* ACTIVE FILTER HIGHLIGHT ANIMATION */
+    @keyframes chipPop {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.06); }
+      100% { transform: scale(1); }
+    }
+    .filter-chip.just-clicked { animation: chipPop 0.22s ease; }
+
+    /* NO RESULTS */
+    .no-results {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 80px 20px;
+      color: var(--muted);
+    }
+    .no-results svg {
+      color: rgba(255,159,122,0.3);
+      margin-bottom: 20px;
+    }
+    .no-results h3 {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: rgba(255,255,255,0.6);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="index.html" class="nav-logo grad-text">NestHaven</a>
+    <ul class="nav-links">
+      <li><a href="index.html#why">For Landlords</a></li>
+      <li><a href="index.html#why">For Buyers</a></li>
+      <li><a href="index.html" class="nav-login">Login</a></li>
+    </ul>
+  </nav>
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <div class="page-header-inner">
+      <div class="breadcrumb reveal">
+        <a href="index.html">Home</a>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        <span>Browse Properties</span>
+      </div>
+      <h1 class="page-header-title reveal reveal-d1">
+        Properties Across<br /><span class="grad-text">the United Kingdom</span>
+      </h1>
+      <p class="page-header-sub reveal reveal-d2">Hand-picked, verified listings in every corner of the UK — from city flats to country estates.</p>
+      <div class="result-count reveal reveal-d3">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+        Showing <strong id="result-total">15</strong> verified properties
+      </div>
+    </div>
+  </div>
+
+  <!-- FILTER BAR -->
+  <div class="filter-bar">
+    <div class="filter-bar-inner">
+      <span class="filter-label">Filter:</span>
+
+      <button class="filter-chip active" data-filter="all">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+        All
+      </button>
+      <button class="filter-chip" data-filter="house">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+        Houses
+      </button>
+      <button class="filter-chip" data-filter="flat">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+        Flats
+      </button>
+      <button class="filter-chip" data-filter="detached">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+        Detached
+      </button>
+      <button class="filter-chip" data-filter="luxury">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+        Luxury
+      </button>
+
+      <div class="filter-divider"></div>
+
+      <button class="filter-chip" data-filter="north">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+        North
+      </button>
+      <button class="filter-chip" data-filter="midlands">Midlands</button>
+      <button class="filter-chip" data-filter="south">South</button>
+      <button class="filter-chip" data-filter="scotland">Scotland</button>
+      <button class="filter-chip" data-filter="wales">Wales</button>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="main-content">
+
+    <!-- Sort Row -->
+    <div class="sort-row">
+      <div class="sort-row-left">
+        <span>Sort by</span>
+        <select class="sort-select" id="sort-select">
+          <option value="default">Relevance</option>
+          <option value="price-asc">Price: Low to High</option>
+          <option value="price-desc">Price: High to Low</option>
+          <option value="beds-desc">Most Bedrooms</option>
+        </select>
+      </div>
+      <div class="view-toggle">
+        <button class="view-btn active" id="btn-grid" title="Grid view" aria-label="Grid view">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+        </button>
+        <button class="view-btn" id="btn-list" title="List view" aria-label="List view">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Property Grid -->
+    <div class="prop-grid" id="prop-grid">
+
+      <!-- 1: Manchester -->
+      <div class="prop-card reveal" data-type="house" data-region="north" data-price="1200" data-beds="3">
+        <div class="prop-img-wrap">
+          <img src="https://images.unsplash.com/photo-1759403478100-92a1acc2d07e?w=600&q=80" alt="3-bed terrace Manchester" loading="lazy" />
+          <span class="prop-badge">Verified</span>
+          <button class="prop-fave" aria-label="Save property">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+          </button>
+        </div>
+        <div class="prop-body">
+          <div class="prop-price">£1,200 <span class="prop-per">/month</span></div>
+          <div class="prop-title">3-Bed Victorian Terrace</div>
+          <div class="prop-location">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            Didsbury, Manchester
+          </div>
+          <p class="prop-desc">Charming Victorian terrace on a leafy street in popular Didsbury. Recently renovated with modern kitchen and bathrooms, retaining original character features.</p>
+          <div class="prop-meta">
+            <span class="prop-meta-item">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+              3 Beds
+            </span>
+            <span class="prop-meta-item">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+              2 Baths
+            </span>
+            <span class="prop-meta-item">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"></rect></svg>
+              House
+            </span>
+          </div>
+          <div class="prop-features">
+            <span class="prop-tag">Garden</span>
+            <span class="prop-tag">Parking</span>
+            <span class="prop-tag">Near Schools</span>
+          </div>
+          <div class="prop-divider"></div>
+          <a href="property.html?id=1" class="prop-btn grad-btn">View Property</a>
+        </div>
+      </div>
+
+      <!-- 2: London -->
+      <div class="prop-card reveal reveal-d1" data-type="flat" data-region="south" data-price="1800" data-beds="2">
+        <div class="prop-img-wrap">
+          <img src="https://images.unsplash.com/photo-1718579019220-98697dc2fd72?w=600&q=80" alt="2-bed flat Notting Hill London" loading="lazy" />
+          <span class="prop-badge">Verified</span>
+          <span class="prop-badge-new">New</span>
+          <button class="prop-fave" aria-label="Save property">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+          </button>
+        </div>
+        <div class="prop-body">
+          <div class="prop-price">£1,800 <span class="prop-per">/month</span></div>
+          <div class="prop-title">2-Bed Garden Flat</div>
+          <div class="prop-location">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            Notting Hill, London
+          </div>
+          <p class="prop-desc">Stunning garden flat in the iconic Notting Hill terraces. High ceilings, bay windows and private rear garden in one of London's most desirable postcodes.</p>
+          <div class="prop-meta">
+            <span class="prop-meta-item">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+              2 Beds
+            </span>
+            <span class="prop-meta-item">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"></rect></svg>
+              Flat
+            </span>
+            <span class="prop-meta-item">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+              Garden
+            </span>
+          </div>
+          <div class="prop-features">
+            <span class="prop-tag">Private Garden</span>
+            <span class="prop-tag">Period Features</span>
+          </div>
+          <div class="prop-divider"></div>
+          <a href="property.html?id=2" class="prop-btn grad-btn">View Property</a>
+        </div>
+      </div>
+
+      <!-- 3: Edinburgh -->
+      <div class="prop-card reveal reveal-d2" data-type="flat" data-region="scotland" data-price="950" data-beds="1">
+        <div class="prop-img-wrap">
+          <img src="https://images.unsplash.com/photo-1629475840643-2d2b9923894d?w=600&q=80" alt="Edinburgh stone tenement flat" loading="lazy" />
+          <span class="prop-badge">Verified</span>
+          <button class="prop-fave" aria-label="Save property">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+          </button>
+        </div>
+        <div class="prop-body">
+          <div class="prop-price">£950 <span class="prop-per">/month</span></div>
+          <div class="prop-title">1-Bed Stone Tenement Flat</div>
+          <div class="prop-location">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            New Town, Edinburgh
+          </div>
+          <p class="prop-desc">Beautiful first-floor flat in Edinburgh's famous stone tenement buildings. High ceilings, original cornicing, and close to Princes Street.</p>
+          <div class="prop-meta">
+            <span class="prop-meta-item">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+              1 Bed
+            </span>
+            <span class="prop-meta-item">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"></rect></svg>
+              Flat
+            </span>
+          </div>
+          <div class="prop-features">
+            <span class="prop-tag">City Centre</span>
+            <span class="prop-tag">Period</span>
+          </div>
+          <div class="prop-divider"></div>
+          <a href="property.html?id=3" class="prop-btn grad-btn">View Property</a>
+        </div>
+      </div>
+
+      <!-- 4: Birmingham -->
+      <div class="prop-card reveal" data-type="detached" data-region="midlands" data-price="1500" data-beds="4">
+        <div class="prop-img-wrap">
+          <img src="https://images.unsplash.com/photo-1587995430048-dff2c324ce2f?w=600&q=80" alt="4-bed detached Birmingham" loading="lazy" />
+          <span class="prop-badge">Verified</span>
+          <button class="prop-fave" aria-label="Save property">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+          </button>
+        </div>
+        <div class="prop-body">
+          <div class="prop-price">£1,500 <span class="prop-per">/month</span></div>
+          <div class="prop-title">4-Bed Victorian Detached</div>
+          <div class="prop-location">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            Moseley, Birmingham
+          </div>
+          <p class="prop-desc">Grand Victorian detached home on a prestigious tree-lined road in sought-after Moseley. Double garage and large rear garden.</p>
+          <div class="prop-meta">
+            <span class="prop-meta-item">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+              4 Beds
+            </span>
+            <span class="prop-meta-item">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"></rect></svg>
+              Detached
+            </span>
+          </div>
+          <div class="prop-features">
+            <span class="prop-tag">Double Garage</span>
+            <span class="prop-tag">Large Garden</span>
+          </div>
+          <div class="prop-divider"></div>
+          <a href="property.html?id=4" class="prop-btn grad-btn">View Property</a>
+        </div>
+      </div>
+
+      <!-- 5: Bristol -->
+      <div class="prop-card reveal reveal-d1" data-type="house" data-region="south" data-price="1350" data-beds="3">
+        <div class="prop-img-wrap">
+          <img src="https://images.unsplash.com/photo-1707776445404-5f7421740a26?w=600&q=80" alt="3-bed semi Bristol colourful terrace" loading="lazy" />
+          <span class="prop-badge">Verified</span>
+          <button class="prop-fave" aria-label="Save property">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+          </button>
+        </div>
+        <div class="prop-body">
+          <div class="prop-price">£1,350 <span class="prop-per">/month</span></div>
+          <div class="prop-title">3-Bed Colourful Terrace</div>
+          <div class="prop-location">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            Clifton, Bristol
+          </div>
+          <p class="prop-desc">Iconic colourful terraced house in the heart of Clifton. Steps from the Suspension Bridge, with a sunny south-facing rear garden.</p>
+          <div class="prop-meta">
+            <span class="prop-meta-item">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+              3 Beds
+            </span>
+            <span class="prop-meta-item">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"></rect></svg>
+              Terrace
+            </span>
+          </div>
+          <div class="prop-features">
+            <span class="prop-tag">South Garden</span>
+            <span class="prop-tag">Clifton Village</span>
+          </div>
+          <div class="prop-divider"></div>
+          <a href="property.html?id=5" class="prop-btn grad-btn">View Property</a>
+        </div>
+      </div>
+
+      <!-- 6: Glasgow -->
+      <div class="prop-card reveal reveal-d2" data-type="flat" data-region="scotland" data-price="1100" data-beds="2">
+        <div class="prop-img-wrap">
+          <img src="https://images.unsplash.com/photo-1674090624035-a04b0839136e?w=600&q=80" alt="2-bed flat Glasgow sandstone" loading="lazy" />
+          <span class="prop-badge">Verified</span>
+          <button class="prop-fave" aria-label="Save property">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+          </button>
+        </div>
+        <div class="prop-body">
+          <div class="prop-price">£1,100 <span class="prop-per">/month</span></div>
+          <div class="prop-title">2-Bed Sandstone Conversion</div>
+          <div class="prop-location">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            West End, Glasgow
+          </div>
+          <p class="prop-desc">Spacious conversion within a classic Glasgow sandstone townhouse. Stunning original features including ornate fireplaces and sash windows.</p>
+          <div class="prop-meta">
+            <span class="prop-meta-item">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+              2 Beds
+            </span>
+            <span class="prop-meta-item">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"></rect></svg>
+              Flat
+            </span>
+          </div>
+          <div class="prop-features">
+            <span class="prop-tag">Period Features</span>
+            <span class="prop-tag">West End</span>
+          </div>
+          <div class="prop-divider"></div>
+          <a href="property.html?id=6" class="prop-btn grad-btn">View Property</a>
+        </div>
+      </div>
+
+      <!-- 7: Oxford -->
+      <div class="prop-card reveal" data-type="house" data-region="south" data-price="1650" data-beds="3">
+        <div class="prop-img-wrap">
+          <img src="https://images.unsplash.com/photo-1620630158203-d521ee7a4f36?w=600&q=80" alt="Oxford ivy-covered cottage" loading="lazy" />
+          <span class="prop-badge">Verified</span>
+          <span class="prop-badge-new">New</span>
+          <button class="prop-fave" aria-label="Save property">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+          </button>
+        </div>
+        <div class="prop-body">
+          <div class="prop-price">£1,650 <span class="prop-per">/month</span></div>
+          <div class="prop-title">3-Bed Ivy-Clad Cottage</div>
+          <div class="prop-location">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            Jericho, Oxford
+          </div>
+          <p class="prop-desc">Characterful ivy-clad stone cottage with picturesque dormers in desirable Jericho. Quirky original features throughout, walled courtyard garden.</p>
+          <div class="prop-meta">
+            <span class="prop-meta-item">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+              3 Beds
+            </span>
+            <span class="prop-meta-item">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"></rect></svg>
+              Cottage
+            </span>
+          </div>
+          <div class="prop-features">
+            <span class="prop-tag">Walled Garden</span>
+            <span class="prop-tag">Character</span>
+          </div>
+          <div class="prop-divider"></div>
+          <a href="property.html?id=7" class="prop-btn grad-btn">View Property</a>
+        </div>
+      </div>
+
+      <!-- 8: Liverpool -->
+      <div class="prop-card reveal reveal-d1" data-type="house" data-region="north" data-price="1700" data-beds="4">
+        <div class="prop-img-wrap">
+          <img src="https://images.unsplash.com/photo-1626011338304-525185d89fdf?w=600&q=80" alt="4-bed townhouse Liverpool" loading="lazy" />
+          <span class="prop-badge">Verified</span>
+          <button class="prop-fave" aria-label="Save property">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+          </button>
+        </div>
+        <div class="prop-body">
+          <div class="prop-price">£1,700 <span class="prop-per">/month</span></div>
+          <div class="prop-title">4-Bed Georgian Townhouse</div>
+          <div class="prop-location">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            Georgian Quarter, Liverpool
+          </div>
+          <p class="prop-desc">Magnificent Grade II listed Georgian townhouse in Liverpool's celebrated Georgian Quarter. Four floors of elegant living with all modern amenities.</p>
+          <div class="prop-meta">
+            <span class="prop-meta-item">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+              4 Beds
+            </span>
+            <span class="prop-meta-item">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"></rect></svg>
+              Townhouse
+            </span>
+          </div>
+          <div class="prop-features">
+            <span class="prop-tag">Grade II Listed</span>
+            <span class="prop-tag">4 Floors</span>
+          </div>
+          <div class="prop-divider"></div>
+          <a href="property.html?id=8" class="prop-btn grad-btn">View Property</a>
+        </div>
+      </div>
+
+      <!-- 9: Leeds -->
+      <div class="prop-card reveal reveal-d2" data-type="detached" data-region="north" data-price="2200" data-beds="5">
+        <div class="prop-img-wrap">
+          <img src="https://images.unsplash.com/photo-1639219563997-332d8b8dd207?w=600&q=80" alt="5-bed villa Leeds Yorkshire" loading="lazy" />
+          <span class="prop-badge">Verified</span>
+          <button class="prop-fave" aria-label="Save property">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+          </button>
+        </div>
+        <div class="prop-body">
+          <div class="prop-price">£2,200 <span class="prop-per">/month</span></div>
+          <div class="prop-title">5-Bed Yorkshire Stone Villa</div>
+          <div class="prop-location">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            Roundhay, Leeds
+          </div>
+          <p class="prop-desc">Impressive Yorkshire stone villa with striking turret feature in prestigious Roundhay. Sprawling grounds, double garage, and annexe potential.</p>
+          <div class="prop-meta">
+            <span class="prop-meta-item">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+              5 Beds
+            </span>
+            <span class="prop-meta-item">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"></rect></svg>
+              Villa
+            </span>
+          </div>
+          <div class="prop-features">
+            <span class="prop-tag">Large Grounds</span>
+            <span class="prop-tag">Turret Feature</span>
+          </div>
+          <div class="prop-divider"></div>
+          <a href="property.html?id=9" class="prop-btn grad-btn">View Property</a>
+        </div>
+      </div>
+
+      <!-- 10: Cambridge -->
+      <div class="prop-card reveal" data-type="flat" data-region="south" data-price="1450" data-beds="2">
+        <div class="prop-img-wrap">
+          <img src="https://images.unsplash.com/photo-1644889027199-1d810b046c4f?w=600&q=80" alt="Cambridge King's College Gothic architecture" loading="lazy" />
+          <span class="prop-badge">Verified</span>
+          <button class="prop-fave" aria-label="Save property">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+          </button>
+        </div>
+        <div class="prop-body">
+          <div class="prop-price">£1,450 <span class="prop-per">/month</span></div>
+          <div class="prop-title">2-Bed City Centre Apartment</div>
+          <div class="prop-location">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            City Centre, Cambridge
+          </div>
+          <p class="prop-desc">Exceptional apartment overlooking the stunning Gothic spires of central Cambridge. Moments from King's College, the Backs, and all city amenities.</p>
+          <div class="prop-meta">
+            <span class="prop-meta-item">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+              2 Beds
+            </span>
+            <span class="prop-meta-item">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"></rect></svg>
+              Apartment
+            </span>
+          </div>
+          <div class="prop-features">
+            <span class="prop-tag">City Views</span>
+            <span class="prop-tag">Near University</span>
+          </div>
+          <div class="prop-divider"></div>
+          <a href="property.html?id=10" class="prop-btn grad-btn">View Property</a>
+        </div>
+      </div>
+
+      <!-- 11: Newcastle -->
+      <div class="prop-card reveal reveal-d1" data-type="flat" data-region="north" data-price="1050" data-beds="2">
+        <div class="prop-img-wrap">
+          <img src="https://images.unsplash.com/photo-1660042866417-1963a3cf5ab6?w=600&q=80" alt="Newcastle Quayside Tyne Bridge" loading="lazy" />
+          <span class="prop-badge">Verified</span>
+          <button class="prop-fave" aria-label="Save property">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+          </button>
+        </div>
+        <div class="prop-body">
+          <div class="prop-price">£1,050 <span class="prop-per">/month</span></div>
+          <div class="prop-title">2-Bed Quayside Apartment</div>
+          <div class="prop-location">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            Quayside, Newcastle
+          </div>
+          <p class="prop-desc">Modern riverside apartment with iconic views of the Tyne Bridge from a private balcony. Walk to city centre restaurants, bars and nightlife.</p>
+          <div class="prop-meta">
+            <span class="prop-meta-item">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+              2 Beds
+            </span>
+            <span class="prop-meta-item">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"></rect></svg>
+              Apartment
+            </span>
+          </div>
+          <div class="prop-features">
+            <span class="prop-tag">River Views</span>
+            <span class="prop-tag">Balcony</span>
+          </div>
+          <div class="prop-divider"></div>
+          <a href="property.html?id=11" class="prop-btn grad-btn">View Property</a>
+        </div>
+      </div>
+
+      <!-- 12: Cardiff -->
+      <div class="prop-card reveal reveal-d2" data-type="detached" data-region="wales" data-price="1400" data-beds="4">
+        <div class="prop-img-wrap">
+          <img src="https://images.unsplash.com/photo-1730212161911-49a6a7b17f72?w=600&q=80" alt="Cardiff Victorian estate house in wooded grounds" loading="lazy" />
+          <span class="prop-badge">Verified</span>
+          <button class="prop-fave" aria-label="Save property">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+          </button>
+        </div>
+        <div class="prop-body">
+          <div class="prop-price">£1,400 <span class="prop-per">/month</span></div>
+          <div class="prop-title">4-Bed Victorian Estate House</div>
+          <div class="prop-location">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            Pontcanna, Cardiff
+          </div>
+          <p class="prop-desc">Stately white Victorian house set in extensive private grounds in the leafy Pontcanna conservation area. Original sash windows and grand reception rooms.</p>
+          <div class="prop-meta">
+            <span class="prop-meta-item">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+              4 Beds
+            </span>
+            <span class="prop-meta-item">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"></rect></svg>
+              Detached
+            </span>
+          </div>
+          <div class="prop-features">
+            <span class="prop-tag">Private Grounds</span>
+            <span class="prop-tag">Conservation Area</span>
+          </div>
+          <div class="prop-divider"></div>
+          <a href="property.html?id=12" class="prop-btn grad-btn">View Property</a>
+        </div>
+      </div>
+
+      <!-- 13: Nottingham -->
+      <div class="prop-card reveal" data-type="flat" data-region="midlands" data-price="980" data-beds="2">
+        <div class="prop-img-wrap">
+          <img src="https://images.unsplash.com/photo-1630344353375-2f744504def3?w=600&q=80" alt="Nottingham Lace Market Victorian building" loading="lazy" />
+          <span class="prop-badge">Verified</span>
+          <button class="prop-fave" aria-label="Save property">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+          </button>
+        </div>
+        <div class="prop-body">
+          <div class="prop-price">£980 <span class="prop-per">/month</span></div>
+          <div class="prop-title">2-Bed Lace Market Loft</div>
+          <div class="prop-location">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            Lace Market, Nottingham
+          </div>
+          <p class="prop-desc">Stunning loft conversion within Nottingham's iconic Lace Market red brick warehouse. Industrial-chic interiors with exposed beams and original brickwork.</p>
+          <div class="prop-meta">
+            <span class="prop-meta-item">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+              2 Beds
+            </span>
+            <span class="prop-meta-item">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"></rect></svg>
+              Loft
+            </span>
+          </div>
+          <div class="prop-features">
+            <span class="prop-tag">Exposed Brick</span>
+            <span class="prop-tag">Industrial-Chic</span>
+          </div>
+          <div class="prop-divider"></div>
+          <a href="property.html?id=13" class="prop-btn grad-btn">View Property</a>
+        </div>
+      </div>
+
+      <!-- 14: Surrey -->
+      <div class="prop-card reveal reveal-d1" data-type="luxury" data-region="south" data-price="4500" data-beds="6">
+        <div class="prop-img-wrap">
+          <img src="https://images.unsplash.com/photo-1763976435009-4362d4be36c5?w=600&q=80" alt="Surrey country manor estate" loading="lazy" />
+          <span class="prop-badge">Verified</span>
+          <span class="prop-badge-new">Luxury</span>
+          <button class="prop-fave" aria-label="Save property">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+          </button>
+        </div>
+        <div class="prop-body">
+          <div class="prop-price">£4,500 <span class="prop-per">/month</span></div>
+          <div class="prop-title">6-Bed Country Manor Estate</div>
+          <div class="prop-location">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            Surrey Hills, Surrey
+          </div>
+          <p class="prop-desc">Magnificent red brick country manor with ornate chimneys and period windows on a private 3-acre estate in the Surrey Hills AONB. Formal gardens and paddock.</p>
+          <div class="prop-meta">
+            <span class="prop-meta-item">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+              6 Beds
+            </span>
+            <span class="prop-meta-item">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"></rect></svg>
+              Manor
+            </span>
+          </div>
+          <div class="prop-features">
+            <span class="prop-tag">3 Acres</span>
+            <span class="prop-tag">Paddock</span>
+            <span class="prop-tag">AONB</span>
+          </div>
+          <div class="prop-divider"></div>
+          <a href="property.html?id=14" class="prop-btn grad-btn">View Property</a>
+        </div>
+      </div>
+
+      <!-- 15: Bath -->
+      <div class="prop-card reveal reveal-d2" data-type="luxury" data-region="south" data-price="3200" data-beds="5">
+        <div class="prop-img-wrap">
+          <img src="https://images.unsplash.com/photo-1699454030717-c611ef4a315f?w=600&q=80" alt="Bath Palladian estate grounds" loading="lazy" />
+          <span class="prop-badge">Verified</span>
+          <span class="prop-badge-new">Luxury</span>
+          <button class="prop-fave" aria-label="Save property">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+          </button>
+        </div>
+        <div class="prop-body">
+          <div class="prop-price">£3,200 <span class="prop-per">/month</span></div>
+          <div class="prop-title">5-Bed Palladian Estate House</div>
+          <div class="prop-location">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            Prior Park, Bath
+          </div>
+          <p class="prop-desc">Extraordinary Palladian-style estate house set within historic grounds featuring an iconic stone bridge and cascading water feature. Somerset countryside views.</p>
+          <div class="prop-meta">
+            <span class="prop-meta-item">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+              5 Beds
+            </span>
+            <span class="prop-meta-item">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"></rect></svg>
+              Estate
+            </span>
+          </div>
+          <div class="prop-features">
+            <span class="prop-tag">Historic Grounds</span>
+            <span class="prop-tag">Country Views</span>
+          </div>
+          <div class="prop-divider"></div>
+          <a href="property.html?id=15" class="prop-btn grad-btn">View Property</a>
+        </div>
+      </div>
+
+    </div><!-- /prop-grid -->
+
+    <div class="load-more-wrap reveal">
+      <button class="load-more-btn" id="load-more-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 .49-3.99"></path></svg>
+        Load More Properties
+      </button>
+    </div>
+
+  </div><!-- /main-content -->
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-cols">
+      <div>
+        <h4>NestHaven</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="#">How it works</a></li>
+          <li><a href="#">List a property</a></li>
+          <li><a href="#">Blog</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Browse</h4>
+        <ul>
+          <li><a href="#">Houses</a></li>
+          <li><a href="#">Flats & Apartments</a></li>
+          <li><a href="#">Luxury Homes</a></li>
+          <li><a href="#">New Builds</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="mailto:hello@nesthaven.co.uk">hello@nesthaven.co.uk</a></li>
+          <li><a href="#">Support</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2025 NestHaven. All rights reserved.</span>
+      <span>Real homes. Real people. Real value.</span>
+    </div>
+  </footer>
+
+  <script>
+    // === SCROLL REVEAL ===
+    const revealEls = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    revealEls.forEach(el => observer.observe(el));
+
+    // === FAVOURITE TOGGLE ===
+    document.querySelectorAll('.prop-fave').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        btn.classList.toggle('active');
+        const svg = btn.querySelector('svg');
+        if (btn.classList.contains('active')) {
+          svg.setAttribute('fill', 'currentColor');
+        } else {
+          svg.setAttribute('fill', 'none');
+        }
+      });
+    });
+
+    // === VIEW TOGGLE ===
+    const grid    = document.getElementById('prop-grid');
+    const btnGrid = document.getElementById('btn-grid');
+    const btnList = document.getElementById('btn-list');
+
+    btnGrid.addEventListener('click', () => {
+      grid.classList.remove('list-view');
+      btnGrid.classList.add('active');
+      btnList.classList.remove('active');
+      // Hide desc + features in grid mode
+      document.querySelectorAll('.prop-desc, .prop-features').forEach(el => el.style.display = '');
+    });
+    btnList.addEventListener('click', () => {
+      grid.classList.add('list-view');
+      btnList.classList.add('active');
+      btnGrid.classList.remove('active');
+      // Show desc + features in list mode
+      document.querySelectorAll('.prop-desc').forEach(el => el.style.display = 'block');
+      document.querySelectorAll('.prop-features').forEach(el => el.style.display = 'flex');
+    });
+
+    // === FILTER CHIPS ===
+    const chips = document.querySelectorAll('.filter-chip');
+    const cards = document.querySelectorAll('.prop-card');
+    let activeFilter = 'all';
+
+    // Region tags per card for filtering
+    const regionMap = {
+      'north': ['north'],
+      'midlands': ['midlands'],
+      'south': ['south'],
+      'scotland': ['scotland'],
+      'wales': ['wales']
+    };
+
+    function applyFilter(filter) {
+      activeFilter = filter;
+      let visible = 0;
+      cards.forEach(card => {
+        let show = false;
+        if (filter === 'all') {
+          show = true;
+        } else if (['house', 'flat', 'detached', 'luxury'].includes(filter)) {
+          show = card.dataset.type === filter;
+        } else if (['north', 'midlands', 'south', 'scotland', 'wales'].includes(filter)) {
+          show = card.dataset.region === filter;
+        }
+        card.style.display = show ? '' : 'none';
+        if (show) visible++;
+      });
+      document.getElementById('result-total').textContent = visible;
+    }
+
+    chips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        chips.forEach(c => c.classList.remove('active'));
+        chip.classList.add('active', 'just-clicked');
+        chip.addEventListener('animationend', () => chip.classList.remove('just-clicked'), { once: true });
+        applyFilter(chip.dataset.filter);
+      });
+    });
+
+    // === SORT ===
+    const sortSelect = document.getElementById('sort-select');
+    sortSelect.addEventListener('change', () => {
+      const val = sortSelect.value;
+      const grid = document.getElementById('prop-grid');
+      const cardArr = Array.from(grid.querySelectorAll('.prop-card'));
+
+      cardArr.sort((a, b) => {
+        if (val === 'price-asc')  return +a.dataset.price - +b.dataset.price;
+        if (val === 'price-desc') return +b.dataset.price - +a.dataset.price;
+        if (val === 'beds-desc')  return +b.dataset.beds  - +a.dataset.beds;
+        return 0; // default
+      });
+
+      cardArr.forEach(card => grid.appendChild(card));
+    });
+
+    // === LOAD MORE (visual feedback) ===
+    document.getElementById('load-more-btn').addEventListener('click', function() {
+      this.innerHTML = `
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="animation:spin 0.8s linear infinite"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 .49-3.99"></path></svg>
+        Loading...
+      `;
+      setTimeout(() => {
+        this.innerHTML = `
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          All properties loaded
+        `;
+        this.style.opacity = '0.5';
+        this.style.cursor = 'default';
+      }, 1200);
+    });
+  </script>
+
+  <style>
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+
+</body>
+</html>

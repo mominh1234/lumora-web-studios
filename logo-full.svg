@@ -1,0 +1,160 @@
+<svg viewBox="0 0 900 220" fill="none" xmlns="http://www.w3.org/2000/svg" width="900" height="220">
+  <defs>
+
+    <linearGradient id="cubeTop" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f0e4ff"/>
+      <stop offset="40%" stop-color="#d8bcff"/>
+      <stop offset="100%" stop-color="#a870e8"/>
+    </linearGradient>
+    <linearGradient id="cubeLeft" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#6030a8"/>
+      <stop offset="100%" stop-color="#2e0c60"/>
+    </linearGradient>
+    <linearGradient id="cubeRight" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#9a60d0"/>
+      <stop offset="100%" stop-color="#4a18a0"/>
+    </linearGradient>
+
+    <linearGradient id="beamMid" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0%" stop-color="#cc90ff" stop-opacity="0.65"/>
+      <stop offset="60%" stop-color="#dbb8ff" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="beamCore" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="1"/>
+      <stop offset="45%" stop-color="#f0e0ff" stop-opacity="0.5"/>
+      <stop offset="85%" stop-color="#e0ccff" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="beamHot" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="1"/>
+      <stop offset="35%" stop-color="#ffffff" stop-opacity="0.75"/>
+      <stop offset="75%" stop-color="#e8d8ff" stop-opacity="0.1"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+
+    <linearGradient id="edgeHL" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#c4a8f0" stop-opacity="0.1"/>
+    </linearGradient>
+
+    <linearGradient id="textGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%"   stop-color="#ffffff"/>
+      <stop offset="28%"  stop-color="#ecdaff"/>
+      <stop offset="52%"  stop-color="#ffffff"/>
+      <stop offset="78%"  stop-color="#d8bcff"/>
+      <stop offset="100%" stop-color="#c4a8f0"/>
+    </linearGradient>
+
+    <linearGradient id="divGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"   stop-color="#7040b8" stop-opacity="0"/>
+      <stop offset="25%"  stop-color="#9a6ad8" stop-opacity="0.5"/>
+      <stop offset="75%"  stop-color="#9a6ad8" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#7040b8" stop-opacity="0"/>
+    </linearGradient>
+
+    <filter id="glowCube" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="2.5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="fBeamWide" x="-60%" y="-2%" width="220%" height="104%">
+      <feGaussianBlur stdDeviation="6"/>
+    </filter>
+    <filter id="fBeamMid" x="-40%" y="-2%" width="180%" height="104%">
+      <feGaussianBlur stdDeviation="3"/>
+    </filter>
+    <filter id="fBeamCore" x="-60%" y="-2%" width="220%" height="104%">
+      <feGaussianBlur stdDeviation="1.2"/>
+    </filter>
+    <filter id="fSpotLoose" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="5"/>
+    </filter>
+    <filter id="fSpotTight" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2"/>
+    </filter>
+    <filter id="textGlow" x="-2%" y="-25%" width="104%" height="150%">
+      <feGaussianBlur stdDeviation="1.5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+
+    <radialGradient id="spotGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#bf80ff" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#bf80ff" stop-opacity="0"/>
+    </radialGradient>
+
+  </defs>
+
+  <!-- Solid black background -->
+  <rect width="900" height="220" fill="#000000"/>
+
+  <!-- ═══ ICON ═══ -->
+  <g transform="translate(100,110) scale(0.35) translate(-200,-295)">
+
+    <!-- Beams -->
+    <polygon points="200,290 80,20 320,20"  fill="url(#beamMid)"  filter="url(#fBeamWide)"  opacity="0.55"/>
+    <polygon points="200,290 120,20 280,20" fill="url(#beamMid)"  filter="url(#fBeamMid)"/>
+    <polygon points="200,290 155,20 245,20" fill="url(#beamCore)" filter="url(#fBeamCore)"/>
+    <polygon points="200,290 186,22 214,22" fill="url(#beamHot)"/>
+    <polygon points="200,290 196,24 204,24" fill="white" opacity="1"/>
+
+    <!-- Cube glow -->
+    <ellipse cx="200" cy="205" rx="65" ry="28" fill="url(#spotGlow)" filter="url(#fSpotLoose)"/>
+
+    <!-- Cube faces -->
+    <polygon points="200,272 88,212 200,152 312,212" fill="url(#cubeTop)" filter="url(#glowCube)"/>
+    <polygon points="88,212 200,152 200,318 88,378"   fill="url(#cubeLeft)"/>
+    <polygon points="312,212 200,152 200,318 312,378"  fill="url(#cubeRight)"/>
+    <polygon points="88,378 200,438 312,378 200,318"   fill="#1a0840"/>
+
+    <!-- Edges -->
+    <line x1="200" y1="152" x2="200" y2="318" stroke="url(#edgeHL)" stroke-width="1.5" opacity="0.7"/>
+    <line x1="200" y1="152" x2="88"  y2="212" stroke="#ecdaff"      stroke-width="1.2" opacity="0.6"/>
+    <line x1="200" y1="152" x2="312" y2="212" stroke="#ecdaff"      stroke-width="1.2" opacity="0.6"/>
+    <line x1="88"  y1="378" x2="200" y2="318" stroke="#7050a8"      stroke-width="1"   opacity="0.45"/>
+    <line x1="312" y1="378" x2="200" y2="318" stroke="#7050a8"      stroke-width="1"   opacity="0.45"/>
+    <line x1="88"  y1="212" x2="88"  y2="378" stroke="#4828a0"      stroke-width="0.9" opacity="0.4"/>
+    <line x1="312" y1="212" x2="312" y2="378" stroke="#4828a0"      stroke-width="0.9" opacity="0.4"/>
+    <line x1="88"  y1="378" x2="200" y2="438" stroke="#301470"      stroke-width="0.8" opacity="0.35"/>
+    <line x1="312" y1="378" x2="200" y2="438" stroke="#301470"      stroke-width="0.8" opacity="0.35"/>
+
+    <!-- Beam exit glow -->
+    <ellipse cx="200" cy="198" rx="42" ry="20" fill="#bf80ff" opacity="0.18" filter="url(#fSpotLoose)"/>
+    <ellipse cx="200" cy="195" rx="20" ry="10" fill="#d8a8ff" opacity="0.25" filter="url(#fSpotTight)"/>
+    <ellipse cx="200" cy="192" rx="7"  ry="3"  fill="white"   opacity="0.6"/>
+
+  </g>
+
+  <!-- Vertical divider -->
+  <rect x="188" y="22" width="1" height="176" fill="url(#divGrad)"/>
+
+  <!-- ═══ WORDMARK ═══ -->
+  <text
+    x="210" y="88"
+    font-family="'Orbitron', 'Courier New', monospace"
+    font-size="56"
+    font-weight="900"
+    letter-spacing="5"
+    fill="url(#textGrad)"
+    filter="url(#textGlow)"
+  >LUMORA</text>
+
+  <text
+    x="210" y="145"
+    font-family="'Orbitron', 'Courier New', monospace"
+    font-size="34"
+    font-weight="700"
+    letter-spacing="4"
+    fill="url(#textGrad)"
+    filter="url(#textGlow)"
+  >WEB STUDIOS</text>
+
+  <text
+    x="213" y="175"
+    font-family="'Rajdhani', 'Arial Narrow', Arial, sans-serif"
+    font-size="16"
+    font-weight="400"
+    letter-spacing="9"
+    fill="#9a7dc4"
+  >DIGITAL CRAFTSMANSHIP</text>
+
+</svg>

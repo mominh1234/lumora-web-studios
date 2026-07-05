@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NovaTech – Product</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #080808;
+      --card: #111111;
+      --accent: #00d4ff;
+      --accent-dim: rgba(0, 212, 255, 0.15);
+      --accent-glow: rgba(0, 212, 255, 0.35);
+      --white: #ffffff;
+      --grey: #888888;
+      --border: rgba(255,255,255,0.07);
+      --font-head: 'Space Grotesk', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background-color: var(--bg);
+      color: var(--white);
+      font-family: var(--font-body);
+      line-height: 1.6;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: -20%; left: 50%;
+      transform: translateX(-50%);
+      width: 900px; height: 900px;
+      background: radial-gradient(circle, rgba(0,212,255,0.05) 0%, transparent 70%);
+      pointer-events: none; z-index: 0;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px; height: 70px;
+      background: rgba(8,8,8,0.88);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: var(--font-head);
+      font-size: 1.5rem; font-weight: 700;
+      color: var(--white); text-decoration: none; letter-spacing: -0.5px;
+    }
+    .nav-logo span { color: var(--accent); }
+    .nav-links { display: flex; gap: 36px; list-style: none; }
+    .nav-links a {
+      font-size: 0.9rem; font-weight: 500;
+      color: var(--grey); text-decoration: none; transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--white); }
+    .nav-right { display: flex; align-items: center; gap: 16px; }
+    .nav-cart-btn {
+      position: relative; background: none; border: none;
+      cursor: pointer; color: var(--grey); font-size: 1.2rem;
+      padding: 6px; transition: color 0.2s;
+    }
+    .nav-cart-btn:hover { color: var(--white); }
+    .cart-count {
+      position: absolute; top: 0; right: 0;
+      background: var(--accent); color: #000;
+      font-size: 0.6rem; font-weight: 700;
+      width: 16px; height: 16px; border-radius: 50%;
+      display: none; align-items: center; justify-content: center;
+    }
+    .btn-nav-cta {
+      background: var(--accent); color: #000;
+      font-family: var(--font-body); font-size: 0.85rem; font-weight: 600;
+      padding: 10px 22px; border-radius: 8px;
+      text-decoration: none; border: none; cursor: pointer;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    .btn-nav-cta:hover { opacity: 0.85; transform: translateY(-1px); }
+    .hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      cursor: pointer; background: none; border: none; padding: 4px;
+    }
+    .hamburger span {
+      display: block; width: 24px; height: 2px;
+      background: var(--white); border-radius: 2px; transition: all 0.3s;
+    }
+    .mobile-menu {
+      display: none; position: fixed;
+      top: 70px; left: 0; right: 0;
+      background: rgba(8,8,8,0.97);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      padding: 24px 48px; z-index: 999;
+      flex-direction: column; gap: 20px;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      font-size: 1rem; font-weight: 500; color: var(--grey);
+      text-decoration: none; transition: color 0.2s;
+    }
+    .mobile-menu a:hover { color: var(--white); }
+
+    /* ── BREADCRUMB ── */
+    .breadcrumb {
+      position: relative; z-index: 1;
+      padding: 100px 48px 0;
+      display: flex; align-items: center; gap: 10px;
+      font-size: 0.8rem; color: var(--grey);
+    }
+    .breadcrumb a { color: var(--grey); text-decoration: none; transition: color 0.2s; }
+    .breadcrumb a:hover { color: var(--accent); }
+    .breadcrumb span { color: rgba(255,255,255,0.2); }
+
+    /* ── PRODUCT LAYOUT ── */
+    .product-page {
+      position: relative; z-index: 1;
+      padding: 40px 48px 100px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 72px;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+
+    /* ── IMAGE PANEL ── */
+    .product-image-wrap {
+      position: sticky; top: 90px;
+      align-self: start;
+    }
+    .main-image {
+      width: 100%; aspect-ratio: 4/3;
+      overflow: hidden;
+      border-radius: 20px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      position: relative;
+    }
+    .main-image img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform 0.6s cubic-bezier(0.4,0,0.2,1);
+    }
+    .main-image:hover img { transform: scale(1.04); }
+    .main-image::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 80% 80% at 50% 50%, rgba(0,212,255,0.04) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .badge-row { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
+    .badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 0.72rem; font-weight: 600; letter-spacing: 1.5px;
+      text-transform: uppercase; padding: 6px 14px; border-radius: 100px;
+    }
+    .badge-new { background: var(--accent-dim); color: var(--accent); border: 1px solid rgba(0,212,255,0.25); }
+    .badge-stock { background: rgba(0,255,136,0.1); color: #00ff88; border: 1px solid rgba(0,255,136,0.2); }
+    .badge-warranty { background: rgba(255,255,255,0.05); color: var(--grey); border: 1px solid var(--border); }
+
+    /* ── INFO PANEL ── */
+    .product-info { padding-top: 4px; }
+    .product-cat-label {
+      font-size: 0.75rem; font-weight: 600; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--accent); margin-bottom: 14px;
+    }
+    .product-title {
+      font-family: var(--font-head);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 700; letter-spacing: -1px; line-height: 1.05;
+      margin-bottom: 16px;
+    }
+    .product-price-lg {
+      font-family: var(--font-head);
+      font-size: 2rem; font-weight: 700;
+      color: var(--accent); margin-bottom: 28px;
+      letter-spacing: -0.5px;
+    }
+    .price-note {
+      font-size: 0.78rem; color: var(--grey); font-weight: 400;
+      margin-left: 6px; letter-spacing: 0;
+    }
+
+    .divider {
+      border: none; border-top: 1px solid var(--border); margin: 24px 0;
+    }
+
+    .product-desc {
+      font-size: 0.95rem; font-weight: 300;
+      color: rgba(255,255,255,0.65); line-height: 1.85;
+      margin-bottom: 28px;
+    }
+
+    /* ── SPEC GRID ── */
+    .spec-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 12px; margin-bottom: 32px;
+    }
+    .spec-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 16px;
+      transition: border-color 0.2s;
+    }
+    .spec-item:hover { border-color: rgba(0,212,255,0.2); }
+    .spec-label {
+      font-size: 0.68rem; font-weight: 600; letter-spacing: 1.5px;
+      text-transform: uppercase; color: var(--grey); margin-bottom: 4px;
+    }
+    .spec-value {
+      font-family: var(--font-head);
+      font-size: 0.9rem; font-weight: 600; color: var(--white);
+    }
+
+    /* ── ADD TO BASKET ── */
+    .add-btn {
+      display: block; width: 100%; padding: 18px;
+      background: var(--accent); color: #000;
+      border: none; cursor: pointer;
+      font-family: var(--font-body);
+      font-size: 0.95rem; font-weight: 700;
+      border-radius: 12px;
+      transition: all 0.25s;
+      margin-bottom: 12px;
+      letter-spacing: 0.3px;
+    }
+    .add-btn:hover {
+      background: #fff;
+      box-shadow: 0 12px 40px rgba(0,212,255,0.3);
+      transform: translateY(-1px);
+    }
+    .add-btn.added { background: #00ff88; }
+
+    .wishlist-btn {
+      display: block; width: 100%; padding: 16px;
+      background: transparent; color: var(--white);
+      border: 1px solid var(--border); cursor: pointer;
+      font-family: var(--font-body);
+      font-size: 0.88rem; font-weight: 500;
+      border-radius: 12px;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .wishlist-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── ACCORDION ── */
+    .accordion-block {
+      border-top: 1px solid var(--border);
+    }
+    .accordion-block:last-of-type {
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 28px;
+    }
+    .accordion-btn {
+      width: 100%; background: none; border: none;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 0; cursor: pointer;
+      font-family: var(--font-head);
+      font-size: 0.9rem; font-weight: 600;
+      color: var(--white); transition: color 0.2s;
+    }
+    .accordion-btn:hover { color: var(--accent); }
+    .acc-icon { font-size: 1.1rem; transition: transform 0.25s; color: var(--accent); }
+    .accordion-btn.open .acc-icon { transform: rotate(45deg); }
+    .accordion-body {
+      display: none; padding: 0 0 20px;
+      font-size: 0.85rem; font-weight: 300;
+      color: rgba(255,255,255,0.6); line-height: 1.8;
+    }
+    .accordion-body.open { display: block; }
+    .accordion-body p + p { margin-top: 8px; }
+
+    /* ── TRUST STRIP ── */
+    .trust-row {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 12px; margin-top: 28px;
+    }
+    .trust-item {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 16px 14px;
+      text-align: center; transition: border-color 0.2s;
+    }
+    .trust-item:hover { border-color: rgba(0,212,255,0.2); }
+    .trust-icon { font-size: 1.4rem; display: block; margin-bottom: 6px; }
+    .trust-label {
+      font-size: 0.7rem; font-weight: 600; letter-spacing: 0.5px;
+      color: var(--grey); display: block;
+    }
+
+    /* ── RELATED ── */
+    .related-section {
+      position: relative; z-index: 1;
+      padding: 0 48px 100px;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+    .related-header {
+      border-top: 1px solid var(--border);
+      padding-top: 64px; margin-bottom: 36px;
+    }
+    .related-tag {
+      font-size: 0.72rem; font-weight: 600; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--accent); margin-bottom: 10px;
+      display: block;
+    }
+    .related-title {
+      font-family: var(--font-head);
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-weight: 700; letter-spacing: -0.5px;
+    }
+    .related-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
+    }
+    .rel-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 16px; overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+    }
+    .rel-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 50px rgba(0,212,255,0.1);
+      border-color: rgba(0,212,255,0.25);
+    }
+    .rel-img { height: 160px; overflow: hidden; background: #0a0a0a; position: relative; }
+    .rel-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+    .rel-card:hover .rel-img img { transform: scale(1.06); }
+    .rel-img::after {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+      height: 50px; background: linear-gradient(to top, var(--card), transparent); z-index: 1;
+    }
+    .rel-info { padding: 16px; }
+    .rel-name { font-family: var(--font-head); font-size: 0.9rem; font-weight: 600; margin-bottom: 4px; }
+    .rel-spec { font-size: 0.72rem; color: var(--grey); margin-bottom: 12px; line-height: 1.5; }
+    .rel-bottom { display: flex; align-items: center; justify-content: space-between; }
+    .rel-price { font-family: var(--font-head); font-size: 1rem; font-weight: 700; color: var(--accent); }
+    .rel-btn {
+      background: var(--accent-dim); color: var(--accent);
+      border: 1px solid rgba(0,212,255,0.2);
+      font-family: var(--font-body); font-size: 0.72rem; font-weight: 600;
+      padding: 6px 14px; border-radius: 7px; cursor: pointer;
+      transition: all 0.2s;
+    }
+    .rel-btn:hover { background: var(--accent); color: #000; }
+
+    /* ── CART SIDEBAR ── */
+    .cart-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+      z-index: 1100; display: none; backdrop-filter: blur(4px);
+    }
+    .cart-overlay.open { display: block; }
+    .cart-sidebar {
+      position: fixed; top: 0; right: -420px;
+      width: 420px; max-width: 100vw; height: 100%;
+      background: #0e0e0e; border-left: 1px solid var(--border);
+      z-index: 1200; display: flex; flex-direction: column;
+      transition: right 0.35s cubic-bezier(0.4,0,0.2,1);
+    }
+    .cart-sidebar.open { right: 0; }
+    .cart-header {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 24px; border-bottom: 1px solid var(--border);
+    }
+    .cart-header h3 { font-family: var(--font-head); font-size: 1.1rem; font-weight: 600; }
+    .cart-close-btn {
+      background: none; border: none; color: var(--grey);
+      font-size: 1.4rem; cursor: pointer; line-height: 1; transition: color 0.2s;
+    }
+    .cart-close-btn:hover { color: var(--white); }
+    .cart-items { flex: 1; overflow-y: auto; padding: 16px; }
+    .cart-empty {
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; height: 200px; color: var(--grey);
+      font-size: 0.9rem; gap: 12px;
+    }
+    .cart-empty span { font-size: 3rem; }
+    .cart-item {
+      display: flex; align-items: center; gap: 14px;
+      padding: 14px 0; border-bottom: 1px solid var(--border);
+    }
+    .cart-item-icon {
+      width: 52px; height: 52px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem; background: #1a1a1a; flex-shrink: 0;
+    }
+    .cart-item-info { flex: 1; }
+    .cart-item-info h4 { font-family: var(--font-head); font-size: 0.88rem; font-weight: 600; margin-bottom: 4px; }
+    .cart-item-info p { font-size: 0.78rem; color: var(--accent); font-weight: 600; }
+    .cart-item-controls { display: flex; align-items: center; gap: 10px; }
+    .qty-btn {
+      background: #1a1a1a; border: 1px solid var(--border); color: var(--white);
+      width: 28px; height: 28px; border-radius: 6px; cursor: pointer;
+      font-size: 1rem; line-height: 1; transition: background 0.2s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .qty-btn:hover { background: var(--accent); color: #000; }
+    .qty-num { font-size: 0.9rem; font-weight: 600; min-width: 20px; text-align: center; }
+    .remove-btn {
+      background: none; border: none; color: #444;
+      cursor: pointer; font-size: 1rem; transition: color 0.2s; padding: 2px;
+    }
+    .remove-btn:hover { color: #ff4444; }
+    .cart-footer { padding: 20px 24px; border-top: 1px solid var(--border); }
+    .cart-subtotal {
+      display: flex; justify-content: space-between;
+      margin-bottom: 6px; font-size: 0.85rem; color: var(--grey);
+    }
+    .cart-total-row {
+      display: flex; justify-content: space-between;
+      font-family: var(--font-head); font-size: 1.1rem; font-weight: 700;
+      margin-bottom: 20px;
+    }
+    .cart-total-row span:last-child { color: var(--accent); }
+    .btn-checkout {
+      width: 100%; background: var(--accent); color: #000;
+      border: none; font-family: var(--font-body);
+      font-size: 0.95rem; font-weight: 700; padding: 16px;
+      border-radius: 10px; cursor: pointer; transition: opacity 0.2s;
+    }
+    .btn-checkout:hover { opacity: 0.85; }
+
+    /* ── NOT FOUND ── */
+    .not-found {
+      position: relative; z-index: 1;
+      padding: 200px 48px 100px; text-align: center;
+    }
+    .not-found h1 {
+      font-family: var(--font-head); font-size: 2.5rem;
+      font-weight: 700; margin-bottom: 16px;
+    }
+    .not-found p { color: var(--grey); margin-bottom: 32px; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1024px) {
+      .product-page { grid-template-columns: 1fr; gap: 48px; padding: 32px 32px 80px; }
+      .product-image-wrap { position: static; }
+      .related-grid { grid-template-columns: repeat(2, 1fr); }
+      .related-section { padding: 0 32px 80px; }
+      .breadcrumb { padding: 100px 32px 0; }
+    }
+    @media (max-width: 768px) {
+      nav { padding: 0 24px; }
+      .nav-links { display: none; }
+      .btn-nav-cta { display: none; }
+      .hamburger { display: flex; }
+      .product-page { padding: 24px 20px 60px; }
+      .breadcrumb { padding: 90px 20px 0; }
+      .related-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+      .related-section { padding: 0 20px 60px; }
+      .cart-sidebar { width: 100vw; right: -100vw; }
+      .trust-row { grid-template-columns: 1fr 1fr 1fr; }
+      .spec-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 480px) {
+      .related-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="index.html" class="nav-logo">Nova<span>Tech</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="hardware.html">Hardware</a></li>
+      <li><a href="repairs.html">Repairs</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="nav-cart-btn" id="cartToggleBtn" title="Basket">
+        🛒
+        <span class="cart-count" id="cartCount">0</span>
+      </button>
+      <a href="repairs.html" class="btn-nav-cta">Book Repair</a>
+      <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html">Home</a>
+    <a href="hardware.html">Hardware</a>
+    <a href="repairs.html">Repairs</a>
+    <a href="contact.html">Contact</a>
+    <a href="repairs.html" class="btn-nav-cta" style="text-align:center;">Book Repair</a>
+  </div>
+
+  <!-- CART OVERLAY -->
+  <div class="cart-overlay" id="cartOverlay"></div>
+
+  <!-- CART SIDEBAR -->
+  <div class="cart-sidebar" id="cartSidebar">
+    <div class="cart-header">
+      <h3>Your Basket</h3>
+      <button class="cart-close-btn" id="cartCloseBtn">&times;</button>
+    </div>
+    <div class="cart-items" id="cartItems">
+      <div class="cart-empty" id="cartEmpty">
+        <span>🛒</span>
+        <p>Your basket is empty</p>
+      </div>
+    </div>
+    <div class="cart-footer">
+      <div class="cart-subtotal"><span>Subtotal</span><span id="cartSubtotal">£0.00</span></div>
+      <div class="cart-subtotal"><span>Delivery</span><span style="color:#00ff88;">FREE</span></div>
+      <div class="cart-total-row"><span>Total</span><span id="cartTotal">£0.00</span></div>
+      <button class="btn-checkout">Proceed to Checkout</button>
+    </div>
+  </div>
+
+  <!-- Page content injected by JS -->
+  <div id="pageContent"></div>
+
+  <script>
+    // ── Product Database ──
+    const products = {
+      'iphone-16-pro': {
+        id: 'iphone-16-pro',
+        name: 'iPhone 16 Pro',
+        category: 'phone',
+        categoryLabel: 'Smartphones',
+        price: 1199,
+        icon: '📱',
+        img: 'https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=900&q=80',
+        badge: 'New Arrival',
+        desc: 'The iPhone 16 Pro redefines what a smartphone can do. Powered by the all-new A18 Pro chip — Apple\'s most powerful ever — it delivers console-quality gaming, next-level AI photography, and battery life that lasts all day and into the night. The surgical-grade titanium frame is lighter, stronger, and more refined than any iPhone before it. With the new Camera Control button and a 48MP front camera, creativity is always at your fingertips.',
+        specs: {
+          'Processor': 'Apple A18 Pro',
+          'Display': '6.3" Super Retina XDR OLED',
+          'Camera': '48MP main + 48MP ultra wide + 12MP 5x telephoto',
+          'Battery': 'Up to 33 hours video playback',
+          'Storage': '128GB / 256GB / 512GB / 1TB',
+          'Build': 'Surgical-grade titanium + Ceramic Shield',
+          'OS': 'iOS 18 with Apple Intelligence',
+          'Connectivity': '5G, Wi-Fi 7, Bluetooth 5.3, USB-C'
+        },
+        details: [
+          'A18 Pro chip — fastest mobile chip in the world',
+          '6.3" Super Retina XDR with ProMotion 120Hz',
+          'Triple 48MP camera system with 5x optical zoom',
+          'New Camera Control button for instant photo & video',
+          'Surgical-grade titanium build — lighter and stronger',
+          'USB 3 speeds for 4K ProRes video transfer',
+          'iOS 18 with Apple Intelligence AI features',
+          'Available in Black Titanium, White, Natural, Desert'
+        ]
+      },
+      'samsung-galaxy-s25': {
+        id: 'samsung-galaxy-s25',
+        name: 'Samsung Galaxy S25',
+        category: 'phone',
+        categoryLabel: 'Smartphones',
+        price: 999,
+        icon: '📱',
+        img: 'https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=900&q=80',
+        badge: 'AI-Powered',
+        desc: 'The Galaxy S25 is Samsung\'s most intelligent smartphone yet. Driven by the Snapdragon 8 Elite for Galaxy — co-engineered between Qualcomm and Samsung — and packed with Galaxy AI features that genuinely make your day easier. The 6.2" AMOLED display is a visual masterpiece, while the 200MP camera system captures life with extraordinary detail. With seven years of OS and security updates, this is a phone built to last.',
+        specs: {
+          'Processor': 'Snapdragon 8 Elite for Galaxy',
+          'Display': '6.2" Dynamic AMOLED 2X, 120Hz',
+          'Camera': '200MP main + 12MP ultra wide + 10MP 3x telephoto',
+          'Battery': '4,000mAh, 45W fast charge',
+          'Storage': '128GB / 256GB',
+          'Build': 'Armour Aluminium + Corning Gorilla Armor 2',
+          'OS': 'Android 15 + Galaxy AI, 7 yr updates',
+          'Connectivity': '5G, Wi-Fi 7, Bluetooth 5.4, USB-C'
+        },
+        details: [
+          'Snapdragon 8 Elite — co-engineered with Samsung',
+          '200MP main camera with AI-powered scene optimisation',
+          'Galaxy AI features: Circle to Search, Live Translate, NowBrief',
+          '6.2" Dynamic AMOLED 2X at 120Hz — ultra-smooth scrolling',
+          'Armour Aluminium 2 frame for next-level drop protection',
+          '45W super-fast charging, 15W wireless',
+          '7 years of OS and security updates guaranteed',
+          'Available in Icy Blue, Mint, Navy, Silver Shadow'
+        ]
+      },
+      'google-pixel-9-pro': {
+        id: 'google-pixel-9-pro',
+        name: 'Google Pixel 9 Pro',
+        category: 'phone',
+        categoryLabel: 'Smartphones',
+        price: 999,
+        icon: '📱',
+        img: 'https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=900&q=80',
+        badge: 'Pure Android',
+        desc: 'The Pixel 9 Pro is Google\'s most capable smartphone ever, and the closest you\'ll get to the future right now. Google AI is built deep into the experience — from Magic Eraser and Best Take in the camera, to Gemini on-device intelligence that understands context like a human assistant. The custom Tensor G4 chip is purpose-built for AI, and seven years of updates means this phone grows smarter over time.',
+        specs: {
+          'Processor': 'Google Tensor G4 with Titan M3 security chip',
+          'Display': '6.3" LTPO OLED, 1-120Hz ProMotion',
+          'Camera': '50MP main + 48MP ultra wide + 48MP 5x telephoto',
+          'Battery': '4,700mAh, 37W wired charging',
+          'Storage': '128GB / 256GB / 512GB / 1TB',
+          'Build': 'Polished aluminium + Corning Gorilla Glass Victus 2',
+          'OS': 'Android 15, 7 yr OS updates guaranteed',
+          'Connectivity': '5G, Wi-Fi 7, Bluetooth 5.3, UWB'
+        },
+        details: [
+          'Google Tensor G4 — purpose-built for on-device AI',
+          'Triple camera system with 5x optical zoom and 30x Super Res Zoom',
+          'Magic Eraser, Best Take, Photo Unblur, Video Boost',
+          'Gemini AI assistant built in — understands screen context',
+          '6.3" LTPO OLED with 1Hz–120Hz adaptive refresh',
+          'Temperature sensor for real-world measurements',
+          '7 years of OS, security, and Pixel Drop updates',
+          'Available in Obsidian, Porcelain, Hazel, Rose Quartz'
+        ]
+      },
+      'oneplus-13': {
+        id: 'oneplus-13',
+        name: 'OnePlus 13',
+        category: 'phone',
+        categoryLabel: 'Smartphones',
+        price: 799,
+        icon: '📱',
+        img: 'https://images.unsplash.com/photo-1585060544812-6b45742d762f?w=900&q=80',
+        badge: 'Best Value',
+        desc: 'The OnePlus 13 is the performance flagship that refuses to compromise. Pairing the Snapdragon 8 Elite with a massive 6,000mAh battery and the fastest charging system in its class — 100W wired and 50W wireless — it\'s built for those who demand more from every charge. The 6.82" ProXDR display is Hasselblad-tuned, and the camera system co-developed with Hasselblad delivers colour science that rivals phones costing twice the price.',
+        specs: {
+          'Processor': 'Snapdragon 8 Elite',
+          'Display': '6.82" LTPO AMOLED, 1-120Hz, 4500 nits',
+          'Camera': '50MP main (Hasselblad) + 50MP ultra wide + 50MP 3x telephoto',
+          'Battery': '6,000mAh, 100W wired, 50W wireless',
+          'Storage': '256GB / 512GB',
+          'Build': 'Aerospace-grade aluminium + Ceramic back',
+          'OS': 'OxygenOS 15 based on Android 15',
+          'Connectivity': '5G, Wi-Fi 7, Bluetooth 5.4, USB-C'
+        },
+        details: [
+          'Snapdragon 8 Elite — flagship performance at a mid-range price',
+          '6,000mAh battery — largest in any OnePlus flagship',
+          '100W SUPERVOOC charging — full charge in 36 minutes',
+          'Hasselblad Pro Camera System with Master colour science',
+          'Triple 50MP camera system with periscope telephoto',
+          '6.82" BOE ProXDR 4500-nit display — brightest available',
+          'Ceramic back option for premium texture and heat dissipation',
+          'Available in Black Eclipse, Arctic Dawn, Blue Horizon'
+        ]
+      },
+      'ipad-pro-m4': {
+        id: 'ipad-pro-m4',
+        name: 'iPad Pro M4',
+        category: 'tablet',
+        categoryLabel: 'Tablets',
+        price: 1099,
+        icon: '📲',
+        img: 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=900&q=80',
+        badge: 'Thinnest Apple Device',
+        desc: 'The iPad Pro M4 is the most advanced iPad ever made — and the thinnest Apple device in history at just 5.1mm. The Ultra Retina XDR tandem OLED display delivers reference-grade colour accuracy with a 1,000,000:1 contrast ratio, making it the best screen you\'ll find on any device, period. Powered by the M4 chip, it handles professional video editing, 3D rendering, and AI tasks with ease. Paired with the Apple Pencil Pro and Magic Keyboard, it\'s a true laptop replacement.',
+        specs: {
+          'Processor': 'Apple M4 chip (10-core CPU, 10-core GPU)',
+          'Display': '11" Ultra Retina XDR tandem OLED, 2000 nit',
+          'Storage': '256GB / 512GB / 1TB / 2TB',
+          'RAM': '8GB / 16GB unified memory',
+          'Battery': 'Up to 10 hours, USB-C fast charging',
+          'Build': 'Aerospace-grade aluminium, 5.1mm thin',
+          'OS': 'iPadOS 18 with Apple Intelligence',
+          'Connectivity': 'Wi-Fi 6E, optional 5G, Bluetooth 5.3, USB-C'
+        },
+        details: [
+          'Apple M4 chip — faster than most PC laptops',
+          '11" Ultra Retina XDR tandem OLED — 1,000,000:1 contrast',
+          'ProMotion 120Hz adaptive refresh rate',
+          'Thinnest Apple product ever at 5.1mm',
+          'Compatible with Apple Pencil Pro and Magic Keyboard',
+          'USB-C with Thunderbolt 4 for external displays and storage',
+          'iPadOS 18 with Apple Intelligence on-device AI',
+          'Available in Silver and Space Black'
+        ]
+      },
+      'samsung-galaxy-tab-s10': {
+        id: 'samsung-galaxy-tab-s10',
+        name: 'Samsung Galaxy Tab S10',
+        category: 'tablet',
+        categoryLabel: 'Tablets',
+        price: 849,
+        icon: '📲',
+        img: 'https://images.unsplash.com/photo-1587033411391-5d9e51cce126?w=900&q=80',
+        badge: 'S Pen Included',
+        desc: 'The Galaxy Tab S10 is Samsung\'s most versatile productivity tablet, and it comes with the S Pen included — no extra purchase required. The 11" Dynamic AMOLED 2X display runs at a buttery-smooth 120Hz with Vision Booster for outdoor visibility. Powered by Snapdragon 8 Gen 3, it handles multitasking, creative work, and DeX desktop mode with effortless performance. Seven years of OS updates make it a long-term investment.',
+        specs: {
+          'Processor': 'Snapdragon 8 Gen 3',
+          'Display': '11" Dynamic AMOLED 2X, 120Hz, 2560×1600',
+          'Storage': '128GB / 256GB (microSD up to 1TB)',
+          'RAM': '12GB',
+          'Battery': '8,000mAh, 45W fast charge',
+          'Build': 'Armour Aluminium, 5.6mm thin',
+          'OS': 'Android 14 + One UI 6.1, 7 yr updates',
+          'Connectivity': 'Wi-Fi 7, optional 5G, Bluetooth 5.3, USB-C'
+        },
+        details: [
+          'S Pen included — low latency, 4,096 pressure levels',
+          'Snapdragon 8 Gen 3 — desktop-class performance',
+          '11" Dynamic AMOLED 2X with Vision Booster for outdoors',
+          'Samsung DeX mode — turn it into a desktop instantly',
+          '8,000mAh battery with 45W super-fast charging',
+          'AI Live Translate, Note Assist, and Transcript Assist built in',
+          '7 years of OS and security updates',
+          'Available in Graphite, Silver'
+        ]
+      },
+      'macbook-pro-m4': {
+        id: 'macbook-pro-m4',
+        name: 'MacBook Pro M4',
+        category: 'laptop',
+        categoryLabel: 'Laptops',
+        price: 2499,
+        icon: '💻',
+        img: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=900&q=80',
+        badge: 'Pro Performance',
+        desc: 'The MacBook Pro M4 is the most powerful laptop Apple has ever made — and nothing else comes close. The M4 Pro chip delivers CPU and GPU performance that was impossible in a laptop just a few years ago, while the Liquid Retina XDR display renders every pixel with reference-grade precision. Up to 22 hours of battery life means you can work all day and into the evening on a single charge. Whether you\'re editing 8K video, compiling code, or running machine learning models, the MacBook Pro M4 handles it all without breaking a sweat.',
+        specs: {
+          'Processor': 'Apple M4 Pro (12-core CPU, 20-core GPU)',
+          'Display': '14.2" Liquid Retina XDR, 1600 nit, 120Hz',
+          'RAM': '24GB / 48GB / 64GB unified memory',
+          'Storage': '512GB / 1TB / 2TB / 4TB SSD',
+          'Battery': 'Up to 22 hours, MagSafe 3 charging',
+          'Build': 'Space Black / Silver aluminium, 1.55kg',
+          'OS': 'macOS Sequoia with Apple Intelligence',
+          'Connectivity': 'Thunderbolt 5, HDMI 2.1, SD card, Wi-Fi 6E, Bluetooth 5.3'
+        },
+        details: [
+          'M4 Pro chip — up to 2.5× faster than M2 Pro',
+          '14.2" Liquid Retina XDR — 1,000 nit sustained, 1,600 nit peak',
+          'ProMotion 120Hz for ultra-smooth scrolling and animation',
+          'Up to 22 hours battery — best in any MacBook ever',
+          'Thunderbolt 5 — up to 120Gb/s data transfer',
+          'MagSafe 3, HDMI 2.1, and SD card slot built in',
+          'Space Black and Silver — new Space Black resists fingerprints',
+          '24GB of fast unified memory in base configuration'
+        ]
+      },
+      'dell-xps-15': {
+        id: 'dell-xps-15',
+        name: 'Dell XPS 15',
+        category: 'laptop',
+        categoryLabel: 'Laptops',
+        price: 1799,
+        icon: '💻',
+        img: 'https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=900&q=80',
+        badge: 'Creator Choice',
+        desc: 'The Dell XPS 15 is the premium Windows laptop built for creators who demand both beauty and power. Its stunning 15.6" OLED display covers 100% DCI-P3 with factory calibration, making colours look exactly as intended — critical for photo and video work. The Intel Core Ultra 7 paired with an NVIDIA RTX 4070 gives you the horsepower to render, edit, and export at speed. In a CNC-machined aluminium chassis that\'s just 18mm thin, the XPS 15 proves that power and elegance aren\'t mutually exclusive.',
+        specs: {
+          'Processor': 'Intel Core Ultra 7 185H (16-core)',
+          'Display': '15.6" OLED Touch, 3456×2160, 100% DCI-P3',
+          'GPU': 'NVIDIA GeForce RTX 4070, 8GB GDDR6',
+          'RAM': '32GB DDR5 6400MHz',
+          'Storage': '1TB PCIe Gen 4 NVMe SSD',
+          'Battery': '86Whr, 130W USB-C charging',
+          'Build': 'CNC aluminium + Gorilla Glass 3, 1.86kg',
+          'OS': 'Windows 11 Pro with Microsoft AI'
+        },
+        details: [
+          'Intel Core Ultra 7 — 16-core hybrid architecture',
+          'RTX 4070 with DLSS 3 and ray tracing for creative workloads',
+          '15.6" OLED with factory-calibrated 100% DCI-P3 colour accuracy',
+          '3456×2160 resolution — sharper than 4K in a 16:10 ratio',
+          'Thunderbolt 4, USB-A, SD card, HDMI 2.1 all built in',
+          'CNC-machined aluminium chassis, 18mm thin',
+          'Backlit keyboard with per-key precision',
+          'Available in Platinum Silver and Graphite'
+        ]
+      },
+      'asus-rog-zephyrus': {
+        id: 'asus-rog-zephyrus',
+        name: 'ASUS ROG Zephyrus',
+        category: 'laptop',
+        categoryLabel: 'Laptops',
+        price: 1699,
+        icon: '💻',
+        img: 'https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=900&q=80',
+        badge: 'Gaming Beast',
+        desc: 'The ASUS ROG Zephyrus is the ultimate gaming laptop — the one that serious players choose when they refuse to compromise. At under 20mm thin, it packs a full-power AMD Ryzen 9 and NVIDIA RTX 4080 into a chassis that goes from work meetings to tournament play without skipping a beat. The 14" QHD 165Hz display is tuned with Pantone certification for colour accuracy, and the MUX Switch delivers up to 30% better gaming performance by bypassing the integrated GPU entirely.',
+        specs: {
+          'Processor': 'AMD Ryzen 9 7945HX (16-core, 5.4GHz boost)',
+          'Display': '14" QHD+ IPS, 165Hz, Pantone Validated',
+          'GPU': 'NVIDIA GeForce RTX 4080, 12GB GDDR6',
+          'RAM': '32GB DDR5 4800MHz (upgradeable to 64GB)',
+          'Storage': '1TB PCIe Gen 4 NVMe SSD',
+          'Battery': '90Whr, 240W adaptor',
+          'Build': 'Magnesium-aluminium alloy, 1.64kg',
+          'OS': 'Windows 11 Home'
+        },
+        details: [
+          'AMD Ryzen 9 7945HX — 16-core powerhouse for gaming and rendering',
+          'RTX 4080 12GB — handles 4K gaming and ray tracing at full settings',
+          'MUX Switch — bypass iGPU for up to 30% more gaming performance',
+          '14" QHD+ 165Hz display — Pantone Validated colour accuracy',
+          'ROG Intelligent Cooling with Tri-Fan Technology',
+          'Per-key RGB keyboard with Aura Sync lighting',
+          '90Whr battery — up to 10 hours productivity use',
+          'Available in Eclipse Gray and Moonlight White'
+        ]
+      },
+      'ps5-pro': {
+        id: 'ps5-pro',
+        name: 'PS5 Pro',
+        category: 'console',
+        categoryLabel: 'Gaming Consoles',
+        price: 699,
+        icon: '🎮',
+        img: 'https://images.unsplash.com/photo-1607853202273-797f1c22a38e?w=900&q=80',
+        badge: 'Next-Gen',
+        desc: 'The PS5 Pro is the most powerful PlayStation ever built. Sony\'s new custom GPU delivers 45 TFLOPS of raw graphical performance — nearly three times that of the standard PS5 — enabling true 4K at 60fps and 8K output in supported titles. PlayStation Spectral Super Resolution uses AI upscaling to generate extraordinary detail, and with 2TB of ultra-fast SSD storage, your game library loads instantly. If you care about the absolute best gaming experience on a console, the PS5 Pro is it.',
+        specs: {
+          'CPU': 'AMD Zen 2, 8-core at up to 3.85GHz',
+          'GPU': 'AMD RDNA 4 custom, 45 TFLOPS',
+          'RAM': '16GB GDDR6',
+          'Storage': '2TB Custom NVMe SSD',
+          'Output': '8K (via HDMI 2.1), 4K 120fps, VRR',
+          'Audio': 'Tempest 3D AudioTech',
+          'Disc': 'Ultra HD Blu-ray (optional detachable)',
+          'Connectivity': 'Wi-Fi 7, Bluetooth 5.1, USB-A, USB-C'
+        },
+        details: [
+          '45 TFLOPS GPU — nearly 3× more powerful than PS5',
+          'PlayStation Spectral Super Resolution (PSSR) AI upscaling',
+          '2TB ultra-fast SSD — load times under 2 seconds',
+          '8K output via HDMI 2.1, 4K 120fps with VRR',
+          'DualSense wireless controller with haptic feedback included',
+          'Tempest 3D AudioTech for immersive spatial sound',
+          'Backwards compatible with the entire PS4 and PS5 library',
+          'Disc version available with detachable Blu-ray drive'
+        ]
+      },
+      'xbox-series-x': {
+        id: 'xbox-series-x',
+        name: 'Xbox Series X',
+        category: 'console',
+        categoryLabel: 'Gaming Consoles',
+        price: 499,
+        icon: '🎮',
+        img: 'https://images.unsplash.com/photo-1621259182978-fbf93132d53d?w=900&q=80',
+        badge: 'Game Pass Ready',
+        desc: 'The Xbox Series X is Microsoft\'s most powerful console — built for a generation that demands 4K gaming at 120fps, near-instant load times, and a library of thousands of games on day one. The 1TB custom NVMe SSD eliminates load screens, while Quick Resume lets you jump between multiple games in seconds. With Game Pass Ultimate included for the first month, you get access to hundreds of games immediately. This is gaming without limits.',
+        specs: {
+          'CPU': 'AMD Zen 2 custom, 8-core at 3.8GHz',
+          'GPU': 'AMD RDNA 2 custom, 12 TFLOPS',
+          'RAM': '16GB GDDR6',
+          'Storage': '1TB Custom NVMe SSD (expandable)',
+          'Output': '4K 120fps, 8K capable, VRR, ALLM',
+          'Audio': 'Spatial sound, Dolby Atmos',
+          'Disc': 'Ultra HD 4K Blu-ray',
+          'Connectivity': 'Wi-Fi 5, Bluetooth, USB-A, USB-C'
+        },
+        details: [
+          '12 TFLOPS GPU — true 4K 120fps gaming',
+          'DirectX 12 Ultimate with hardware ray tracing',
+          'Quick Resume — switch between multiple games in seconds',
+          '1TB custom NVMe SSD with expandable storage',
+          'Ultra HD 4K Blu-ray disc drive',
+          'Backwards compatible with 4 generations of Xbox games',
+          'Xbox Wireless Controller included with optional rumble triggers',
+          'Game Pass Ultimate — hundreds of games from day one'
+        ]
+      },
+      'nintendo-switch-2': {
+        id: 'nintendo-switch-2',
+        name: 'Nintendo Switch 2',
+        category: 'console',
+        categoryLabel: 'Gaming Consoles',
+        price: 449,
+        icon: '🎮',
+        img: 'https://images.unsplash.com/photo-1578303512597-81e6cc155b3e?w=900&q=80',
+        badge: 'Play Anywhere',
+        desc: 'The Nintendo Switch 2 is the most ambitious console Nintendo has ever made — a hybrid system that delivers 4K gaming in your living room and HD portable play wherever you go. The larger, brighter LCD display and the new magnetic Joy-Cons with a C button for GameChat make it the definitive portable console. Backward compatible with the entire Switch library, plus a new generation of Switch 2 exclusives that push the hardware to its limits.',
+        specs: {
+          'CPU / GPU': 'Custom NVIDIA Tegra T239 (Ampere architecture)',
+          'Display': '7.9" LCD, 1080p handheld mode, 60fps',
+          'RAM': '12GB LPDDR5X',
+          'Storage': '256GB internal (microSD expandable)',
+          'TV Output': '4K 60fps / 1080p 120fps via dock',
+          'Battery': '5,000mAh — up to 6 hours handheld',
+          'Controllers': 'Magnetic Joy-Con 2 with C button, mouse mode',
+          'Connectivity': 'Wi-Fi 6, Bluetooth 5.1, USB-C'
+        },
+        details: [
+          'NVIDIA Ampere GPU — 4K output when docked via DLSS',
+          '7.9" 1080p LCD — larger and brighter than Switch 1',
+          'New magnetic Joy-Con 2 with optical mouse sensor',
+          'GameChat with C button for in-game voice and video chat',
+          '256GB built-in storage — 2× more than Switch 1',
+          'Backwards compatible with the entire Nintendo Switch library',
+          'Mouse mode — Joy-Cons can act as PC-style mice on flat surfaces',
+          'Available in Black and White'
+        ]
+      }
+    };
+
+    // Related products by category
+    const byCategory = {
+      phone: ['iphone-16-pro','samsung-galaxy-s25','google-pixel-9-pro','oneplus-13'],
+      tablet: ['ipad-pro-m4','samsung-galaxy-tab-s10'],
+      laptop: ['macbook-pro-m4','dell-xps-15','asus-rog-zephyrus'],
+      console: ['ps5-pro','xbox-series-x','nintendo-switch-2']
+    };
+
+    let cart = JSON.parse(localStorage.getItem('novatech_cart') || '[]');
+
+    // ── Get product from URL ──
+    const params = new URLSearchParams(window.location.search);
+    const productId = params.get('id');
+    const product = products[productId];
+
+    function renderPage() {
+      const page = document.getElementById('pageContent');
+
+      if (!product) {
+        page.innerHTML = `
+          <div class="not-found">
+            <h1>Product Not Found</h1>
+            <p>This device doesn't exist or may have been removed from our catalogue.</p>
+            <a href="hardware.html" style="display:inline-block;background:var(--accent);color:#000;padding:14px 32px;border-radius:10px;font-weight:700;text-decoration:none;">Browse All Hardware</a>
+          </div>`;
+        return;
+      }
+
+      // Related products
+      const relatedIds = (byCategory[product.category] || []).filter(id => id !== product.id).slice(0, 4);
+      const related = relatedIds.map(id => products[id]).filter(Boolean);
+
+      document.title = `NovaTech – ${product.name}`;
+
+      const specsHtml = Object.entries(product.specs).map(([label, value]) => `
+        <div class="spec-item">
+          <div class="spec-label">${label}</div>
+          <div class="spec-value">${value}</div>
+        </div>
+      `).join('');
+
+      page.innerHTML = `
+        <div class="breadcrumb">
+          <a href="index.html">Home</a>
+          <span>/</span>
+          <a href="hardware.html">Hardware</a>
+          <span>/</span>
+          <a href="hardware.html">${product.categoryLabel}</a>
+          <span>/</span>
+          ${product.name}
+        </div>
+
+        <div class="product-page">
+          <!-- IMAGE -->
+          <div class="product-image-wrap">
+            <div class="main-image">
+              <img src="${product.img}" alt="${product.name}"/>
+            </div>
+            <div class="badge-row">
+              ${product.badge ? `<span class="badge badge-new">⚡ ${product.badge}</span>` : ''}
+              <span class="badge badge-stock">✓ In Stock</span>
+              <span class="badge badge-warranty">🛡 1 Year Warranty</span>
+            </div>
+          </div>
+
+          <!-- INFO -->
+          <div class="product-info">
+            <p class="product-cat-label">${product.categoryLabel}</p>
+            <h1 class="product-title">${product.name}</h1>
+            <p class="product-price-lg">£${product.price.toLocaleString('en-GB')}<span class="price-note">inc. VAT · Free UK delivery</span></p>
+
+            <p class="product-desc">${product.desc}</p>
+
+            <hr class="divider"/>
+
+            <div class="spec-grid">${specsHtml}</div>
+
+            <button class="add-btn" id="addBtn" onclick="addToCart()">Add to Basket</button>
+            <button class="wishlist-btn">♡ &nbsp; Save to Wishlist</button>
+
+            <hr class="divider"/>
+
+            <div class="accordion-block">
+              <button class="accordion-btn" onclick="toggleAccordion(this)">
+                <span>What's in the Box</span> <span class="acc-icon">+</span>
+              </button>
+              <div class="accordion-body">
+                <p>Your ${product.name} comes with all official manufacturer accessories. Box contents vary by model — typically includes the device, charging cable, quick start guide, and safety documentation. Check individual SKU for full box contents.</p>
+                <p>All NovaTech products are supplied in original sealed manufacturer packaging. We never repackage, refurbish, or restock returned units as new.</p>
+              </div>
+            </div>
+            <div class="accordion-block">
+              <button class="accordion-btn" onclick="toggleAccordion(this)">
+                <span>Delivery & Shipping</span> <span class="acc-icon">+</span>
+              </button>
+              <div class="accordion-body">
+                <p><strong>Free Standard Delivery</strong> — 2–3 working days (all UK orders)</p>
+                <p>Express Delivery — Next working day if ordered before 2pm — £6.99</p>
+                <p>Saturday Delivery — Order by Friday 12pm — £9.99</p>
+                <p>All orders are fully tracked. You'll receive an email with your tracking link once dispatched.</p>
+              </div>
+            </div>
+            <div class="accordion-block">
+              <button class="accordion-btn" onclick="toggleAccordion(this)">
+                <span>Returns & Warranty</span> <span class="acc-icon">+</span>
+              </button>
+              <div class="accordion-body">
+                <p>All devices come with a minimum <strong>12-month manufacturer warranty</strong> plus NovaTech's own 90-day satisfaction guarantee.</p>
+                <p>Not happy? Return within 30 days of delivery for a full refund — no questions asked. Device must be in original condition with all accessories.</p>
+                <p>For warranty repairs, our certified technicians offer same-day assessment at our London service centre.</p>
+              </div>
+            </div>
+            <div class="accordion-block">
+              <button class="accordion-btn" onclick="toggleAccordion(this)">
+                <span>Trade-In & Finance</span> <span class="acc-icon">+</span>
+              </button>
+              <div class="accordion-body">
+                <p>Trade in your old device and reduce the price of your new one. We accept phones, tablets, and laptops from all major brands — even with cracked screens or faults.</p>
+                <p>Finance available from 0% APR over 12 months (subject to credit approval). Spread the cost on orders over £299.</p>
+                <p>Contact our team for a trade-in quote or to discuss finance options.</p>
+              </div>
+            </div>
+
+            <div class="trust-row">
+              <div class="trust-item">
+                <span class="trust-icon">🚚</span>
+                <span class="trust-label">Free UK Delivery</span>
+              </div>
+              <div class="trust-item">
+                <span class="trust-icon">🛡</span>
+                <span class="trust-label">1 Year Warranty</span>
+              </div>
+              <div class="trust-item">
+                <span class="trust-icon">↩</span>
+                <span class="trust-label">30-Day Returns</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        ${related.length > 0 ? `
+        <div class="related-section">
+          <div class="related-header">
+            <span class="related-tag">You May Also Like</span>
+            <h2 class="related-title">More From NovaTech</h2>
+          </div>
+          <div class="related-grid">
+            ${related.map(r => `
+              <div class="rel-card" onclick="window.location.href='product.html?id=${r.id}'">
+                <div class="rel-img">
+                  <img src="${r.img}" alt="${r.name}" loading="lazy"/>
+                </div>
+                <div class="rel-info">
+                  <div class="rel-name">${r.name}</div>
+                  <div class="rel-spec">${Object.values(r.specs).slice(0,2).join(' · ')}</div>
+                  <div class="rel-bottom">
+                    <span class="rel-price">£${r.price.toLocaleString('en-GB')}</span>
+                    <button class="rel-btn" onclick="event.stopPropagation(); addRelToCart('${r.id}')">Add to Basket</button>
+                  </div>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>` : ''}
+      `;
+
+      updateCartDisplay();
+    }
+
+    function addToCart() {
+      const id = product.id;
+      const existing = cart.find(i => i.id === id);
+      if (existing) { existing.qty++; }
+      else { cart.push({ id, name: product.name, price: product.price, icon: product.icon, qty: 1 }); }
+      saveCart();
+      updateCartDisplay();
+      const btn = document.getElementById('addBtn');
+      btn.textContent = 'Added ✓';
+      btn.classList.add('added');
+      setTimeout(() => { btn.textContent = 'Add to Basket'; btn.classList.remove('added'); }, 1800);
+      openCart();
+    }
+
+    function addRelToCart(id) {
+      const p = products[id];
+      if (!p) return;
+      const existing = cart.find(i => i.id === id);
+      if (existing) { existing.qty++; }
+      else { cart.push({ id, name: p.name, price: p.price, icon: p.icon, qty: 1 }); }
+      saveCart();
+      updateCartDisplay();
+      openCart();
+    }
+
+    function saveCart() { localStorage.setItem('novatech_cart', JSON.stringify(cart)); }
+
+    function updateCartDisplay() {
+      const total = cart.reduce((s, i) => s + i.qty, 0);
+      const countEl = document.getElementById('cartCount');
+      countEl.textContent = total;
+      countEl.style.display = total > 0 ? 'flex' : 'none';
+
+      const itemsEl = document.getElementById('cartItems');
+      const emptyEl = document.getElementById('cartEmpty');
+      const subtotalEl = document.getElementById('cartSubtotal');
+      const totalEl = document.getElementById('cartTotal');
+
+      if (cart.length === 0) {
+        emptyEl.style.display = 'flex';
+        subtotalEl.textContent = '£0.00';
+        totalEl.textContent = '£0.00';
+        Array.from(itemsEl.children).forEach(c => { if (c !== emptyEl) c.remove(); });
+        return;
+      }
+      emptyEl.style.display = 'none';
+      Array.from(itemsEl.children).forEach(c => { if (c !== emptyEl) c.remove(); });
+
+      let grandTotal = 0;
+      cart.forEach(item => {
+        grandTotal += item.price * item.qty;
+        const div = document.createElement('div');
+        div.className = 'cart-item';
+        div.innerHTML = `
+          <div class="cart-item-icon">${item.icon}</div>
+          <div class="cart-item-info">
+            <h4>${item.name}</h4>
+            <p>£${(item.price * item.qty).toLocaleString('en-GB', {minimumFractionDigits:2})}</p>
+          </div>
+          <div class="cart-item-controls">
+            <button class="qty-btn" data-id="${item.id}" data-action="dec">−</button>
+            <span class="qty-num">${item.qty}</span>
+            <button class="qty-btn" data-id="${item.id}" data-action="inc">+</button>
+            <button class="remove-btn" data-id="${item.id}" title="Remove">✕</button>
+          </div>
+        `;
+        itemsEl.appendChild(div);
+      });
+
+      subtotalEl.textContent = `£${grandTotal.toLocaleString('en-GB', {minimumFractionDigits:2})}`;
+      totalEl.textContent = `£${grandTotal.toLocaleString('en-GB', {minimumFractionDigits:2})}`;
+
+      itemsEl.querySelectorAll('.qty-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.dataset.id;
+          const action = btn.dataset.action;
+          const idx = cart.findIndex(i => i.id === id);
+          if (idx === -1) return;
+          if (action === 'inc') cart[idx].qty++;
+          else { cart[idx].qty--; if (cart[idx].qty <= 0) cart.splice(idx, 1); }
+          saveCart(); updateCartDisplay();
+        });
+      });
+      itemsEl.querySelectorAll('.remove-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          cart = cart.filter(i => i.id !== btn.dataset.id);
+          saveCart(); updateCartDisplay();
+        });
+      });
+    }
+
+    function openCart() {
+      document.getElementById('cartSidebar').classList.add('open');
+      document.getElementById('cartOverlay').classList.add('open');
+    }
+    function closeCart() {
+      document.getElementById('cartSidebar').classList.remove('open');
+      document.getElementById('cartOverlay').classList.remove('open');
+    }
+
+    function toggleAccordion(btn) {
+      const body = btn.nextElementSibling;
+      const isOpen = body.classList.contains('open');
+      document.querySelectorAll('.accordion-body').forEach(b => b.classList.remove('open'));
+      document.querySelectorAll('.accordion-btn').forEach(b => b.classList.remove('open'));
+      if (!isOpen) { body.classList.add('open'); btn.classList.add('open'); }
+    }
+
+    // Hamburger
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    hamburgerBtn.addEventListener('click', () => mobileMenu.classList.toggle('open'));
+    document.addEventListener('click', e => {
+      if (!hamburgerBtn.contains(e.target) && !mobileMenu.contains(e.target))
+        mobileMenu.classList.remove('open');
+    });
+
+    // Cart controls
+    document.getElementById('cartToggleBtn').addEventListener('click', () => {
+      document.getElementById('cartSidebar').classList.contains('open') ? closeCart() : openCart();
+    });
+    document.getElementById('cartCloseBtn').addEventListener('click', closeCart);
+    document.getElementById('cartOverlay').addEventListener('click', closeCart);
+
+    document.querySelector('.btn-checkout').addEventListener('click', () => {
+      if (cart.length === 0) return;
+      window.location.href = 'checkout.html';
+    });
+
+    // Init
+    renderPage();
+  </script>
+
+</body>
+</html>

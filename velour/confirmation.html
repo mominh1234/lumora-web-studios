@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Order Confirmed — Velour</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:  #0a0a0a;
+      --white:  #f5f5f5;
+      --grey:   #1a1a1a;
+      --mid:    #2e2e2e;
+      --muted:  #888;
+      --accent: #e8d5b0;
+      --border: rgba(255,255,255,0.08);
+      --success: #90c97c;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    nav {
+      display: flex; align-items: center; justify-content: center;
+      padding: 0 48px; height: 64px;
+      background: rgba(10,10,10,0.92);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.6rem; letter-spacing: 0.12em;
+      color: var(--white); text-decoration: none;
+    }
+
+    .confirm-wrap {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 60px 24px 80px;
+    }
+
+    /* Success animation */
+    .success-circle {
+      width: 88px; height: 88px;
+      border-radius: 50%;
+      background: rgba(144,201,124,0.12);
+      border: 2px solid var(--success);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 32px;
+      animation: popIn 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
+    }
+    @keyframes popIn {
+      from { transform: scale(0); opacity: 0; }
+      to   { transform: scale(1); opacity: 1; }
+    }
+    .success-check {
+      stroke-dasharray: 40;
+      stroke-dashoffset: 40;
+      animation: drawCheck 0.4s 0.3s ease forwards;
+    }
+    @keyframes drawCheck {
+      to { stroke-dashoffset: 0; }
+    }
+
+    .confirm-tag {
+      text-align: center;
+      font-size: 0.72rem; font-weight: 600;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--success); margin-bottom: 12px;
+    }
+    .confirm-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3rem; letter-spacing: 0.06em;
+      text-align: center; margin-bottom: 14px;
+    }
+    .confirm-sub {
+      text-align: center; color: var(--muted);
+      font-size: 0.9rem; max-width: 440px;
+      margin: 0 auto 40px;
+    }
+
+    .order-ref-box {
+      background: var(--grey);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 22px 28px;
+      display: flex; align-items: center;
+      justify-content: space-between;
+      margin-bottom: 28px;
+    }
+    .order-ref-label {
+      font-size: 0.72rem; font-weight: 600;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 4px;
+    }
+    .order-ref-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.5rem; letter-spacing: 0.12em;
+      color: var(--accent);
+    }
+    .copy-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--muted); padding: 8px 14px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.75rem; font-weight: 600;
+      letter-spacing: 0.08em; cursor: pointer;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .copy-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* Details grid */
+    .details-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .detail-card {
+      background: var(--grey);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px 22px;
+    }
+    .detail-card-label {
+      font-size: 0.68rem; font-weight: 600;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 8px;
+    }
+    .detail-card-val {
+      font-size: 0.88rem; line-height: 1.6; color: var(--white);
+    }
+    .detail-card-val strong { color: var(--accent); }
+
+    /* Order items */
+    .order-items-section {
+      background: var(--grey);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 32px;
+    }
+    .order-items-header {
+      padding: 16px 22px;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.72rem; font-weight: 600;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--muted);
+    }
+    .order-item {
+      display: flex; align-items: center;
+      gap: 16px; padding: 16px 22px;
+      border-bottom: 1px solid var(--border);
+    }
+    .order-item:last-child { border-bottom: none; }
+    .order-item-img {
+      width: 52px; height: 52px;
+      border-radius: 6px; object-fit: cover;
+      border: 1px solid var(--border); flex-shrink: 0;
+    }
+    .order-item-info { flex: 1; }
+    .order-item-name { font-size: 0.88rem; font-weight: 500; }
+    .order-item-meta { font-size: 0.75rem; color: var(--muted); margin-top: 2px; }
+    .order-item-price { font-size: 0.88rem; font-weight: 600; }
+
+    .order-totals { padding: 16px 22px; }
+    .total-line {
+      display: flex; justify-content: space-between;
+      font-size: 0.85rem; color: var(--muted); margin-bottom: 8px;
+    }
+    .total-line span:last-child { color: var(--white); }
+    .total-final {
+      display: flex; justify-content: space-between;
+      font-size: 1rem; font-weight: 700;
+      padding-top: 12px; margin-top: 4px;
+      border-top: 1px solid var(--border);
+    }
+    .total-final span:last-child { color: var(--accent); }
+
+    /* Timeline */
+    .timeline {
+      margin-bottom: 36px;
+    }
+    .timeline-title {
+      font-size: 0.72rem; font-weight: 600;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 18px;
+    }
+    .timeline-steps {
+      display: flex;
+      position: relative;
+    }
+    .timeline-steps::before {
+      content: '';
+      position: absolute;
+      top: 18px; left: 18px;
+      right: 18px; height: 2px;
+      background: var(--mid);
+      z-index: 0;
+    }
+    .timeline-progress {
+      position: absolute;
+      top: 18px; left: 18px;
+      height: 2px; width: 0%;
+      background: var(--success);
+      z-index: 1;
+      transition: width 1s ease 0.5s;
+    }
+    .timeline-step {
+      flex: 1; display: flex;
+      flex-direction: column; align-items: center;
+      gap: 10px; position: relative; z-index: 2;
+    }
+    .step-dot {
+      width: 36px; height: 36px; border-radius: 50%;
+      border: 2px solid var(--mid);
+      background: var(--black);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; color: var(--muted);
+      transition: border-color 0.5s, background 0.5s, color 0.5s;
+    }
+    .step-dot.done {
+      border-color: var(--success);
+      background: rgba(144,201,124,0.15);
+      color: var(--success);
+    }
+    .step-dot.active {
+      border-color: var(--accent);
+      background: rgba(232,213,176,0.1);
+      color: var(--accent);
+    }
+    .step-label {
+      font-size: 0.72rem; color: var(--muted);
+      text-align: center; letter-spacing: 0.05em;
+    }
+    .step-label.done { color: var(--success); }
+    .step-label.active { color: var(--accent); }
+
+    /* CTA */
+    .cta-row {
+      display: flex; gap: 14px; flex-wrap: wrap;
+    }
+    .btn-primary {
+      flex: 1; min-width: 160px;
+      padding: 15px 24px;
+      background: var(--white); color: var(--black);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1rem; letter-spacing: 0.15em;
+      border: none; border-radius: 6px;
+      cursor: pointer; text-decoration: none;
+      text-align: center;
+      transition: background 0.2s, transform 0.15s;
+      display: block;
+    }
+    .btn-primary:hover { background: var(--accent); transform: translateY(-1px); }
+    .btn-ghost {
+      flex: 1; min-width: 160px;
+      padding: 15px 24px;
+      background: transparent; color: var(--white);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1rem; letter-spacing: 0.15em;
+      border: 1px solid var(--border); border-radius: 6px;
+      cursor: pointer; text-decoration: none;
+      text-align: center;
+      transition: border-color 0.2s, color 0.2s, transform 0.15s;
+      display: block;
+    }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
+
+    @media (max-width: 600px) {
+      .details-grid { grid-template-columns: 1fr; }
+      .confirm-title { font-size: 2.2rem; }
+      nav { padding: 0 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-logo">Velour</a>
+  </nav>
+
+  <div class="confirm-wrap">
+
+    <!-- Success icon -->
+    <div class="success-circle">
+      <svg width="38" height="38" viewBox="0 0 38 38" fill="none">
+        <polyline class="success-check" points="8,20 16,28 30,12"
+          stroke="#90c97c" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+
+    <p class="confirm-tag">Order Confirmed</p>
+    <h1 class="confirm-title">Thank You!</h1>
+    <p class="confirm-sub" id="confirmSub">
+      Your order has been placed successfully. You'll receive a confirmation email shortly.
+    </p>
+
+    <!-- Order ref -->
+    <div class="order-ref-box">
+      <div>
+        <div class="order-ref-label">Order Reference</div>
+        <div class="order-ref-num" id="orderRef">VLR-XXXXXX</div>
+      </div>
+      <button class="copy-btn" onclick="copyRef()">Copy</button>
+    </div>
+
+    <!-- Details -->
+    <div class="details-grid">
+      <div class="detail-card">
+        <div class="detail-card-label">Shipping to</div>
+        <div class="detail-card-val" id="shipAddr">—</div>
+      </div>
+      <div class="detail-card">
+        <div class="detail-card-label">Delivery</div>
+        <div class="detail-card-val" id="deliveryInfo">—</div>
+      </div>
+      <div class="detail-card">
+        <div class="detail-card-label">Payment Method</div>
+        <div class="detail-card-val" id="paymentMethod">—</div>
+      </div>
+      <div class="detail-card">
+        <div class="detail-card-label">Estimated Arrival</div>
+        <div class="detail-card-val" id="estArrival">—</div>
+      </div>
+    </div>
+
+    <!-- Order items -->
+    <div class="order-items-section">
+      <div class="order-items-header">Items in Your Order</div>
+      <div id="confirmItems"></div>
+      <div class="order-totals">
+        <div class="total-line"><span>Subtotal</span><span id="confSubtotal">£0</span></div>
+        <div class="total-line"><span>Delivery</span><span id="confDelivery">FREE</span></div>
+        <div class="total-line" id="confDiscountLine" style="display:none; color:#90c97c;"><span>Discount</span><span id="confDiscount"></span></div>
+        <div class="total-final"><span>Total Paid</span><span id="confTotal">£0</span></div>
+      </div>
+    </div>
+
+    <!-- Delivery timeline -->
+    <div class="timeline">
+      <div class="timeline-title">Order Progress</div>
+      <div class="timeline-steps">
+        <div class="timeline-progress" id="timelineBar"></div>
+        <div class="timeline-step">
+          <div class="step-dot done" id="dot1">✓</div>
+          <div class="step-label done">Confirmed</div>
+        </div>
+        <div class="timeline-step">
+          <div class="step-dot active" id="dot2">⟳</div>
+          <div class="step-label active">Processing</div>
+        </div>
+        <div class="timeline-step">
+          <div class="step-dot" id="dot3">📦</div>
+          <div class="step-label">Dispatched</div>
+        </div>
+        <div class="timeline-step">
+          <div class="step-dot" id="dot4">🚚</div>
+          <div class="step-label">Out for Delivery</div>
+        </div>
+        <div class="timeline-step">
+          <div class="step-dot" id="dot5">🏠</div>
+          <div class="step-label">Delivered</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTAs -->
+    <div class="cta-row">
+      <a href="index.html" class="btn-primary">Continue Shopping</a>
+      <a href="index.html" class="btn-ghost">Track My Order</a>
+    </div>
+
+  </div>
+
+  <script>
+    const cart     = JSON.parse(sessionStorage.getItem('velour_cart') || '[]');
+    const shipping = JSON.parse(sessionStorage.getItem('velour_shipping') || '{}');
+    const orderRef = sessionStorage.getItem('velour_orderRef') || 'VLR-XXXXXX';
+    const method   = sessionStorage.getItem('velour_orderMethod') || 'card';
+
+    if (cart.length === 0) window.location.href = 'index.html';
+
+    // Order ref
+    document.getElementById('orderRef').textContent = orderRef;
+
+    // Sub
+    const sub = cart.reduce((s, i) => s + i.price * i.qty, 0);
+    const deliveryCost = shipping.deliveryCost || 0;
+    const discount = shipping.promoApplied ? Math.round(sub * 0.1) : 0;
+    const total = sub + deliveryCost - discount;
+
+    // Confirmation sub
+    document.getElementById('confirmSub').textContent =
+      `Your order has been placed successfully${shipping.email ? ' and a confirmation has been sent to ' + shipping.email : ''}. We'll update you when it ships.`;
+
+    // Shipping address
+    document.getElementById('shipAddr').innerHTML = shipping.firstName
+      ? `${shipping.firstName} ${shipping.lastName}<br/>${shipping.address1}${shipping.address2 ? ', ' + shipping.address2 : ''}<br/>${shipping.city}, ${shipping.postcode}`
+      : '—';
+
+    // Delivery info
+    const deliveryNames = { standard: 'Standard (3–5 days)', express: 'Express (1–2 days)', next: 'Next Day' };
+    document.getElementById('deliveryInfo').innerHTML =
+      `<strong>${deliveryNames[shipping.delivery] || 'Standard'}</strong><br/>${deliveryCost === 0 ? 'FREE' : '£' + deliveryCost.toFixed(2)}`;
+
+    // Payment method
+    const methodNames = { card: '💳 Credit / Debit Card', paypal: '🅿️ PayPal', apple: '🍎 Apple Pay' };
+    document.getElementById('paymentMethod').textContent = methodNames[method] || '💳 Card';
+
+    // Estimated arrival
+    function addBusinessDays(days) {
+      const d = new Date();
+      let added = 0;
+      while (added < days) {
+        d.setDate(d.getDate() + 1);
+        if (d.getDay() !== 0 && d.getDay() !== 6) added++;
+      }
+      return d.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' });
+    }
+    const etaDays = { standard: 5, express: 2, next: 1 };
+    document.getElementById('estArrival').innerHTML =
+      `<strong>${addBusinessDays(etaDays[shipping.delivery] || 5)}</strong>`;
+
+    // Order items
+    document.getElementById('confirmItems').innerHTML = cart.map(item => `
+      <div class="order-item">
+        <img class="order-item-img" src="${item.img}" alt="${item.name}"/>
+        <div class="order-item-info">
+          <div class="order-item-name">${item.name}</div>
+          <div class="order-item-meta">Qty: ${item.qty} · ${item.cat}</div>
+        </div>
+        <div class="order-item-price">£${item.price * item.qty}</div>
+      </div>
+    `).join('');
+
+    // Totals
+    document.getElementById('confSubtotal').textContent = `£${sub}`;
+    document.getElementById('confDelivery').textContent = deliveryCost === 0 ? 'FREE' : `£${deliveryCost.toFixed(2)}`;
+    document.getElementById('confTotal').textContent = `£${total.toFixed(2)}`;
+    if (discount > 0) {
+      document.getElementById('confDiscountLine').style.display = 'flex';
+      document.getElementById('confDiscount').textContent = `-£${discount}`;
+    }
+
+    // Timeline bar animation
+    setTimeout(() => {
+      document.getElementById('timelineBar').style.width = '25%';
+    }, 600);
+
+    // Copy ref
+    function copyRef() {
+      navigator.clipboard?.writeText(orderRef).then(() => {
+        const btn = document.querySelector('.copy-btn');
+        btn.textContent = 'Copied!';
+        btn.style.borderColor = 'var(--success)';
+        btn.style.color = 'var(--success)';
+        setTimeout(() => {
+          btn.textContent = 'Copy';
+          btn.style.borderColor = '';
+          btn.style.color = '';
+        }, 2000);
+      });
+    }
+
+    // Clear cart after confirmed
+    sessionStorage.removeItem('velour_cart');
+  </script>
+
+</body>
+</html>

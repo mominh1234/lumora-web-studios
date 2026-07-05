@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Web Design Packages UK — Prices from £100 | Lumora Web Studio</title>
+  <meta name="description" content="Affordable web design packages for businesses across the UK. Starter from £100, Professional from £400, Enterprise from £700. Fixed prices, no hidden fees. Get a free quote today." />
+  <meta name="keywords" content="web design packages UK, web design pricing UK, affordable website UK, cheap web design UK, web design cost UK, website packages United Kingdom, web development pricing UK, small business website UK, web design quote UK" />
+  <meta name="author" content="Lumora Web Studio" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://lumorawebstudio.info/packages.html" />
+  <!-- Open Graph -->
+  <meta property="og:title" content="Web Design Packages UK — From £100 | Lumora Web Studio" />
+  <meta property="og:description" content="Affordable web design packages for businesses across the UK. Starter from £100, Professional from £400, Enterprise from £700." />
+  <meta property="og:url" content="https://lumorawebstudio.info/packages.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Lumora Web Studio" />
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Web Design Packages UK — From £100 | Lumora Web Studio" />
+  <meta name="twitter:description" content="Fixed-price web design packages for UK businesses. No hidden fees." />
+  <!-- Schema: Offer Catalog -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Web Design Packages — Lumora Web Studio",
+    "url": "https://lumorawebstudio.info/packages.html",
+    "description": "Web design packages for businesses across the UK. Starting from £100.",
+    "breadcrumb": {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://lumorawebstudio.info/"},
+        {"@type": "ListItem", "position": 2, "name": "Packages", "item": "https://lumorawebstudio.info/packages.html"}
+      ]
+    },
+    "mainEntity": {
+      "@type": "ItemList",
+      "name": "Web Design Packages",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "item": {
+            "@type": "Product",
+            "name": "Starter Web Design Package",
+            "description": "Up to 3 custom pages, mobile-responsive design, contact form, basic SEO. Perfect for new businesses across the UK.",
+            "offers": {"@type": "Offer", "price": "100", "priceCurrency": "GBP", "availability": "https://schema.org/InStock"}
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "item": {
+            "@type": "Product",
+            "name": "Professional Growth Web Design Package",
+            "description": "Up to 10 custom pages, bespoke UI/UX, CMS blog, full SEO, 1 month free support. Most popular for UK small businesses.",
+            "offers": {"@type": "Offer", "price": "400", "priceCurrency": "GBP", "availability": "https://schema.org/InStock"}
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "item": {
+            "@type": "Product",
+            "name": "Enterprise Custom Web Design Package",
+            "description": "Unlimited pages, e-commerce, custom features, dedicated account manager, 60 days support. For ambitious UK brands.",
+            "offers": {"@type": "Offer", "price": "700", "priceCurrency": "GBP", "availability": "https://schema.org/InStock"}
+          }
+        }
+      ]
+    }
+  }
+  </script>
+  <link rel="icon" type="image/svg+xml" href="logo-icon.svg" />
+  <link rel="shortcut icon" href="logo-icon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600&family=DM+Sans:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy-deep:    #0a0612;
+      --navy-mid:     #140a28;
+      --royal:        #2a1054;
+      --royal-bright: #5a20b0;
+      --chrome-1:     #c4a8f0;
+      --chrome-2:     #e0d0ff;
+      --chrome-3:     #9a6ad8;
+      --chrome-4:     #7040b8;
+      --accent-cyan:  #bf80ff;
+      --accent-ice:   #e8d0ff;
+      --white:        #ffffff;
+      --off-white:    #ede0ff;
+      --text-muted:   #9a7dc4;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--navy-deep);
+      color: var(--off-white);
+      min-height: 100vh;
+    }
+    #bg-canvas {
+      position: fixed; inset: 0; z-index: 0;
+      pointer-events: none;
+    }
+    .metal-overlay {
+      position: fixed; inset: 0; z-index: 1; pointer-events: none;
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 10%, rgba(90,32,176,0.22) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 80% at 80% 90%, rgba(40,10,90,0.35) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 40% at 55% 50%, rgba(160,80,255,0.04) 0%, transparent 70%);
+    }
+    header, nav, section, footer, .page-hero, .hosting-addon, .pricing-guarantee { position: relative; z-index: 2; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 60px;
+      background: rgba(10,6,18,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(196,168,240,0.08);
+    }
+    .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+    .nav-logo img { height: 36px; }
+    .logo-text { font-family: 'Orbitron', sans-serif; font-size: 0.9rem; font-weight: 700; color: var(--chrome-1); letter-spacing: 0.05em; }
+    .logo-sub { font-family: 'Rajdhani', sans-serif; font-size: 0.65rem; color: var(--text-muted); letter-spacing: 0.15em; text-transform: uppercase; display: block; }
+    .nav-links { display: flex; align-items: center; gap: 36px; }
+    .nav-links a { font-family: 'Rajdhani', sans-serif; font-size: 0.85rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--chrome-1); }
+    .nav-cta {
+      font-family: 'Rajdhani', sans-serif; font-size: 0.8rem; font-weight: 600;
+      letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none;
+      padding: 9px 22px; border-radius: 6px;
+      border: 1px solid var(--chrome-3);
+      color: var(--chrome-1);
+      background: rgba(196,168,240,0.06);
+      transition: all 0.25s;
+    }
+    .nav-cta:hover { background: rgba(196,168,240,0.14); border-color: var(--chrome-1); }
+
+    /* ── PAGE HERO ── */
+    .page-hero {
+      padding: 160px 80px 80px;
+      text-align: center;
+    }
+    .page-tag {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--chrome-3);
+      display: inline-flex; align-items: center; gap: 10px;
+      margin-bottom: 20px;
+    }
+    .page-tag::before, .page-tag::after { content: ''; display: block; width: 28px; height: 1px; background: var(--chrome-3); }
+    .page-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.1;
+      margin-bottom: 20px;
+    }
+    .page-title span { color: var(--chrome-1); }
+    .page-sub {
+      font-size: 1rem; color: var(--text-muted); max-width: 560px;
+      margin: 0 auto; line-height: 1.7;
+    }
+
+    /* ── PRICING CARDS ── */
+    #pricing { padding: 60px 80px; }
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .hosting-addon {
+      max-width: 1100px;
+      margin: 24px auto 0;
+      background: rgba(20,10,40,0.6);
+      border: 1px solid rgba(196,168,240,0.12);
+      border-radius: 16px;
+      padding: 40px 48px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 40px;
+    }
+    .hosting-addon h3 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.1rem; font-weight: 700;
+      color: var(--chrome-2); margin-bottom: 8px;
+    }
+    .hosting-addon p { font-size: 0.9rem; color: var(--text-muted); max-width: 560px; }
+    .hosting-addon-price {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2rem; font-weight: 700;
+      color: var(--chrome-1); white-space: nowrap; text-align: center;
+    }
+    .hosting-addon-price span { display: block; font-size: 0.7rem; color: var(--text-muted); font-family: 'DM Sans', sans-serif; font-weight: 400; letter-spacing: 0.05em; margin-top: 4px; }
+    @media (max-width: 640px) { .hosting-addon { grid-template-columns: 1fr; gap: 20px; padding: 32px 24px; } }
+    .pricing-card {
+      background: rgba(20,10,40,0.6);
+      border: 1px solid rgba(196,168,240,0.12);
+      border-radius: 16px;
+      padding: 40px 32px;
+      position: relative;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .pricing-card:hover { transform: translateY(-6px); box-shadow: 0 20px 60px rgba(90,32,176,0.2); }
+    .pricing-card.featured {
+      border-color: rgba(196,168,240,0.35);
+      background: rgba(42,16,84,0.5);
+      transform: translateY(-12px);
+    }
+    .pricing-card.featured:hover { transform: translateY(-18px); }
+    .pricing-card.featured::before {
+      content: ''; position: absolute; inset: -1px; border-radius: 17px;
+      background: linear-gradient(135deg, rgba(196,168,240,0.3), transparent 60%);
+      pointer-events: none;
+    }
+    .pricing-badge {
+      position: absolute; top: 18px; right: 18px;
+      font-family: 'Orbitron', sans-serif; font-size: 0.45rem;
+      font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--navy-deep);
+      background: linear-gradient(135deg, var(--chrome-1), var(--chrome-3));
+      padding: 5px 10px; border-radius: 20px;
+    }
+    .pricing-tier {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--chrome-3); margin-bottom: 12px;
+    }
+    .pricing-price {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75rem; color: var(--text-muted); margin-bottom: 8px;
+    }
+    .pricing-price span { font-size: 2rem; color: var(--chrome-1); font-weight: 700; }
+    .pricing-divider { height: 1px; background: rgba(196,168,240,0.12); margin: 20px 0; }
+    .pricing-name {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1rem; font-weight: 600; color: var(--white); margin-bottom: 10px;
+    }
+    .pricing-desc { font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 24px; }
+    .pricing-features { list-style: none; margin-bottom: 32px; display: flex; flex-direction: column; gap: 10px; }
+    .pricing-features li {
+      font-size: 0.85rem; color: var(--off-white);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .pricing-features li::before {
+      content: '';
+      width: 14px; height: 14px; flex-shrink: 0;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14' fill='none'%3E%3Ccircle cx='7' cy='7' r='6.25' stroke='%239a6ad8' stroke-width='0.75'/%3E%3Cpath d='M4 7l2 2 4-4' stroke='%23c4a8f0' stroke-width='1.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat;
+    }
+    .pricing-features li.muted { color: var(--text-muted); }
+    .pricing-features li.muted::before {
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14' fill='none'%3E%3Ccircle cx='7' cy='7' r='6.25' stroke='%23483065' stroke-width='0.75'/%3E%3Cpath d='M5 5l4 4M9 5l-4 4' stroke='%23483065' stroke-width='1.2' stroke-linecap='round'/%3E%3C/svg%3E") center/contain no-repeat;
+    }
+    .btn-pricing {
+      display: block; width: 100%; text-align: center;
+      font-family: 'Rajdhani', sans-serif; font-size: 0.85rem;
+      font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+      text-decoration: none; padding: 14px 24px; border-radius: 8px;
+      transition: all 0.25s;
+    }
+    .btn-pricing-outline {
+      border: 1px solid rgba(196,168,240,0.3); color: var(--chrome-1);
+      background: transparent;
+    }
+    .btn-pricing-outline:hover { border-color: var(--chrome-1); background: rgba(196,168,240,0.08); }
+    .btn-pricing-solid {
+      background: linear-gradient(135deg, var(--royal-bright), var(--chrome-3));
+      color: var(--white); border: none; position: relative; overflow: hidden;
+    }
+    .btn-pricing-solid::before {
+      content: ''; position: absolute; top: 0; left: -100%;
+      width: 60%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+      transition: left 0.4s;
+    }
+    .btn-pricing-solid:hover { box-shadow: 0 0 36px rgba(196,168,240,0.35); transform: translateY(-2px); }
+    .btn-pricing-solid:hover::before { left: 150%; }
+
+    /* ── GUARANTEE STRIP ── */
+    .pricing-guarantee {
+      display: flex; flex-wrap: wrap; gap: 32px; justify-content: center;
+      margin: 56px auto 0; max-width: 900px;
+      padding: 28px 40px;
+      background: rgba(20,10,40,0.5);
+      border: 1px solid rgba(196,168,240,0.1);
+      border-radius: 14px;
+    }
+    .guarantee-item { display: flex; align-items: center; gap: 14px; }
+    .guarantee-icon { width: 36px; height: 36px; color: var(--chrome-3); flex-shrink: 0; }
+    .guarantee-text-title { font-family: 'Rajdhani', sans-serif; font-size: 0.95rem; font-weight: 600; color: var(--chrome-1); letter-spacing: 0.05em; }
+    .guarantee-text-sub { font-size: 0.78rem; color: var(--text-muted); }
+
+    /* ── COMPARISON TABLE ── */
+    #comparison { padding: 80px 80px; }
+    .comparison-header { text-align: center; margin-bottom: 50px; }
+    .section-tag {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--chrome-3);
+      display: inline-flex; align-items: center; gap: 10px;
+      margin-bottom: 14px;
+    }
+    .section-tag::before, .section-tag::after { content: ''; display: block; width: 28px; height: 1px; background: var(--chrome-3); }
+    .section-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 700; color: var(--white); line-height: 1.2;
+    }
+
+    .comparison-table {
+      width: 100%; max-width: 1000px; margin: 0 auto;
+      border-collapse: collapse;
+      border-radius: 16px; overflow: hidden;
+    }
+    .comparison-table th, .comparison-table td {
+      padding: 16px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(196,168,240,0.08);
+    }
+    .comparison-table th {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.7rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      background: rgba(42,16,84,0.6);
+      color: var(--chrome-1);
+    }
+    .comparison-table th.featured-col { background: rgba(90,32,176,0.5); color: var(--white); }
+    .comparison-table th:first-child { text-align: left; }
+    .comparison-table td { font-size: 0.85rem; color: var(--off-white); background: rgba(20,10,40,0.4); }
+    .comparison-table td.featured-col { background: rgba(42,16,84,0.3); }
+    .comparison-table td:first-child { text-align: left; color: var(--text-muted); font-size: 0.82rem; }
+    .comparison-table tr:last-child td { border-bottom: none; }
+    .comparison-table tr:hover td { background: rgba(42,16,84,0.25); }
+    .comparison-table tr:hover td.featured-col { background: rgba(90,32,176,0.25); }
+
+    .check { color: #a78bfa; font-size: 1.1rem; }
+    .cross { color: #483065; font-size: 1.1rem; }
+    .partial { color: var(--chrome-3); font-size: 0.8rem; font-style: italic; }
+
+    .tier-price-row th { padding-top: 8px; padding-bottom: 8px; font-size: 0.8rem; }
+    .tier-price-row .price-val {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1rem; color: var(--chrome-1); font-weight: 700;
+    }
+    .tier-price-row .featured-col .price-val { color: var(--white); }
+
+    .category-row td, .category-row th {
+      background: rgba(10,6,18,0.8) !important;
+      color: var(--chrome-3) !important;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase;
+      padding: 10px 20px;
+    }
+
+    .cta-row td {
+      padding: 28px 20px;
+      background: rgba(20,10,40,0.6) !important;
+    }
+    .cta-row a {
+      display: inline-block;
+      font-family: 'Rajdhani', sans-serif; font-size: 0.8rem;
+      font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+      text-decoration: none; padding: 10px 22px; border-radius: 7px;
+      border: 1px solid rgba(196,168,240,0.3); color: var(--chrome-1);
+      background: transparent; transition: all 0.25s;
+    }
+    .cta-row a:hover { background: rgba(196,168,240,0.1); border-color: var(--chrome-1); }
+    .cta-row .featured-col a {
+      background: linear-gradient(135deg, var(--royal-bright), var(--chrome-3));
+      color: var(--white); border: none;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center; padding: 40px 60px;
+      border-top: 1px solid rgba(196,168,240,0.08);
+      font-size: 0.78rem; color: var(--text-muted);
+    }
+    footer a { color: var(--chrome-3); text-decoration: none; }
+    footer a:hover { color: var(--chrome-1); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 16px 24px; }
+      .nav-links { display: none; }
+      .page-hero { padding: 120px 24px 60px; }
+      #pricing { padding: 40px 24px; }
+      .pricing-grid { grid-template-columns: 1fr; max-width: 480px; margin: 0 auto; }
+      .pricing-card.featured { transform: translateY(0); }
+      #comparison { padding: 40px 16px; overflow-x: auto; }
+      .comparison-table th, .comparison-table td { padding: 12px 12px; font-size: 0.75rem; }
+      footer { padding: 30px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background Canvas (matches homepage) -->
+  <canvas id="bg-canvas"></canvas>
+  <div class="metal-overlay"></div>
+
+  <!-- NAV -->
+  <nav>
+    <a href="index.html" class="nav-logo">
+      <div>
+        <span class="logo-text">Lumora Web Studios</span>
+        <span class="logo-sub">Digital Craftsmanship</span>
+      </div>
+    </a>
+    <div class="nav-links">
+      <a href="index.html#services">Services</a>
+      <a href="index.html#portfolio">Portfolio</a>
+      <a href="index.html#process">Process</a>
+      <a href="packages.html" class="active">Packages</a>
+      <a href="index.html#testimonials">Clients</a>
+      <a href="index.html#contact" class="nav-cta">Start a Project</a>
+    </div>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <div class="page-hero">
+    <p class="page-tag">Pricing</p>
+    <h1 class="page-title">The Right Package<br/><span>For Every Business</span></h1>
+    <p class="page-sub">From new launches to full enterprise builds — choose a package tailored to where you are and where you're going.</p>
+  </div>
+
+  <!-- PRICING CARDS -->
+  <section id="pricing">
+    <div class="pricing-grid">
+
+      <!-- Starter -->
+      <div class="pricing-card">
+        <div class="pricing-tier">Starter</div>
+        <div class="pricing-price">Starting from <span>£100</span></div>
+        <div class="pricing-divider"></div>
+        <div class="pricing-name">Launch Package</div>
+        <p class="pricing-desc">Perfect for new businesses and personal brands that need a clean, professional web presence fast.</p>
+        <ul class="pricing-features">
+          <li>Up to 3 custom pages</li>
+          <li>Mobile-responsive design</li>
+          <li>Contact form + email setup</li>
+          <li>Basic SEO foundations</li>
+          <li>Google Analytics integration</li>
+          <li>14-day revision window</li>
+          <li class="muted">Custom CMS / blog</li>
+          <li class="muted">E-commerce functionality</li>
+        </ul>
+        <a href="index.html#contact" class="btn-pricing btn-pricing-outline">Get Started</a>
+      </div>
+
+      <!-- Pro (Featured) -->
+      <div class="pricing-card featured">
+        <div class="pricing-badge">Most Popular</div>
+        <div class="pricing-tier">Professional</div>
+        <div class="pricing-price">Starting from <span>£400</span></div>
+        <div class="pricing-divider"></div>
+        <div class="pricing-name">Growth Package</div>
+        <p class="pricing-desc">The complete solution for growing businesses ready to stand out, convert visitors, and scale their brand.</p>
+        <ul class="pricing-features">
+          <li>Up to 6 custom pages</li>
+          <li>Bespoke UI/UX design</li>
+          <li>CMS / editable blog</li>
+          <li>Full SEO optimisation</li>
+          <li>Speed & Core Web Vitals tuning</li>
+          <li>Social media integration</li>
+          <li>30-day revision window</li>
+          <li>1 month free support</li>
+        </ul>
+        <a href="index.html#contact" class="btn-pricing btn-pricing-solid">Start a Project</a>
+      </div>
+
+      <!-- Enterprise -->
+      <div class="pricing-card">
+        <div class="pricing-tier">Enterprise</div>
+        <div class="pricing-price">Starting from <span>£700</span></div>
+        <div class="pricing-divider"></div>
+        <div class="pricing-name">Custom Package</div>
+        <p class="pricing-desc">For ambitious brands requiring a fully tailored digital solution — e-commerce, portals, custom integrations, and beyond.</p>
+        <ul class="pricing-features">
+          <li>Unlimited pages</li>
+          <li>E-commerce / payment integration</li>
+          <li>Custom web application features</li>
+          <li>Advanced animations & interactions</li>
+          <li>Priority delivery</li>
+          <li>Dedicated account manager</li>
+          <li>60 days ongoing support</li>
+          <li>Brand identity add-on available</li>
+        </ul>
+        <a href="index.html#contact" class="btn-pricing btn-pricing-outline">Let's Talk</a>
+      </div>
+
+      <!-- Web Hosting -->
+    </div>
+
+    <!-- Web Hosting Add-On -->
+    <div class="hosting-addon">
+      <div>
+        <div class="pricing-tier" style="margin-bottom:8px;">Add-On Service</div>
+        <h3>Web Hosting</h3>
+        <p>Managed hosting to keep your site fast, secure and online 24/7 — SSL included, automatic daily backups, fast CDN delivery, monthly performance report, technical maintenance, priority support. Cancel anytime.</p>
+        <a href="index.html#contact" class="btn-pricing btn-pricing-outline" style="margin-top:20px; display:inline-block;">Get Hosting</a>
+      </div>
+      <div style="text-align:center;">
+        <div class="hosting-addon-price">£25<span>per month</span></div>
+      </div>
+    </div>
+
+    <!-- AI Agent Add-On -->
+    <div class="hosting-addon" style="margin-top:16px;">
+      <div>
+        <div class="pricing-tier" style="margin-bottom:8px;">Add-On Service</div>
+        <h3>Tailored AI Agent</h3>
+        <p>A custom-built AI assistant designed around your specific business needs — acting as your always-on digital secretary. Your AI agent can be embedded directly into your website to handle customer enquiries in real time, eliminating the need for visitors to call or wait for an email reply. It can read and respond to incoming emails, automatically book appointments and add them to your calendar, send out branded reminders by email or SMS to reduce no-shows, and keep your digital files and folders organised. Every agent is built to your exact workflow — no generic chatbots, no off-the-shelf software. We scope, build and deploy it for you from the ground up.</p>
+        <a href="index.html#contact" class="btn-pricing btn-pricing-outline" style="margin-top:20px; display:inline-block;">Get a Quote</a>
+      </div>
+      <div style="text-align:center;">
+        <div class="hosting-addon-price" style="font-size:1.3rem;">Custom<span>priced to your needs</span></div>
+      </div>
+    </div>
+
+    <!-- Guarantee strip -->
+    <div class="pricing-guarantee">
+      <div class="guarantee-item">
+        <svg class="guarantee-icon" viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="1.2">
+          <path d="M18 4l13 5v9c0 7-5.5 13-13 15C10.5 31 5 25 5 18V9l13-5z"/>
+          <path d="M12 18l4 4 8-8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <div>
+          <div class="guarantee-text-title">Satisfaction Guaranteed</div>
+          <div class="guarantee-text-sub">We revise until you love it</div>
+        </div>
+      </div>
+      <div class="guarantee-item">
+        <svg class="guarantee-icon" viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="1.2">
+          <circle cx="18" cy="18" r="14"/>
+          <path d="M18 10v8l5 3"/>
+        </svg>
+        <div>
+          <div class="guarantee-text-title">Fast Turnaround</div>
+          <div class="guarantee-text-sub">Most sites delivered in 7–14 days</div>
+        </div>
+      </div>
+      <div class="guarantee-item">
+        <svg class="guarantee-icon" viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="1.2">
+          <rect x="5" y="10" width="26" height="18" rx="2"/>
+          <path d="M5 15h26"/>
+          <path d="M12 22h4M20 22h4"/>
+        </svg>
+        <div>
+          <div class="guarantee-text-title">No Hidden Fees</div>
+          <div class="guarantee-text-sub">Fixed price, agreed upfront</div>
+        </div>
+      </div>
+      <div class="guarantee-item">
+        <svg class="guarantee-icon" viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="1.2">
+          <path d="M18 4c7.7 0 14 6.3 14 14s-6.3 14-14 14S4 25.7 4 18 10.3 4 18 4"/>
+          <path d="M14 18l3 3 7-7" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <div>
+          <div class="guarantee-text-title">You Own Everything</div>
+          <div class="guarantee-text-sub">Full code & asset handover</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMPARISON TABLE -->
+  <section id="comparison">
+    <div class="comparison-header">
+      <p class="section-tag">Compare</p>
+      <h2 class="section-title">Package Comparison</h2>
+    </div>
+
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          <th>Feature</th>
+          <th>Starter<br/><span style="font-size:0.65rem; color:var(--chrome-3); font-family:'DM Sans',sans-serif; font-weight:400; letter-spacing:0;">From £100</span></th>
+          <th class="featured-col">Professional ⭐<br/><span style="font-size:0.65rem; color:rgba(255,255,255,0.6); font-family:'DM Sans',sans-serif; font-weight:400; letter-spacing:0;">From £400</span></th>
+          <th>Enterprise<br/><span style="font-size:0.65rem; color:var(--chrome-3); font-family:'DM Sans',sans-serif; font-weight:400; letter-spacing:0;">From £700</span></th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <!-- PAGES & DESIGN -->
+        <tr class="category-row"><td colspan="4">Pages & Design</td></tr>
+        <tr>
+          <td>Number of pages</td>
+          <td>Up to 3</td>
+          <td class="featured-col">Up to 6</td>
+          <td>Unlimited</td>
+        </tr>
+        <tr>
+          <td>Mobile-responsive design</td>
+          <td><span class="check">✓</span></td>
+          <td class="featured-col"><span class="check">✓</span></td>
+          <td><span class="check">✓</span></td>
+        </tr>
+        <tr>
+          <td>Bespoke UI/UX design</td>
+          <td><span class="cross">✗</span></td>
+          <td class="featured-col"><span class="check">✓</span></td>
+          <td><span class="check">✓</span></td>
+        </tr>
+        <tr>
+          <td>Advanced animations & interactions</td>
+          <td><span class="cross">✗</span></td>
+          <td class="featured-col"><span class="cross">✗</span></td>
+          <td><span class="check">✓</span></td>
+        </tr>
+        <tr>
+          <td>Brand identity add-on</td>
+          <td><span class="cross">✗</span></td>
+          <td class="featured-col"><span class="cross">✗</span></td>
+          <td><span class="check">✓</span></td>
+        </tr>
+
+        <!-- FUNCTIONALITY -->
+        <tr class="category-row"><td colspan="4">Functionality</td></tr>
+        <tr>
+          <td>Contact form + email setup</td>
+          <td><span class="check">✓</span></td>
+          <td class="featured-col"><span class="check">✓</span></td>
+          <td><span class="check">✓</span></td>
+        </tr>
+        <tr>
+          <td>CMS / editable blog</td>
+          <td><span class="cross">✗</span></td>
+          <td class="featured-col"><span class="check">✓</span></td>
+          <td><span class="check">✓</span></td>
+        </tr>
+        <tr>
+          <td>Social media integration</td>
+          <td><span class="cross">✗</span></td>
+          <td class="featured-col"><span class="check">✓</span></td>
+          <td><span class="check">✓</span></td>
+        </tr>
+        <tr>
+          <td>E-commerce / payment integration</td>
+          <td><span class="cross">✗</span></td>
+          <td class="featured-col"><span class="cross">✗</span></td>
+          <td><span class="check">✓</span></td>
+        </tr>
+        <tr>
+          <td>Custom web application features</td>
+          <td><span class="cross">✗</span></td>
+          <td class="featured-col"><span class="cross">✗</span></td>
+          <td><span class="check">✓</span></td>
+        </tr>
+
+        <!-- SEO & PERFORMANCE -->
+        <tr class="category-row"><td colspan="4">SEO & Performance</td></tr>
+        <tr>
+          <td>Basic SEO foundations</td>
+          <td><span class="check">✓</span></td>
+          <td class="featured-col"><span class="check">✓</span></td>
+          <td><span class="check">✓</span></td>
+        </tr>
+        <tr>
+          <td>Full SEO optimisation</td>
+          <td><span class="cross">✗</span></td>
+          <td class="featured-col"><span class="check">✓</span></td>
+          <td><span class="check">✓</span></td>
+        </tr>
+        <tr>
+          <td>Speed & Core Web Vitals tuning</td>
+          <td><span class="cross">✗</span></td>
+          <td class="featured-col"><span class="check">✓</span></td>
+          <td><span class="check">✓</span></td>
+        </tr>
+        <tr>
+          <td>Google Analytics integration</td>
+          <td><span class="check">✓</span></td>
+          <td class="featured-col"><span class="check">✓</span></td>
+          <td><span class="check">✓</span></td>
+        </tr>
+
+        <!-- SUPPORT -->
+        <tr class="category-row"><td colspan="4">Support & Revisions</td></tr>
+        <tr>
+          <td>Revision window</td>
+          <td>14 days</td>
+          <td class="featured-col">30 days</td>
+          <td>60 days</td>
+        </tr>
+        <tr>
+          <td>Free post-launch support</td>
+          <td><span class="cross">✗</span></td>
+          <td class="featured-col">1 month</td>
+          <td>2 months</td>
+        </tr>
+        <tr>
+          <td>Dedicated account manager</td>
+          <td><span class="cross">✗</span></td>
+          <td class="featured-col"><span class="cross">✗</span></td>
+          <td><span class="check">✓</span></td>
+        </tr>
+        <tr>
+          <td>Priority delivery</td>
+          <td><span class="cross">✗</span></td>
+          <td class="featured-col"><span class="cross">✗</span></td>
+          <td><span class="check">✓</span></td>
+        </tr>
+
+        <!-- HOSTING -->
+        <tr class="category-row"><td colspan="4">Web Hosting (Add-On — £25/month)</td></tr>
+        <tr>
+          <td>Managed hosting</td>
+          <td><span class="check">✓</span> Add-on</td>
+          <td class="featured-col"><span class="check">✓</span> Add-on</td>
+          <td><span class="check">✓</span> Add-on</td>
+        </tr>
+        <tr>
+          <td>SSL certificate</td>
+          <td><span class="check">✓</span></td>
+          <td class="featured-col"><span class="check">✓</span></td>
+          <td><span class="check">✓</span></td>
+        </tr>
+        <tr>
+          <td>Daily backups</td>
+          <td><span class="check">✓</span></td>
+          <td class="featured-col"><span class="check">✓</span></td>
+          <td><span class="check">✓</span></td>
+        </tr>
+        <tr>
+          <td>99.9% uptime guarantee</td>
+          <td><span class="check">✓</span></td>
+          <td class="featured-col"><span class="check">✓</span></td>
+          <td><span class="check">✓</span></td>
+        </tr>
+
+        <!-- CTA ROW -->
+        <tr class="cta-row">
+          <td></td>
+          <td><a href="index.html#contact">Get Started</a></td>
+          <td class="featured-col"><a href="index.html#contact">Start a Project</a></td>
+          <td><a href="index.html#contact">Let's Talk</a></td>
+        </tr>
+
+      </tbody>
+    </table>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2025 Lumora Web Studios. All rights reserved. &nbsp;|&nbsp; <a href="index.html">Back to Home</a></p>
+  </footer>
+
+  <script>
+    // ── Particle Canvas (matches homepage) ──
+    const canvas = document.getElementById('bg-canvas');
+    const ctx = canvas.getContext('2d');
+    let W, H, particles = [];
+
+    function resize() {
+      W = canvas.width  = window.innerWidth;
+      H = canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    const PARTICLE_COUNT = 80;
+    function makeParticle() {
+      return {
+        x: Math.random() * W,
+        y: Math.random() * H,
+        r: Math.random() * 1.2 + 0.3,
+        vx: (Math.random() - 0.5) * 0.18,
+        vy: (Math.random() - 0.5) * 0.18,
+        alpha: Math.random() * 0.5 + 0.1,
+      };
+    }
+
+    for (let i = 0; i < PARTICLE_COUNT; i++) particles.push(makeParticle());
+
+    function drawCanvas() {
+      ctx.clearRect(0, 0, W, H);
+
+      const bg = ctx.createLinearGradient(0, 0, W, H);
+      bg.addColorStop(0, '#0a0612');
+      bg.addColorStop(0.4, '#140a28');
+      bg.addColorStop(0.7, '#0f0820');
+      bg.addColorStop(1, '#0a0612');
+      ctx.fillStyle = bg;
+      ctx.fillRect(0, 0, W, H);
+
+      const orb1 = ctx.createRadialGradient(W*0.2, H*0.15, 0, W*0.2, H*0.15, W*0.35);
+      orb1.addColorStop(0, 'rgba(90,32,176,0.22)');
+      orb1.addColorStop(1, 'transparent');
+      ctx.fillStyle = orb1;
+      ctx.fillRect(0, 0, W, H);
+
+      const orb2 = ctx.createRadialGradient(W*0.82, H*0.85, 0, W*0.82, H*0.85, W*0.3);
+      orb2.addColorStop(0, 'rgba(60,10,120,0.28)');
+      orb2.addColorStop(1, 'transparent');
+      ctx.fillStyle = orb2;
+      ctx.fillRect(0, 0, W, H);
+
+      particles.forEach(p => {
+        p.x += p.vx; p.y += p.vy;
+        if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
+        if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+        ctx.fillStyle = `rgba(196,168,240,${p.alpha})`;
+        ctx.fill();
+      });
+
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i+1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const d = Math.sqrt(dx*dx + dy*dy);
+          if (d < 120) {
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.strokeStyle = `rgba(196,168,240,${0.04 * (1 - d/120)})`;
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
+          }
+        }
+      }
+
+      requestAnimationFrame(drawCanvas);
+    }
+    drawCanvas();
+  </script>
+
+</body>
+</html>
